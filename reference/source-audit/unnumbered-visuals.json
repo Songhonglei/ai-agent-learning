@@ -1,0 +1,28 @@
+[
+  {
+    "discoveryEvidence": "全页视觉扫描；PDF 第32页上半部至中部的四列表格",
+    "kind": "visual",
+    "pdfPage": 32,
+    "region": {
+      "height": 0.383,
+      "width": 0.811,
+      "x": 0.094,
+      "y": 0.232
+    },
+    "semanticBrief": "Harness工程重点、对应章节、核心内容与安全关注点的四列表格",
+    "sourceId": "visual-p032-01"
+  },
+  {
+    "discoveryEvidence": "全页视觉扫描；PDF 第239页顶部的三列表格",
+    "kind": "visual",
+    "pdfPage": 239,
+    "region": {
+      "height": 0.107,
+      "width": 0.67,
+      "x": 0.165,
+      "y": 0.085
+    },
+    "semanticBrief": "轨迹验证器的评估维度、验证问题与主要证据三列表格",
+    "sourceId": "visual-p239-01"
+  }
+]

@@ -1,0 +1,425 @@
+{
+  "analysisHeadingAnchors": {
+    "highPriority": "五条最高优先级的作者论断（非共识型）",
+    "highRisk": "🔴 高风险——容易被误引的表述",
+    "mediumRisk": "🟡 中风险——容易被过度解读的结论"
+  },
+  "calibration": {
+    "maximumSourceItems": 40,
+    "minimumSourceItems": 30,
+    "queueExternalCandidates": [
+      32,
+      35,
+      52,
+      15,
+      26,
+      27
+    ],
+    "requiredPages": [
+      10,
+      20,
+      81,
+      239,
+      240,
+      279
+    ]
+  },
+  "captionConflictSourceIds": [
+    "experiment-1-1",
+    "experiment-2-7",
+    "experiment-2-8",
+    "experiment-4-4",
+    "experiment-9-1",
+    "experiment-10-4",
+    "figure-1-4",
+    "figure-2-6",
+    "figure-3-5",
+    "figure-4-9",
+    "figure-8-2",
+    "figure-8-3",
+    "figure-8-4",
+    "figure-10-3",
+    "table-2-1",
+    "table-7-3",
+    "table-7-4",
+    "table-8-2",
+    "table-10-1",
+    "table-10-2",
+    "table-10-4"
+  ],
+  "chapterLessonCandidates": {
+    "1": [
+      {
+        "lessonId": "0-1",
+        "role": "primary"
+      },
+      {
+        "lessonId": "0-2",
+        "role": "primary"
+      },
+      {
+        "lessonId": "3-2",
+        "role": "primary"
+      }
+    ],
+    "2": [
+      {
+        "lessonId": "1-1",
+        "role": "primary"
+      },
+      {
+        "lessonId": "1-2",
+        "role": "primary"
+      },
+      {
+        "lessonId": "1-3",
+        "role": "primary"
+      },
+      {
+        "lessonId": "2-3",
+        "role": "secondary"
+      }
+    ],
+    "3": [
+      {
+        "lessonId": "2-1",
+        "role": "primary"
+      },
+      {
+        "lessonId": "2-2",
+        "role": "primary"
+      }
+    ],
+    "4": [
+      {
+        "lessonId": "1-3",
+        "role": "primary"
+      },
+      {
+        "lessonId": "3-1",
+        "role": "primary"
+      },
+      {
+        "lessonId": "3-2",
+        "role": "primary"
+      }
+    ],
+    "5": [],
+    "6": [
+      {
+        "lessonId": "4-1",
+        "role": "primary"
+      }
+    ],
+    "7": [],
+    "8": [
+      {
+        "lessonId": "2-3",
+        "role": "primary"
+      }
+    ],
+    "9": [],
+    "10": [
+      {
+        "lessonId": "4-2",
+        "role": "primary"
+      }
+    ]
+  },
+  "excludedChapters": [
+    5,
+    7,
+    9
+  ],
+  "lessonIds": [
+    "0-1",
+    "0-2",
+    "1-1",
+    "1-2",
+    "1-3",
+    "2-1",
+    "2-2",
+    "2-3",
+    "3-1",
+    "3-2",
+    "4-1",
+    "4-2"
+  ],
+  "mustKeepRules": {
+    "courseObjectives": {
+      "expectedCount": 12,
+      "fieldLabel": "核心内容",
+      "lessonIds": [
+        "0-1",
+        "0-2",
+        "1-1",
+        "1-2",
+        "1-3",
+        "2-1",
+        "2-2",
+        "2-3",
+        "3-1",
+        "3-2",
+        "4-1",
+        "4-2"
+      ],
+      "sourceRoutingByLesson": {
+        "0-1": {
+          "primary": [
+            {
+              "chapter": 1
+            }
+          ],
+          "secondary": []
+        },
+        "0-2": {
+          "primary": [
+            {
+              "chapter": 1
+            }
+          ],
+          "secondary": []
+        },
+        "1-1": {
+          "primary": [
+            {
+              "chapter": 2
+            }
+          ],
+          "secondary": []
+        },
+        "1-2": {
+          "primary": [
+            {
+              "chapter": 2
+            }
+          ],
+          "secondary": []
+        },
+        "1-3": {
+          "primary": [
+            {
+              "chapter": 2
+            },
+            {
+              "chapter": 4
+            }
+          ],
+          "secondary": [
+            {
+              "chapter": 1,
+              "sectionAnchor": "1.2.6 护栏与安全性"
+            }
+          ]
+        },
+        "2-1": {
+          "primary": [
+            {
+              "chapter": 3
+            }
+          ],
+          "secondary": []
+        },
+        "2-2": {
+          "primary": [
+            {
+              "chapter": 3
+            }
+          ],
+          "secondary": []
+        },
+        "2-3": {
+          "primary": [
+            {
+              "chapter": 3,
+              "sectionAnchor": "3.1 用户记忆系统"
+            },
+            {
+              "chapter": 8
+            }
+          ],
+          "secondary": [
+            {
+              "chapter": 2
+            }
+          ]
+        },
+        "3-1": {
+          "primary": [
+            {
+              "chapter": 4
+            }
+          ],
+          "secondary": []
+        },
+        "3-2": {
+          "primary": [
+            {
+              "chapter": 1
+            },
+            {
+              "chapter": 4
+            }
+          ],
+          "secondary": []
+        },
+        "4-1": {
+          "primary": [
+            {
+              "chapter": 6
+            }
+          ],
+          "secondary": []
+        },
+        "4-2": {
+          "primary": [
+            {
+              "chapter": 10
+            }
+          ],
+          "secondary": []
+        }
+      }
+    },
+    "highPriority": {
+      "expectedCount": 5,
+      "headingAnchor": "五条最高优先级的作者论断（非共识型）",
+      "routing": {
+        "analysis-high-priority-01": {
+          "lessonIds": [
+            "0-1",
+            "0-2",
+            "3-2"
+          ],
+          "sourceChapters": [
+            1
+          ],
+          "versionStatus": "current"
+        },
+        "analysis-high-priority-02": {
+          "lessonIds": [
+            "1-1",
+            "1-2"
+          ],
+          "sourceChapters": [
+            2
+          ],
+          "versionStatus": "current"
+        },
+        "analysis-high-priority-03": {
+          "lessonIds": [],
+          "sourceChapters": [
+            7
+          ],
+          "versionStatus": "future"
+        },
+        "analysis-high-priority-04": {
+          "lessonIds": [],
+          "sourceChapters": [
+            7
+          ],
+          "versionStatus": "future"
+        },
+        "analysis-high-priority-05": {
+          "lessonIds": [
+            "4-2"
+          ],
+          "sourceChapters": [
+            10
+          ],
+          "versionStatus": "current"
+        }
+      }
+    },
+    "highRisk": {
+      "expectedCount": 8,
+      "headingAnchor": "🔴 高风险——容易被误引的表述",
+      "routing": {
+        "analysis-high-risk-01": {
+          "lessonIds": [
+            "4-2"
+          ],
+          "sourceChapters": [
+            10
+          ],
+          "versionStatus": "current"
+        },
+        "analysis-high-risk-02": {
+          "lessonIds": [],
+          "sourceChapters": [
+            7
+          ],
+          "versionStatus": "future"
+        },
+        "analysis-high-risk-03": {
+          "lessonIds": [
+            "1-1",
+            "1-2"
+          ],
+          "sourceChapters": [
+            2
+          ],
+          "versionStatus": "current"
+        },
+        "analysis-high-risk-04": {
+          "lessonIds": [
+            "1-1",
+            "1-2"
+          ],
+          "sourceChapters": [
+            2
+          ],
+          "versionStatus": "current"
+        },
+        "analysis-high-risk-05": {
+          "lessonIds": [
+            "4-1"
+          ],
+          "sourceChapters": [
+            6
+          ],
+          "versionStatus": "current"
+        },
+        "analysis-high-risk-06": {
+          "lessonIds": [
+            "4-2"
+          ],
+          "sourceChapters": [
+            10
+          ],
+          "versionStatus": "current"
+        },
+        "analysis-high-risk-07": {
+          "lessonIds": [],
+          "sourceChapters": [
+            7
+          ],
+          "versionStatus": "future"
+        },
+        "analysis-high-risk-08": {
+          "lessonIds": [],
+          "sourceChapters": [
+            5
+          ],
+          "versionStatus": "future"
+        }
+      }
+    }
+  },
+  "schemaVersion": 1,
+  "sectionLessonCandidates": {
+    "1.2.6 护栏与安全性": [
+      {
+        "lessonId": "1-3",
+        "role": "secondary"
+      }
+    ],
+    "3.1 用户记忆系统": [
+      {
+        "lessonId": "2-3",
+        "role": "primary"
+      }
+    ]
+  },
+  "versionBoundaryReason": "[版本边界] 留待未来技术人员版"
+}

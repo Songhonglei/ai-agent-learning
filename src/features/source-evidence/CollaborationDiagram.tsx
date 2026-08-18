@@ -1,0 +1,2 @@
+const paths = [['共享上下文', '少量角色沿同一任务轨迹接棒'], ['不共享上下文', '独立子任务并行，交接结构化结果'], ['共同前提', '清晰分工、可验证交接与终止条件']] as const
+export function CollaborationDiagram() { return <figure className="memory-layers-figure" aria-label="多Agent协作判断示意图"><div className="prompt-flow-heading"><div><p>协作架构</p><h3>先判断是否真的需要协作</h3></div><span>新信息才有价值</span></div><ol>{paths.map(([title, detail], index) => <li key={title}><span aria-hidden="true">{index + 1}</span><div><strong>{title}</strong><small>{detail}</small></div></li>)}</ol><figcaption>多 Agent 的价值取决于新信息、并行或隔离需求，而不是角色数量。</figcaption></figure> }

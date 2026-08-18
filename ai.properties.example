@@ -1,0 +1,6 @@
+# 平台注入的 ai.properties 示例（不要提交真实密钥）
+# 实际运行时会由平台注入 ai.properties 到工作目录
+ai.base_url=https://runway.devops.rednote.life/openai
+ai.api_key=replace-with-runway-api-key
+# ai.api_style=openai-chat-completions
+# ai.model=replace-with-model-name
