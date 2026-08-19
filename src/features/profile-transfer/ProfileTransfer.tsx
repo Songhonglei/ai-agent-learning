@@ -112,12 +112,18 @@ export function ProfileTransfer({
       {compact && <h2 className="sr-only" id="profile-transfer-title">导入或导出本地学习档案</h2>}
 
       <div className="profile-transfer-actions">
-        <button className="primary-button" type="button" onClick={handleExport}>
-          导出学习档案
+        <button
+          aria-label={compact ? '导出学习档案' : undefined}
+          className="primary-button"
+          type="button"
+          onClick={handleExport}
+        >
+          {compact ? '导出' : '导出学习档案'}
         </button>
         <label className="profile-transfer-file">
-          <span>导入学习档案</span>
+          <span>{compact ? '导入' : '导入学习档案'}</span>
           <input
+            aria-label={compact ? '导入学习档案' : undefined}
             type="file"
             accept="application/json,.json"
             disabled={blockedMessage !== undefined}

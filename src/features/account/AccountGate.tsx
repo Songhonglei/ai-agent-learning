@@ -37,8 +37,12 @@ export function AccountGate({ configured, onUseLocal, compact = false }: Account
   }
 
   if (!configured) {
+    if (compact) {
+      return <p className="account-gate-unavailable" role="status">登录暂不可用</p>
+    }
+
     return (
-      <section className={compact ? 'account-gate account-gate-compact' : 'account-gate'} role="status" aria-live="polite">
+      <section className="account-gate" role="status" aria-live="polite">
         <p className="status-kicker">云端学习档案正在配置</p>
         <h2>暂时使用本机学习</h2>
         <p>站点管理员尚未完成邮箱登录服务配置。你仍可将进度明确保存到当前浏览器，之后也可以导出备份。</p>
@@ -51,9 +55,15 @@ export function AccountGate({ configured, onUseLocal, compact = false }: Account
 
   return (
     <section className={compact ? 'account-gate account-gate-compact' : 'account-gate'} aria-labelledby="account-gate-title">
-      <p className="status-kicker">跨设备继续学习</p>
-      <h2 id="account-gate-title">{compact ? '登录云端档案' : '创建你的学习档案'}</h2>
-      <p>{compact ? '输入名称和邮箱，登录后即可跨设备同步进度。' : '输入名称和邮箱。我们会发送一次性登录链接，用于安全保存并同步你的学习进度。'}</p>
+      {compact ? (
+        <h2 className="sr-only" id="account-gate-title">登录学习档案</h2>
+      ) : (
+        <>
+          <p className="status-kicker">跨设备继续学习</p>
+          <h2 id="account-gate-title">创建你的学习档案</h2>
+          <p>输入名称和邮箱。我们会发送一次性登录链接，用于安全保存并同步你的学习进度。</p>
+        </>
+      )}
       {status === 'sent' ? (
         <div className="account-gate-success" role="status">
           登录链接已发送，请在邮箱中打开它；返回本页后会自动进入你的学习档案。
@@ -70,10 +80,15 @@ export function AccountGate({ configured, onUseLocal, compact = false }: Account
           </label>
           {error && <p className="account-gate-error" role="alert">{error}</p>}
           <div className="status-actions">
-            <button className="primary-button" type="submit" disabled={status === 'sending'}>
-              {status === 'sending' ? '正在发送…' : '发送登录链接'}
+            <button
+              aria-label={compact ? '发送登录链接' : undefined}
+              className="primary-button"
+              type="submit"
+              disabled={status === 'sending'}
+            >
+              {status === 'sending' ? '发送中…' : compact ? '登录' : '发送登录链接'}
             </button>
-            <button type="button" onClick={onUseLocal}>暂时仅在本机学习</button>
+            {!compact && <button type="button" onClick={onUseLocal}>暂时仅在本机学习</button>}
           </div>
         </form>
       )}

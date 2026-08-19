@@ -33,7 +33,7 @@ describe('StorageModeMenu', () => {
 
     await user.click(screen.getByRole('button', { name: '学习档案模式' }))
 
-    expect(screen.getByRole('heading', { name: '登录云端档案' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '登录学习档案' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: '发送登录链接' })).toBeInTheDocument()
   })
 

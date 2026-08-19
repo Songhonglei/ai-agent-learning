@@ -221,32 +221,25 @@ h1 {
   z-index: 40;
   top: calc(100% + 10px);
   right: 0;
-  width: min(390px, calc(100vw - 24px));
-  padding: 14px;
+  width: min(340px, calc(100vw - 24px));
+  padding: 12px;
   color: var(--text);
   background: color-mix(in srgb, var(--panel) 96%, transparent);
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: 14px;
   box-shadow: 0 20px 42px color-mix(in srgb, var(--text) 18%, transparent);
   backdrop-filter: blur(20px);
 }
 
 .storage-mode-panel-heading {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
 
-.storage-mode-panel-heading p {
-  margin-bottom: 2px;
-  color: var(--muted);
-  font-size: 0.72rem;
-  font-weight: 700;
-}
-
 .storage-mode-panel-heading strong {
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 .storage-mode-panel-heading button {
@@ -267,17 +260,17 @@ h1 {
 }
 
 .storage-mode-tabs {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
   gap: 4px;
   padding: 4px;
-  margin: 14px 0 12px;
+  margin: 10px 0 12px;
   background: var(--soft);
-  border-radius: 11px;
+  border-radius: 10px;
 }
 
 .storage-mode-tabs button {
-  padding: 8px 10px;
+  min-width: 68px;
+  padding: 7px 12px;
   color: var(--muted);
   background: transparent;
   border: 0;
@@ -392,18 +385,16 @@ h1 {
 }
 
 .account-gate-compact h2 {
-  margin-bottom: 5px;
-  font-size: 1rem;
+  margin: 0;
 }
 
 .account-gate-compact > p:not(.status-kicker) {
-  margin-bottom: 12px;
-  font-size: 0.82rem;
+  margin: 0;
 }
 
 .account-gate-compact .account-gate-form {
   grid-template-columns: 1fr;
-  gap: 10px;
+  gap: 8px;
 }
 
 .account-gate-compact .account-gate-form input {
@@ -411,7 +402,19 @@ h1 {
 }
 
 .account-gate-compact .status-actions {
-  margin-top: 2px;
+  margin-top: 0;
+}
+
+.account-gate-compact .status-actions button {
+  width: auto;
+  min-width: 68px;
+  padding: 8px 14px;
+}
+
+.account-gate-unavailable {
+  margin: 2px 0;
+  color: var(--muted);
+  font-size: 0.82rem;
 }
 
 .storage-mode-cloud-user,
@@ -420,8 +423,7 @@ h1 {
   gap: 8px;
 }
 
-.storage-mode-cloud-user p,
-.storage-mode-local-note {
+.storage-mode-cloud-user p {
   margin: 0;
   color: var(--muted);
   font-size: 0.78rem;
@@ -448,8 +450,15 @@ h1 {
 }
 
 .storage-mode-clear {
-  margin-top: 2px;
+  margin: 0;
   color: var(--warning);
+}
+
+.storage-mode-local {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px;
 }
 
 @media (max-width: 640px) {
@@ -2211,21 +2220,25 @@ h1 {
 }
 
 .profile-transfer-compact {
+  width: auto;
   padding: 0;
-  margin: 2px 0 0;
+  margin: 0;
   background: transparent;
   border: 0;
   border-radius: 0;
 }
 
 .profile-transfer-compact .profile-transfer-actions {
-  justify-content: stretch;
-  margin-top: 2px;
+  gap: 8px;
+  justify-content: flex-start;
+  margin-top: 0;
 }
 
 .profile-transfer-compact .profile-transfer-actions > * {
-  flex: 1 1 0;
+  flex: 0 0 auto;
   justify-content: center;
+  min-width: 68px;
+  padding: 8px 12px;
 }
 
 .sr-only {

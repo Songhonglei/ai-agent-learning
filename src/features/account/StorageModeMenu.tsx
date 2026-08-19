@@ -65,10 +65,7 @@ export function StorageModeMenu({
       {open && (
         <section className="storage-mode-panel" id="storage-mode-panel" aria-label="学习档案模式">
           <div className="storage-mode-panel-heading">
-            <div>
-              <p>学习档案</p>
-              <strong>{mode === 'local' ? '本地模式' : '云端模式'}</strong>
-            </div>
+            <strong>学习档案</strong>
             <button type="button" aria-label="关闭学习档案模式菜单" onClick={() => setOpen(false)}>×</button>
           </div>
 
@@ -108,10 +105,14 @@ export function StorageModeMenu({
             )
           ) : (
             <div className="storage-mode-local">
-              <p className="storage-mode-local-note">进度仅保存在这台设备的浏览器中。</p>
               <ProfileTransfer profile={profile} onConfirm={onProfileImport} compact />
-              <button className="storage-mode-clear" type="button" onClick={onClearLocal}>
-                清空本地学习档案
+              <button
+                aria-label="清空本地学习档案"
+                className="storage-mode-clear"
+                type="button"
+                onClick={onClearLocal}
+              >
+                清空
               </button>
             </div>
           )}
