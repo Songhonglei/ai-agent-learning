@@ -96,33 +96,31 @@ export function StorageModeMenu({
       {open && (
         <section className="storage-mode-panel" id="storage-mode-panel" aria-label="学习档案模式">
           <div className="storage-mode-panel-heading">
-            <strong>学习档案</strong>
+            <fieldset className={`storage-mode-options is-${selectedMode}`}>
+              <legend className="sr-only">学习数据存储位置</legend>
+              <label className={selectedMode === 'cloud' ? 'is-active' : undefined}>
+                <input
+                  type="radio"
+                  name="storage-mode"
+                  value="cloud"
+                  checked={selectedMode === 'cloud'}
+                  onChange={selectCloud}
+                />
+                <span>云端档案</span>
+              </label>
+              <label className={selectedMode === 'local' ? 'is-active' : undefined}>
+                <input
+                  type="radio"
+                  name="storage-mode"
+                  value="local"
+                  checked={selectedMode === 'local'}
+                  onChange={selectLocal}
+                />
+                <span>本地档案</span>
+              </label>
+            </fieldset>
             <button type="button" aria-label="关闭学习档案模式菜单" onClick={() => setOpen(false)}>×</button>
           </div>
-
-          <fieldset className={`storage-mode-options is-${selectedMode}`}>
-            <legend className="sr-only">学习数据存储位置</legend>
-            <label className={selectedMode === 'cloud' ? 'is-active' : undefined}>
-              <input
-                type="radio"
-                name="storage-mode"
-                value="cloud"
-                checked={selectedMode === 'cloud'}
-                onChange={selectCloud}
-              />
-              <span>云端</span>
-            </label>
-            <label className={selectedMode === 'local' ? 'is-active' : undefined}>
-              <input
-                type="radio"
-                name="storage-mode"
-                value="local"
-                checked={selectedMode === 'local'}
-                onChange={selectLocal}
-              />
-              <span>本地</span>
-            </label>
-          </fieldset>
 
           {selectedMode === 'cloud' ? (
             identity ? (

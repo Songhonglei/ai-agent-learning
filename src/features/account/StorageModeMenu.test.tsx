@@ -35,7 +35,7 @@ describe('StorageModeMenu', () => {
     const user = userEvent.setup()
 
     await user.click(screen.getByRole('button', { name: '学习档案模式' }))
-    await user.click(screen.getByRole('radio', { name: '云端' }))
+    await user.click(screen.getByRole('radio', { name: '云端档案' }))
 
     expect(screen.getByRole('heading', { name: '登录学习档案' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: '发送验证码' })).toBeInTheDocument()
@@ -65,7 +65,7 @@ describe('StorageModeMenu', () => {
     const modeSwitch = screen.getByRole('group', { name: '学习数据存储位置' })
     expect(modeSwitch).toHaveClass('is-cloud')
 
-    await user.click(screen.getByRole('radio', { name: '本地' }))
+    await user.click(screen.getByRole('radio', { name: '本地档案' }))
 
     expect(props.onUseLocal).toHaveBeenCalledOnce()
     expect(modeSwitch).toHaveClass('is-local')
@@ -79,7 +79,7 @@ describe('StorageModeMenu', () => {
     expect(trigger).toHaveAttribute('data-tooltip', '学习数据本地存储')
 
     await user.click(trigger)
-    await user.click(screen.getByRole('radio', { name: '云端' }))
+    await user.click(screen.getByRole('radio', { name: '云端档案' }))
 
     expect(props.onUseCloud).not.toHaveBeenCalled()
     expect(screen.getByRole('button', { name: '发送验证码' })).toBeInTheDocument()
