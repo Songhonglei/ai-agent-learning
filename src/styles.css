@@ -470,9 +470,9 @@ h1 {
 }
 
 .account-gate-compact .account-gate-form {
-  grid-template-columns: 1fr;
-  gap: 8px;
-  width: min(100%, 360px);
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: 10px;
+  width: 100%;
   margin-inline: auto;
 }
 
@@ -559,9 +559,9 @@ h1 {
   font-size: 0.98rem;
 }
 
-.storage-mode-cloud-user span {
-  color: var(--muted);
-  font-size: 0.78rem;
+.storage-mode-identity {
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 .storage-mode-cloud-user button,

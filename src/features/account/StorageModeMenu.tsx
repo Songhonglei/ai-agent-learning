@@ -128,8 +128,11 @@ export function StorageModeMenu({
             identity ? (
               <div className="storage-mode-cloud-user">
                 <p>已登录</p>
-                <strong>{identity.displayName || identity.email}</strong>
-                {identity.displayName && <span>{identity.email}</span>}
+                <strong className="storage-mode-identity">
+                  {identity.displayName
+                    ? `${identity.displayName}（${identity.email}）`
+                    : identity.email}
+                </strong>
                 <button type="button" onClick={() => { void handleSignOut() }} disabled={signingOut}>
                   {signingOut ? '正在登出…' : '登出用户'}
                 </button>

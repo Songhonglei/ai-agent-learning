@@ -92,6 +92,19 @@ describe('StorageModeMenu', () => {
       .toHaveAttribute('data-tooltip', '学习数据云端存储')
   })
 
+  it('shows the signed-in learner on one compact identity line', async () => {
+    renderMenu('cloud', {
+      accessToken: 'token',
+      email: 'learner@example.com',
+      displayName: 'Learner',
+    })
+    const user = userEvent.setup()
+
+    await user.click(screen.getByRole('button', { name: '学习档案模式' }))
+
+    expect(screen.getByText('Learner（learner@example.com）')).toBeInTheDocument()
+  })
+
   it('signs out the authenticated learner before closing the menu', async () => {
     let finishSignOut: (() => void) | undefined
     const props = renderMenu('cloud', {
