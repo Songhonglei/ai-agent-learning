@@ -1,13 +1,22 @@
 import { createClient, type Session } from '@supabase/supabase-js'
-import { appPath } from '../runtime/app-path'
 
 const projectUrl = import.meta.env.VITE_SUPABASE_URL?.trim()
 const publishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY?.trim()
-const client = projectUrl && publishableKey
-  ? createClient(projectUrl, publishableKey, {
-    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
-  })
-  : null
+
+function createLearnerClient() {
+  if (!projectUrl || !publishableKey) return null
+  try {
+    const url = new URL(projectUrl)
+    if (url.protocol !== 'https:' && url.protocol !== 'http:') return null
+    return createClient(url.toString(), publishableKey, {
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+    })
+  } catch {
+    return null
+  }
+}
+
+const client = createLearnerClient()
 
 export interface LearnerIdentity {
   accessToken: string
@@ -44,16 +53,25 @@ export function subscribeLearnerIdentity(callback: (identity: LearnerIdentity | 
   return () => data.subscription.unsubscribe()
 }
 
-export async function sendLearnerMagicLink(displayName: string, email: string): Promise<void> {
+export async function sendLearnerOtp(displayName: string, email: string): Promise<void> {
   if (!client) throw new Error('学习档案服务尚未配置')
   const { error } = await client.auth.signInWithOtp({
     email,
     options: {
-      emailRedirectTo: `${window.location.origin}${appPath('/')}`,
+      shouldCreateUser: true,
       data: { display_name: displayName },
     },
   })
   if (error) throw error
+}
+
+export async function verifyLearnerOtp(email: string, token: string): Promise<LearnerIdentity> {
+  if (!client) throw new Error('学习档案服务尚未配置')
+  const { data, error } = await client.auth.verifyOtp({ email, token, type: 'email' })
+  if (error) throw error
+  const identity = identityFromSession(data.session)
+  if (!identity) throw new Error('验证码已通过，但未能建立登录会话')
+  return identity
 }
 
 export async function signOutLearner(): Promise<void> {

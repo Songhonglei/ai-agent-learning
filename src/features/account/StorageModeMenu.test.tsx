@@ -38,7 +38,7 @@ describe('StorageModeMenu', () => {
     await user.click(screen.getByRole('radio', { name: '云端' }))
 
     expect(screen.getByRole('heading', { name: '登录学习档案' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '发送登录链接' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '发送验证码' })).toBeInTheDocument()
   })
 
   it('offers local backup, restore, and clear actions only in local mode', async () => {
@@ -78,7 +78,7 @@ describe('StorageModeMenu', () => {
     await user.click(screen.getByRole('radio', { name: '云端' }))
 
     expect(props.onUseCloud).not.toHaveBeenCalled()
-    expect(screen.getByRole('button', { name: '发送登录链接' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '发送验证码' })).toBeInTheDocument()
   })
 
   it('shows cloud storage only for an authenticated learner', () => {
