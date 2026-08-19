@@ -236,14 +236,18 @@ h1 {
 }
 
 .storage-mode-panel-heading {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 12px;
   margin-bottom: 12px;
 }
 
 .storage-mode-panel-heading button {
+  position: absolute;
+  top: 50%;
+  right: 0;
   width: 28px;
   height: 28px;
   padding: 0;
@@ -253,6 +257,7 @@ h1 {
   border-radius: 8px;
   font-size: 1.3rem;
   line-height: 1;
+  transform: translateY(-50%);
 }
 
 .storage-mode-panel-heading button:hover {
@@ -508,7 +513,7 @@ h1 {
 }
 
 .account-gate-compact .status-actions {
-  justify-content: flex-end;
+  justify-content: center;
   gap: 8px;
   margin-top: 4px;
 }
@@ -549,7 +554,7 @@ h1 {
 .account-gate-compact .account-otp-actions {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 8px;
   margin-top: 10px;
 }
@@ -595,7 +600,7 @@ h1 {
 
 .storage-mode-cloud-user button,
 .storage-mode-clear {
-  justify-self: end;
+  justify-self: center;
   min-height: 34px;
   padding: 6px 10px;
   color: var(--text);
@@ -619,7 +624,7 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 8px;
   padding-top: 2px;
 }
@@ -652,7 +657,7 @@ h1 {
   }
 
   .account-gate-compact .account-otp-actions {
-    justify-content: flex-end;
+    justify-content: center;
   }
 }
 
@@ -2419,12 +2424,12 @@ h1 {
 
 .profile-transfer-compact .profile-transfer-actions {
   gap: 8px;
-  justify-content: flex-end;
+  justify-content: center;
   margin-top: 0;
 }
 
 .profile-transfer-compact .profile-transfer-confirm-actions {
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .profile-transfer-compact .profile-transfer-actions > * {
