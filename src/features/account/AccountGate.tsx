@@ -4,9 +4,10 @@ import { sendLearnerMagicLink } from '../../shared/auth/learner-auth'
 interface AccountGateProps {
   configured: boolean
   onUseLocal: () => void
+  compact?: boolean
 }
 
-export function AccountGate({ configured, onUseLocal }: AccountGateProps) {
+export function AccountGate({ configured, onUseLocal, compact = false }: AccountGateProps) {
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent'>('idle')
@@ -37,7 +38,7 @@ export function AccountGate({ configured, onUseLocal }: AccountGateProps) {
 
   if (!configured) {
     return (
-      <section className="account-gate" role="status" aria-live="polite">
+      <section className={compact ? 'account-gate account-gate-compact' : 'account-gate'} role="status" aria-live="polite">
         <p className="status-kicker">云端学习档案正在配置</p>
         <h2>暂时使用本机学习</h2>
         <p>站点管理员尚未完成邮箱登录服务配置。你仍可将进度明确保存到当前浏览器，之后也可以导出备份。</p>
@@ -49,10 +50,10 @@ export function AccountGate({ configured, onUseLocal }: AccountGateProps) {
   }
 
   return (
-    <section className="account-gate" aria-labelledby="account-gate-title">
+    <section className={compact ? 'account-gate account-gate-compact' : 'account-gate'} aria-labelledby="account-gate-title">
       <p className="status-kicker">跨设备继续学习</p>
-      <h2 id="account-gate-title">创建你的学习档案</h2>
-      <p>输入名称和邮箱。我们会发送一次性登录链接，用于安全保存并同步你的学习进度。</p>
+      <h2 id="account-gate-title">{compact ? '登录云端档案' : '创建你的学习档案'}</h2>
+      <p>{compact ? '输入名称和邮箱，登录后即可跨设备同步进度。' : '输入名称和邮箱。我们会发送一次性登录链接，用于安全保存并同步你的学习进度。'}</p>
       {status === 'sent' ? (
         <div className="account-gate-success" role="status">
           登录链接已发送，请在邮箱中打开它；返回本页后会自动进入你的学习档案。

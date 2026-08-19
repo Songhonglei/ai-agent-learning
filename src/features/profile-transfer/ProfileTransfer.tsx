@@ -10,6 +10,7 @@ interface ProfileTransferProps {
   profile: LearningProfile
   onConfirm: (merged: LearningProfile) => void
   blockedMessage?: string
+  compact?: boolean
 }
 
 function downloadFileName(updatedAt: string): string {
@@ -28,6 +29,7 @@ export function ProfileTransfer({
   profile,
   onConfirm,
   blockedMessage,
+  compact = false,
 }: ProfileTransferProps) {
   const [preview, setPreview] = useState<ImportPreview | null>(null)
   const previewBaseRef = useRef<string | null>(null)
@@ -90,18 +92,24 @@ export function ProfileTransfer({
   }
 
   return (
-    <section className="profile-transfer" aria-labelledby="profile-transfer-title">
-      <div className="profile-transfer-heading">
-        <div>
-          <p className="profile-transfer-kicker">只在本机处理</p>
-          <h2 id="profile-transfer-title">备份与迁移学习档案</h2>
-        </div>
-        <span>JSON · schema v{profile.schemaVersion}</span>
-      </div>
+    <section className={compact ? 'profile-transfer profile-transfer-compact' : 'profile-transfer'} aria-labelledby="profile-transfer-title">
+      {!compact && (
+        <>
+          <div className="profile-transfer-heading">
+            <div>
+              <p className="profile-transfer-kicker">只在本机处理</p>
+              <h2 id="profile-transfer-title">备份与迁移学习档案</h2>
+            </div>
+            <span>JSON · schema v{profile.schemaVersion}</span>
+          </div>
 
-      <p className="profile-transfer-intro">
-        导出内容只包含学习进度；导入文件会先校验并展示合并取舍，确认前不会改动当前档案。
-      </p>
+          <p className="profile-transfer-intro">
+            导出内容只包含学习进度；导入文件会先校验并展示合并取舍，确认前不会改动当前档案。
+          </p>
+        </>
+      )}
+
+      {compact && <h2 className="sr-only" id="profile-transfer-title">导入或导出本地学习档案</h2>}
 
       <div className="profile-transfer-actions">
         <button className="primary-button" type="button" onClick={handleExport}>

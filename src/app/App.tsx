@@ -9,6 +9,7 @@ import { loadCloudProfile, saveCloudProfile } from '../shared/profile-api'
 import {
   getLearnerIdentity,
   isLearnerAuthConfigured,
+  signOutLearner,
   type LearnerIdentity,
   subscribeLearnerIdentity,
 } from '../shared/auth/learner-auth'
@@ -25,7 +26,7 @@ import {
   type LearningProfile,
 } from '../shared/types/profile'
 import { StatusPanel } from '../shared/ui/StatusPanel'
-import { AccountGate } from '../features/account/AccountGate'
+import { StorageModeMenu } from '../features/account/StorageModeMenu'
 import { LocalProgressSync } from '../features/account/LocalProgressSync'
 import { appPath, deploymentBasePath } from '../shared/runtime/app-path'
 import { ThemeToggle } from './theme'
@@ -128,8 +129,8 @@ export function App() {
       const saved = loadLearningProfile()
       if (saved.status === 'loaded') {
         applyProfile(saved.profile)
-        activateStorageMode('local')
       }
+      activateStorageMode('local')
       setCloudState('ready')
       return
     }
@@ -229,6 +230,38 @@ export function App() {
     setHasLocalWriteError(false)
   }
 
+  function useCloudProfile() {
+    activateStorageMode('cloud')
+    setHasWriteError(false)
+    setHasLocalWriteError(false)
+    if (identity) void refreshCloudProfile(identity.accessToken)
+  }
+
+  function clearLocalProfile() {
+    if (!window.confirm('确定清空这台设备中的学习进度、收藏与错题吗？此操作无法撤销。')) return
+    const emptyProfile = {
+      ...createEmptyProfile(),
+      theme: profileRef.current.theme,
+    }
+    applyProfile(emptyProfile)
+    activateStorageMode('local')
+    if (saveLearningProfile(emptyProfile)) {
+      setHasLocalWriteError(false)
+      return
+    }
+    setHasLocalWriteError(true)
+  }
+
+  function signOut() {
+    signOutLearner()
+      .then(() => {
+        setIdentity(null)
+        setAuthState('anonymous')
+        activateStorageMode('cloud')
+      })
+      .catch(() => setHasWriteError(true))
+  }
+
   function keepCloudProfile() {
     if (!pendingCloudProfile) return
     applyProfile(pendingCloudProfile)
@@ -286,6 +319,17 @@ export function App() {
             <img className="brand-mark" src={agentLearningLogo} alt="" />
             <span>Agent 入门课</span>
           </a>
+          <StorageModeMenu
+            profile={profile}
+            mode={storageMode}
+            identity={identity}
+            configured={authState !== 'unconfigured'}
+            onUseCloud={useCloudProfile}
+            onUseLocal={useLocalProfile}
+            onSignOut={signOut}
+            onClearLocal={clearLocalProfile}
+            onProfileImport={updateProfile}
+          />
           <a className="header-icon-button profile-link" href={appPath('/profile')} aria-label="学习档案" data-tooltip="学习档案">
             <span aria-hidden="true">▣</span>
           </a>
@@ -301,16 +345,6 @@ export function App() {
             <span aria-hidden="true">{headerCollapsed ? '↓' : '↑'}</span>
           </button>
         </header>
-
-        {storageMode === 'local' && !hasLocalWriteError && (
-          <p className="storage-message" role="status">
-            本机模式：学习进度正保存到当前浏览器。
-          </p>
-        )}
-
-        {storageMode === 'cloud' && authState !== 'authenticated' && cloudState !== 'error' && !hasWriteError && (
-          <AccountGate configured={authState !== 'unconfigured'} onUseLocal={useLocalProfile} />
-        )}
 
         {pendingCloudProfile && (
           <LocalProgressSync

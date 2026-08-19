@@ -122,8 +122,8 @@ describe('App routes and global learning profile', () => {
     window.history.pushState({}, '', '/lesson/0-1')
     render(<App />)
 
-    await user.click(await screen.findByRole('button', { name: '保存到本机' }))
-    expect(screen.getByText('本机模式：学习进度正保存到当前浏览器。')).toBeInTheDocument()
+    await user.click(await screen.findByRole('button', { name: '学习档案模式' }))
+    await user.click(screen.getByRole('tab', { name: '本地' }))
     expect(localStorage.getItem(LEARNING_PROFILE_STORAGE_KEY)).not.toBeNull()
 
     await user.click(screen.getByRole('button', { name: '下一步' }))
