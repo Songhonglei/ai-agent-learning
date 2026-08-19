@@ -472,6 +472,8 @@ h1 {
 .account-gate-compact .account-gate-form {
   grid-template-columns: 1fr;
   gap: 8px;
+  width: min(100%, 360px);
+  margin-inline: auto;
 }
 
 .account-gate-compact .account-gate-form input {
@@ -479,7 +481,8 @@ h1 {
 }
 
 .account-gate-compact .status-actions {
-  margin-top: 0;
+  gap: 8px;
+  margin-top: 4px;
 }
 
 .account-gate-compact .status-actions button {
@@ -490,8 +493,7 @@ h1 {
   font-size: 0.82rem;
 }
 
-.account-gate-compact .account-otp-step,
-.account-gate-compact .account-otp-form input {
+.account-gate-compact .account-otp-step {
   width: 100%;
 }
 
@@ -499,16 +501,33 @@ h1 {
   align-items: flex-start;
   flex-direction: column;
   gap: 1px;
+  width: min(100%, 360px);
+  margin: 0 auto 4px;
+}
+
+.account-gate-compact .account-otp-form label {
+  width: min(100%, 300px);
+  margin-inline: auto;
+}
+
+.account-gate-compact .account-otp-form input {
+  width: 100%;
+  min-height: 44px;
+  padding: 6px 10px;
+  font-size: 1rem;
+  letter-spacing: 0.18em;
 }
 
 .account-gate-compact .account-otp-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
+  margin-top: 10px;
 }
 
 .account-gate-compact .account-otp-actions button {
-  padding: 7px 9px;
+  min-height: 34px;
+  padding: 6px 10px;
 }
 
 .account-gate-unavailable {
@@ -523,6 +542,12 @@ h1 {
   gap: 8px;
 }
 
+.storage-mode-cloud-user {
+  justify-items: center;
+  padding-top: 2px;
+  text-align: center;
+}
+
 .storage-mode-cloud-user p {
   margin: 0;
   color: var(--muted);
@@ -530,6 +555,7 @@ h1 {
 }
 
 .storage-mode-cloud-user strong {
+  margin-top: 1px;
   font-size: 0.98rem;
 }
 
@@ -540,13 +566,19 @@ h1 {
 
 .storage-mode-cloud-user button,
 .storage-mode-clear {
-  justify-self: start;
-  padding: 8px 10px;
+  justify-self: center;
+  min-height: 34px;
+  padding: 6px 10px;
   color: var(--text);
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 9px;
+  font-size: 0.82rem;
   font-weight: 750;
+}
+
+.storage-mode-cloud-user button {
+  margin-top: 8px;
 }
 
 .storage-mode-clear {
@@ -560,6 +592,7 @@ h1 {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  padding-top: 2px;
 }
 
 .storage-mode-local .storage-mode-clear {
