@@ -148,9 +148,29 @@ function chooseProfileValue<T>(
   return newerSide(currentUpdatedAt, incomingUpdatedAt) === 'incoming' ? incoming : current
 }
 
+export function hasSavableLearningData(profile: LearningProfile): boolean {
+  if (
+    profile.wrongAnswers.length > 0
+    || profile.favoriteContentIds.length > 0
+    || Object.keys(profile.assessments).length > 0
+  ) {
+    return true
+  }
+
+  return Object.values(profile.courses).some((course) => (
+    course.completedAt !== undefined
+    || course.completedStepIds.length > 0
+    || Object.keys(course.answers).length > 0
+    || Object.values(course.experimentStates).some((selectedIds) => selectedIds.length > 0)
+  ))
+}
+
 export function exportProfile(profile: LearningProfile): string {
   const projected = projectLearningProfile(profile)
   if (!projected) throw new Error('当前学习档案无法导出。')
+  if (!hasSavableLearningData(projected)) {
+    throw new Error('本地没有可保存的学习档案。')
+  }
   return JSON.stringify(projected, null, 2)
 }
 

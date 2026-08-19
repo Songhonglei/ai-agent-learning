@@ -32,6 +32,7 @@ export function ProfileTransfer({
   compact = false,
 }: ProfileTransferProps) {
   const [preview, setPreview] = useState<ImportPreview | null>(null)
+  const [exportMessage, setExportMessage] = useState<string | null>(null)
   const previewBaseRef = useRef<string | null>(null)
 
   useEffect(() => {
@@ -48,7 +49,16 @@ export function ProfileTransfer({
   }, [preview, profile])
 
   function handleExport() {
-    const blob = new Blob([exportProfile(profile)], { type: 'application/json' })
+    let json: string
+    try {
+      json = exportProfile(profile)
+      setExportMessage(null)
+    } catch (error) {
+      setExportMessage(error instanceof Error ? error.message : '当前学习档案无法导出。')
+      return
+    }
+
+    const blob = new Blob([json], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
@@ -131,6 +141,10 @@ export function ProfileTransfer({
           />
         </label>
       </div>
+
+      {exportMessage && (
+        <p className="profile-transfer-error" role="alert">{exportMessage}</p>
+      )}
 
       {blockedMessage && (
         <p className="profile-transfer-error" role="alert">{blockedMessage}</p>

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { createEmptyProfile, type LearningProfile } from '../types/profile'
 import {
   exportProfile,
+  hasSavableLearningData,
   mergeLearningProfiles,
   previewProfileImport,
 } from './transfer'
@@ -21,6 +22,7 @@ describe('profile transfer', () => {
         '1-1': {
           ...profileAt('2026-08-05T10:00:00.000Z').courses['1-1'],
           currentStepId: 'dialogue-context',
+          completedStepIds: ['scene-context'],
           authoredSteps: [{ id: 'dialogue-context', body: 'course body' }],
         },
       },
@@ -34,7 +36,7 @@ describe('profile transfer', () => {
       courses: {
         '1-1': {
           currentStepId: 'dialogue-context',
-          completedStepIds: [],
+          completedStepIds: ['scene-context'],
           experimentStates: {},
           answers: {},
         },
@@ -43,6 +45,16 @@ describe('profile transfer', () => {
     expect(exported).not.toHaveProperty('courseBodies')
     expect(exported).not.toHaveProperty('localSecret')
     expect(exported.courses['1-1']).not.toHaveProperty('authoredSteps')
+  })
+
+  it('does not treat an initialized lesson location as savable learning data', () => {
+    const profile = profileAt('2026-08-05T10:00:00.000Z')
+
+    expect(hasSavableLearningData(profile)).toBe(false)
+    expect(() => exportProfile(profile)).toThrow('本地没有可保存的学习档案。')
+
+    profile.courses['0-1'].completedStepIds = ['scene-daily-agent']
+    expect(hasSavableLearningData(profile)).toBe(true)
   })
 
   it('rejects damaged JSON, malformed profiles, and future versions before merge', () => {

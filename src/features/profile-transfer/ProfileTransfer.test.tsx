@@ -113,6 +113,7 @@ describe('ProfileTransfer', () => {
       ...profileAt('2026-08-05T10:00:00.000Z'),
       unknownRoot: 'do-not-download',
     }
+    profile.courses['0-1'].completedStepIds = ['scene-daily-agent']
     render(<ProfileTransfer profile={profile} onConfirm={vi.fn()} />)
 
     await user.click(screen.getByRole('button', { name: '导出学习档案' }))
@@ -122,5 +123,19 @@ describe('ProfileTransfer', () => {
     await expect(blob.text()).resolves.not.toContain('unknownRoot')
     expect(click).toHaveBeenCalledOnce()
     await waitFor(() => expect(revokeObjectURL).toHaveBeenCalledWith('blob:learning-profile'))
+  })
+
+  it('explains that an untouched local profile has nothing to export', async () => {
+    const user = userEvent.setup()
+    const createObjectURL = vi.fn<(blob: Blob) => string>(() => 'blob:learning-profile')
+    vi.stubGlobal('URL', { createObjectURL, revokeObjectURL: vi.fn() })
+    const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined)
+    render(<ProfileTransfer profile={profileAt('2026-08-05T10:00:00.000Z')} onConfirm={vi.fn()} compact />)
+
+    await user.click(screen.getByRole('button', { name: '导出学习档案' }))
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('本地没有可保存的学习档案。')
+    expect(createObjectURL).not.toHaveBeenCalled()
+    expect(click).not.toHaveBeenCalled()
   })
 })
