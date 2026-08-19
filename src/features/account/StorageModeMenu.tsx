@@ -16,6 +16,29 @@ interface StorageModeMenuProps {
   onProfileImport(profile: LearningProfile): void
 }
 
+function StorageModeIcon({ mode }: { mode: 'cloud' | 'local' }): React.JSX.Element {
+  if (mode === 'local') {
+    return (
+      <svg className="storage-mode-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="3.5" y="5" width="17" height="14" rx="2.5" stroke="currentColor" strokeWidth="2" />
+        <path d="M7 15.5h.01M11 15.5h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      </svg>
+    )
+  }
+
+  return (
+    <svg className="storage-mode-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M7.25 18.25h9.25a4 4 0 0 0 .55-7.96A5.5 5.5 0 0 0 6.6 9.5a4.4 4.4 0 0 0 .65 8.75Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
 export function StorageModeMenu({
   profile,
   mode,
@@ -59,7 +82,7 @@ export function StorageModeMenu({
         data-tooltip={mode === 'local' ? '本地学习档案' : '云端学习档案'}
         onClick={() => setOpen((visible) => !visible)}
       >
-        <span aria-hidden="true">{mode === 'local' ? '⌂' : '☁'}</span>
+        <StorageModeIcon mode={mode} />
       </button>
 
       {open && (

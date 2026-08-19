@@ -216,6 +216,16 @@ h1 {
   border-color: color-mix(in srgb, var(--primary) 36%, var(--line));
 }
 
+.storage-mode-trigger {
+  line-height: 0;
+}
+
+.storage-mode-icon {
+  display: block;
+  width: 21px;
+  height: 21px;
+}
+
 .storage-mode-panel {
   position: absolute;
   z-index: 40;
@@ -260,7 +270,8 @@ h1 {
 }
 
 .storage-mode-tabs {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 4px;
   padding: 4px;
   margin: 10px 0 12px;
@@ -269,7 +280,8 @@ h1 {
 }
 
 .storage-mode-tabs button {
-  min-width: 68px;
+  width: 100%;
+  min-width: 0;
   padding: 7px 12px;
   color: var(--muted);
   background: transparent;
@@ -457,8 +469,16 @@ h1 {
 .storage-mode-local {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
   gap: 8px;
+}
+
+.storage-mode-local .storage-mode-clear {
+  min-width: 56px;
+  min-height: 34px;
+  padding: 6px 10px;
+  font-size: 0.82rem;
 }
 
 @media (max-width: 640px) {
@@ -2237,8 +2257,10 @@ h1 {
 .profile-transfer-compact .profile-transfer-actions > * {
   flex: 0 0 auto;
   justify-content: center;
-  min-width: 68px;
-  padding: 8px 12px;
+  min-width: 56px;
+  min-height: 34px;
+  padding: 6px 10px;
+  font-size: 0.82rem;
 }
 
 .sr-only {
