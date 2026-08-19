@@ -39,10 +39,9 @@ VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
-SUPABASE_SECRET_KEY=sb_secret_...
 ```
 
-其中两个 `VITE_` 值用于浏览器发起邮箱登录，属于公开项目配置；`SUPABASE_SECRET_KEY` 仅由 `/api/profile` 使用，必须设为 Sensitive，且不得提交到仓库。还需在 Supabase Authentication 的 URL Configuration 中设置 Site URL 与允许的 Vercel 回调地址，并为生产邮件配置 SMTP。
+两个 `VITE_` 值用于浏览器发起邮箱登录，属于公开项目配置；其余两个变量仅供 `/api/profile` 的服务器函数使用。学习档案表启用了按用户 ID 隔离的 RLS 策略，服务器函数会先验证邮箱登录令牌，再以该令牌读写对应用户的档案。还需在 Supabase Authentication 的 URL Configuration 中设置 Site URL 与允许的 Vercel 回调地址，并为生产邮件配置 SMTP。
 
 部署前执行：
 

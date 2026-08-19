@@ -7,8 +7,7 @@ function sendJson(response, status, payload) {
 function configured() {
   const url = process.env.SUPABASE_URL?.trim()
   const publishableKey = process.env.SUPABASE_PUBLISHABLE_KEY?.trim()
-  const secretKey = process.env.SUPABASE_SECRET_KEY?.trim()
-  return url && publishableKey && secretKey ? { url: url.replace(/\/$/, ''), publishableKey, secretKey } : null
+  return url && publishableKey ? { url: url.replace(/\/$/, ''), publishableKey } : null
 }
 
 function isProfilePayload(value) {
@@ -39,12 +38,12 @@ async function requireUser(request, config) {
   return typeof user?.id === 'string' && typeof user?.email === 'string' ? user : null
 }
 
-async function rest(config, path, init = {}) {
+async function rest(config, accessToken, path, init = {}) {
   const response = await fetch(`${config.url}/rest/v1/${path}`, {
     ...init,
     headers: {
-      apikey: config.secretKey,
-      Authorization: `Bearer ${config.secretKey}`,
+      apikey: config.publishableKey,
+      Authorization: accessToken,
       'Content-Type': 'application/json',
       ...(init.headers ?? {}),
     },
@@ -53,11 +52,11 @@ async function rest(config, path, init = {}) {
   return response
 }
 
-async function upsertAccount(config, user) {
+async function upsertAccount(config, user, accessToken) {
   const displayName = typeof user.user_metadata?.display_name === 'string'
     ? user.user_metadata.display_name.trim().slice(0, 60)
     : ''
-  await rest(config, 'learning_profiles?on_conflict=user_id', {
+  await rest(config, accessToken, 'learning_profiles?on_conflict=user_id', {
     method: 'POST',
     headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
     body: JSON.stringify([{
@@ -74,12 +73,14 @@ export default async function handler(request, response) {
   if (!config) return sendJson(response, 503, { error: '学习档案服务尚未完成配置。' })
   const user = await requireUser(request, config)
   if (!user) return sendJson(response, 401, { error: '请先通过邮箱登录后再同步学习档案。' })
+  const accessToken = request.headers.authorization
 
   try {
-    await upsertAccount(config, user)
+    await upsertAccount(config, user, accessToken)
     if (request.method === 'GET') {
       const result = await rest(
         config,
+        accessToken,
         `learning_profiles?user_id=eq.${encodeURIComponent(user.id)}&select=profile&limit=1`,
       )
       const rows = await result.json()
@@ -91,7 +92,7 @@ export default async function handler(request, response) {
     if (rawBody.length > maxProfileBytes) return sendJson(response, 413, { error: '学习档案内容过大。' })
     const profile = typeof request.body === 'string' ? JSON.parse(request.body) : request.body
     if (!isProfilePayload(profile)) return sendJson(response, 400, { error: '学习档案格式不正确。' })
-    const result = await rest(config, 'learning_profiles?on_conflict=user_id', {
+    const result = await rest(config, accessToken, 'learning_profiles?on_conflict=user_id', {
       method: 'POST',
       headers: { Prefer: 'resolution=merge-duplicates,return=representation' },
       body: JSON.stringify([{

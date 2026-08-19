@@ -39,13 +39,11 @@ function request(method, body, authorization = 'Bearer learner-token') {
 function setSupabaseConfig() {
   process.env.SUPABASE_URL = 'https://example.supabase.co'
   process.env.SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_test'
-  process.env.SUPABASE_SECRET_KEY = 'sb_secret_test'
 }
 
 function clearSupabaseConfig() {
   delete process.env.SUPABASE_URL
   delete process.env.SUPABASE_PUBLISHABLE_KEY
-  delete process.env.SUPABASE_SECRET_KEY
 }
 
 test('profile API makes unconfigured deployments explicitly local-only', async () => {
@@ -119,7 +117,7 @@ test('profile API validates and upserts a learner-owned profile server-side', as
     assert.equal(response.result.statusCode, 200)
     assert.deepEqual(response.result.payload, profile)
     assert.equal(calls.length, 3)
-    assert.equal(calls[2].init.headers.Authorization, 'Bearer sb_secret_test')
+    assert.equal(calls[2].init.headers.Authorization, 'Bearer learner-token')
     assert.match(calls[2].init.body, /learner@example\.com/)
   } finally {
     globalThis.fetch = originalFetch
