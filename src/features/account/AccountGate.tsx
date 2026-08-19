@@ -50,8 +50,8 @@ export function AccountGate({ configured, onUseLocal, compact = false }: Account
   async function verifyOtp(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const normalizedToken = token.replace(/\s/g, '')
-    if (!/^\d{6}$/.test(normalizedToken)) {
-      setError('请输入 6 位验证码。')
+    if (!/^\d{6,10}$/.test(normalizedToken)) {
+      setError('请输入 6 至 10 位验证码。')
       return
     }
 
@@ -134,9 +134,9 @@ export function AccountGate({ configured, onUseLocal, compact = false }: Account
                 autoFocus
                 autoComplete="one-time-code"
                 inputMode="numeric"
-                maxLength={6}
+                maxLength={10}
                 value={token}
-                onChange={(event) => setToken(event.target.value.replace(/\D/g, '').slice(0, 6))}
+                onChange={(event) => setToken(event.target.value.replace(/\D/g, '').slice(0, 10))}
               />
             </label>
             {error && <p className="account-gate-error" role="alert">{error}</p>}

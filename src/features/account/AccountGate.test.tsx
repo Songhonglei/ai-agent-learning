@@ -75,6 +75,26 @@ describe('AccountGate', () => {
     expect(await screen.findByRole('status')).toHaveTextContent('登录成功')
   })
 
+  it('accepts an eight-digit OTP when the Supabase project uses a custom length', async () => {
+    sendLearnerOtp.mockResolvedValue(undefined)
+    verifyLearnerOtp.mockResolvedValue({
+      accessToken: 'access-token',
+      email: 'learner@example.com',
+      displayName: '红叔',
+    })
+    render(<AccountGate configured onUseLocal={vi.fn()} compact />)
+    const user = userEvent.setup()
+
+    await user.type(screen.getByLabelText('名称'), '红叔')
+    await user.type(screen.getByLabelText('邮箱'), 'learner@example.com')
+    await user.click(screen.getByRole('button', { name: '发送验证码' }))
+    await user.type(await screen.findByLabelText('验证码'), '12345678')
+    await user.click(screen.getByRole('button', { name: '验证并登录' }))
+
+    expect(verifyLearnerOtp).toHaveBeenCalledWith('learner@example.com', '12345678')
+    expect(await screen.findByRole('status')).toHaveTextContent('登录成功')
+  })
+
   it('rejects an incomplete OTP without calling Supabase', async () => {
     sendLearnerOtp.mockResolvedValue(undefined)
     render(<AccountGate configured onUseLocal={vi.fn()} />)
@@ -86,7 +106,7 @@ describe('AccountGate', () => {
     await user.type(await screen.findByLabelText('验证码'), '123')
     await user.click(screen.getByRole('button', { name: '验证并登录' }))
 
-    expect(screen.getByRole('alert')).toHaveTextContent('请输入 6 位验证码。')
+    expect(screen.getByRole('alert')).toHaveTextContent('请输入 6 至 10 位验证码。')
     expect(verifyLearnerOtp).not.toHaveBeenCalled()
   })
 })
