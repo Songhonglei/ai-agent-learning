@@ -117,14 +117,13 @@ describe('App routes and global learning profile', () => {
     expect(screen.getByRole('button', { name: '继续学习' })).toBeEnabled()
   })
 
-  it('saves progress locally only after the learner confirms the cloud fallback', async () => {
+  it('saves progress locally while the learner is anonymous', async () => {
     const user = userEvent.setup()
     window.history.pushState({}, '', '/lesson/0-1')
     render(<App />)
 
-    await user.click(await screen.findByRole('button', { name: '学习档案模式' }))
-    await user.click(screen.getByRole('tab', { name: '本地' }))
-    expect(localStorage.getItem(LEARNING_PROFILE_STORAGE_KEY)).not.toBeNull()
+    expect(screen.getByRole('button', { name: '学习档案模式' }))
+      .toHaveAttribute('data-tooltip', '学习数据本地存储')
 
     await user.click(screen.getByRole('button', { name: '下一步' }))
     expect(JSON.parse(localStorage.getItem(LEARNING_PROFILE_STORAGE_KEY) ?? '')).toMatchObject({

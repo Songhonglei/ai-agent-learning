@@ -83,12 +83,12 @@ function LessonPage({ profile, onProfileChange }: LessonPageProps) {
 export function App() {
   const [profile, setProfile] = useState(createEmptyProfile)
   const profileRef = useRef(profile)
-  const storageModeRef = useRef<'cloud' | 'local'>('cloud')
+  const storageModeRef = useRef<'cloud' | 'local'>('local')
   const [cloudState, setCloudState] = useState<'loading' | 'ready' | 'error'>('loading')
   const [identity, setIdentity] = useState<LearnerIdentity | null>(null)
   const [authState, setAuthState] = useState<'checking' | 'anonymous' | 'authenticated' | 'unconfigured'>('checking')
   const [hasWriteError, setHasWriteError] = useState(false)
-  const [storageMode, setStorageMode] = useState<'cloud' | 'local'>('cloud')
+  const [storageMode, setStorageMode] = useState<'cloud' | 'local'>('local')
   const [hasLocalWriteError, setHasLocalWriteError] = useState(false)
   const [headerCollapsed, setHeaderCollapsed] = useState(false)
   const [pendingCloudProfile, setPendingCloudProfile] = useState<LearningProfile | null>(null)
@@ -142,18 +142,19 @@ export function App() {
         setIdentity(nextIdentity)
         setAuthState(nextIdentity ? 'authenticated' : 'anonymous')
         if (nextIdentity) void refreshCloudProfile(nextIdentity.accessToken)
-        else setCloudState('ready')
+        else enterAnonymousLocalMode()
       })
       .catch(() => {
         if (!subscribed) return
         setAuthState('anonymous')
-        setCloudState('ready')
+        enterAnonymousLocalMode()
       })
     const unsubscribe = subscribeLearnerIdentity((nextIdentity) => {
       if (!subscribed) return
       setIdentity(nextIdentity)
       setAuthState(nextIdentity ? 'authenticated' : 'anonymous')
       if (nextIdentity) void refreshCloudProfile(nextIdentity.accessToken)
+      else enterAnonymousLocalMode()
     })
     return () => {
       subscribed = false
@@ -231,6 +232,7 @@ export function App() {
   }
 
   function useCloudProfile() {
+    if (!identity) return
     activateStorageMode('cloud')
     setHasWriteError(false)
     setHasLocalWriteError(false)
@@ -257,9 +259,28 @@ export function App() {
       .then(() => {
         setIdentity(null)
         setAuthState('anonymous')
-        activateStorageMode('cloud')
+        enterAnonymousLocalMode()
       })
       .catch(() => setHasWriteError(true))
+  }
+
+  function enterAnonymousLocalMode() {
+    const saved = loadLearningProfile()
+    if (saved.status === 'loaded') {
+      applyProfile(saved.profile)
+      setHasLocalWriteError(false)
+    } else if (saved.status === 'empty') {
+      applyProfile({
+        ...createEmptyProfile(),
+        theme: profileRef.current.theme,
+      })
+      setHasLocalWriteError(false)
+    } else {
+      setHasLocalWriteError(true)
+    }
+    activateStorageMode('local')
+    setCloudState('ready')
+    setHasWriteError(false)
   }
 
   function keepCloudProfile() {

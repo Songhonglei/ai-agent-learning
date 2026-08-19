@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { LearningProfile } from '../../shared/types/profile'
 import type { LearnerIdentity } from '../../shared/auth/learner-auth'
 import { AccountGate } from './AccountGate'
@@ -52,6 +52,12 @@ export function StorageModeMenu({
 }: StorageModeMenuProps): React.JSX.Element {
   const [open, setOpen] = useState(false)
   const [signingOut, setSigningOut] = useState(false)
+  const effectiveMode = mode === 'cloud' && identity ? 'cloud' : 'local'
+  const [selectedMode, setSelectedMode] = useState<'cloud' | 'local'>(effectiveMode)
+
+  useEffect(() => {
+    setSelectedMode(effectiveMode)
+  }, [effectiveMode])
 
   async function handleSignOut() {
     setSigningOut(true)
@@ -64,25 +70,27 @@ export function StorageModeMenu({
   }
 
   function selectCloud() {
-    onUseCloud()
+    setSelectedMode('cloud')
+    if (identity) onUseCloud()
   }
 
   function selectLocal() {
+    setSelectedMode('local')
     onUseLocal()
   }
 
   return (
     <div className="storage-mode-menu">
       <button
-        className={mode === 'local' ? 'header-icon-button storage-mode-trigger is-local' : 'header-icon-button storage-mode-trigger'}
+        className={effectiveMode === 'local' ? 'header-icon-button storage-mode-trigger is-local' : 'header-icon-button storage-mode-trigger'}
         type="button"
         aria-label="学习档案模式"
         aria-expanded={open}
         aria-controls="storage-mode-panel"
-        data-tooltip={mode === 'local' ? '本地学习档案' : '云端学习档案'}
+        data-tooltip={effectiveMode === 'local' ? '学习数据本地存储' : '学习数据云端存储'}
         onClick={() => setOpen((visible) => !visible)}
       >
-        <StorageModeIcon mode={mode} />
+        <StorageModeIcon mode={effectiveMode} />
       </button>
 
       {open && (
@@ -92,28 +100,31 @@ export function StorageModeMenu({
             <button type="button" aria-label="关闭学习档案模式菜单" onClick={() => setOpen(false)}>×</button>
           </div>
 
-          <div className="storage-mode-tabs" role="tablist" aria-label="学习档案模式切换">
-            <button
-              type="button"
-              role="tab"
-              aria-selected={mode === 'cloud'}
-              className={mode === 'cloud' ? 'is-active' : undefined}
-              onClick={selectCloud}
-            >
-              云端
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={mode === 'local'}
-              className={mode === 'local' ? 'is-active' : undefined}
-              onClick={selectLocal}
-            >
-              本地
-            </button>
-          </div>
+          <fieldset className="storage-mode-options">
+            <legend className="sr-only">学习数据存储位置</legend>
+            <label className={selectedMode === 'cloud' ? 'is-active' : undefined}>
+              <input
+                type="radio"
+                name="storage-mode"
+                value="cloud"
+                checked={selectedMode === 'cloud'}
+                onChange={selectCloud}
+              />
+              <span>云端</span>
+            </label>
+            <label className={selectedMode === 'local' ? 'is-active' : undefined}>
+              <input
+                type="radio"
+                name="storage-mode"
+                value="local"
+                checked={selectedMode === 'local'}
+                onChange={selectLocal}
+              />
+              <span>本地</span>
+            </label>
+          </fieldset>
 
-          {mode === 'cloud' ? (
+          {selectedMode === 'cloud' ? (
             identity ? (
               <div className="storage-mode-cloud-user">
                 <p>已登录</p>

@@ -269,31 +269,43 @@ h1 {
   background: var(--soft);
 }
 
-.storage-mode-tabs {
+.storage-mode-options {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 4px;
   padding: 4px;
   margin: 10px 0 12px;
   background: var(--soft);
+  border: 0;
   border-radius: 10px;
 }
 
-.storage-mode-tabs button {
+.storage-mode-options label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
   width: 100%;
   min-width: 0;
   padding: 7px 12px;
   color: var(--muted);
   background: transparent;
-  border: 0;
   border-radius: 8px;
+  cursor: pointer;
   font-weight: 750;
 }
 
-.storage-mode-tabs button.is-active {
+.storage-mode-options label.is-active {
   color: var(--text);
   background: var(--panel);
   box-shadow: 0 1px 4px color-mix(in srgb, var(--text) 12%, transparent);
+}
+
+.storage-mode-options input {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: var(--primary);
 }
 
 .app-header.is-collapsed {
