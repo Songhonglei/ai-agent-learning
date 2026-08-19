@@ -82,7 +82,7 @@ export function StorageModeMenu({
   return (
     <div className="storage-mode-menu">
       <button
-        className={effectiveMode === 'local' ? 'header-icon-button storage-mode-trigger is-local' : 'header-icon-button storage-mode-trigger'}
+        className="header-icon-button storage-mode-trigger"
         type="button"
         aria-label="学习档案模式"
         aria-expanded={open}

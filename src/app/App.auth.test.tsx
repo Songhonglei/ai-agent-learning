@@ -1,0 +1,50 @@
+import { cleanup, render, screen, waitFor } from '@testing-library/react'
+import '@testing-library/jest-dom/vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { LEARNING_PROFILE_STORAGE_KEY } from '../shared/storage/learningProfile'
+import { createEmptyProfile, type LearningProfile } from '../shared/types/profile'
+
+const cloudProfile = createEmptyProfile()
+
+vi.mock('../shared/auth/learner-auth', () => ({
+  getLearnerIdentity: vi.fn(async () => ({
+    accessToken: 'access-token',
+    email: 'learner@example.com',
+    displayName: 'Learner',
+  })),
+  isLearnerAuthConfigured: vi.fn(() => true),
+  signOutLearner: vi.fn(async () => undefined),
+  subscribeLearnerIdentity: vi.fn(() => () => undefined),
+}))
+
+vi.mock('../shared/profile-api', () => ({
+  loadCloudProfile: vi.fn(async () => cloudProfile),
+  saveCloudProfile: vi.fn(async (profile: LearningProfile) => profile),
+}))
+
+import { App } from './App'
+
+describe('App authenticated storage mode', () => {
+  afterEach(() => {
+    cleanup()
+    localStorage.clear()
+    vi.clearAllMocks()
+  })
+
+  it('enters cloud mode immediately after login while offering to merge local progress', async () => {
+    localStorage.setItem(LEARNING_PROFILE_STORAGE_KEY, JSON.stringify({
+      ...createEmptyProfile(),
+      currentLessonId: '1-1',
+      updatedAt: '2026-08-19T08:00:00.000Z',
+    }))
+    window.history.pushState({}, '', '/')
+
+    render(<App />)
+
+    expect(await screen.findByRole('heading', { name: '要合并到这个学习档案吗？' })).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: '学习档案模式' }))
+        .toHaveAttribute('data-tooltip', '学习数据云端存储')
+    })
+  })
+})

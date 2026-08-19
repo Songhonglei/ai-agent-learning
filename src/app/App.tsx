@@ -110,7 +110,10 @@ export function App() {
       const savedLocalProfile = loadLearningProfile()
       if (storageModeRef.current === 'local' && savedLocalProfile.status === 'loaded') {
         setPendingCloudProfile(cloudProfile)
+        applyProfile(cloudProfile)
+        activateStorageMode('cloud')
         setCloudState('ready')
+        setHasWriteError(false)
         return
       }
       applyProfile(cloudProfile)
@@ -136,29 +139,44 @@ export function App() {
     }
 
     let subscribed = true
-    void getLearnerIdentity()
-      .then((nextIdentity) => {
-        if (!subscribed) return
-        setIdentity(nextIdentity)
-        setAuthState(nextIdentity ? 'authenticated' : 'anonymous')
-        if (nextIdentity) void refreshCloudProfile(nextIdentity.accessToken)
-        else enterAnonymousLocalMode()
-      })
-      .catch(() => {
-        if (!subscribed) return
-        setAuthState('anonymous')
-        enterAnonymousLocalMode()
-      })
-    const unsubscribe = subscribeLearnerIdentity((nextIdentity) => {
+    let activeAccessToken: string | null | undefined
+    function applyLearnerIdentity(nextIdentity: LearnerIdentity | null) {
       if (!subscribed) return
+      const nextAccessToken = nextIdentity?.accessToken ?? null
+      if (nextAccessToken === activeAccessToken) return
+      activeAccessToken = nextAccessToken
       setIdentity(nextIdentity)
       setAuthState(nextIdentity ? 'authenticated' : 'anonymous')
       if (nextIdentity) void refreshCloudProfile(nextIdentity.accessToken)
       else enterAnonymousLocalMode()
+    }
+
+    function refreshLearnerIdentity() {
+      void getLearnerIdentity()
+        .then(applyLearnerIdentity)
+        .catch(() => {
+          if (!subscribed) return
+          setAuthState('anonymous')
+          enterAnonymousLocalMode()
+        })
+    }
+
+    refreshLearnerIdentity()
+    const unsubscribe = subscribeLearnerIdentity((nextIdentity) => {
+      applyLearnerIdentity(nextIdentity)
     })
+
+    function refreshIdentityWhenVisible() {
+      if (document.visibilityState === 'visible') refreshLearnerIdentity()
+    }
+
+    window.addEventListener('focus', refreshLearnerIdentity)
+    document.addEventListener('visibilitychange', refreshIdentityWhenVisible)
     return () => {
       subscribed = false
       unsubscribe()
+      window.removeEventListener('focus', refreshLearnerIdentity)
+      document.removeEventListener('visibilitychange', refreshIdentityWhenVisible)
     }
   }, [])
 

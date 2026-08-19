@@ -210,10 +210,6 @@ h1 {
   margin-left: 0;
 }
 
-.storage-mode-trigger.is-local {
-  color: var(--primary-text);
-}
-
 .storage-mode-trigger {
   line-height: 0;
 }
