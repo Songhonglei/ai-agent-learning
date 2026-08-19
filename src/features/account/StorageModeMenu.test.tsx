@@ -62,9 +62,13 @@ describe('StorageModeMenu', () => {
     const user = userEvent.setup()
 
     await user.click(screen.getByRole('button', { name: '学习档案模式' }))
+    const modeSwitch = screen.getByRole('group', { name: '学习数据存储位置' })
+    expect(modeSwitch).toHaveClass('is-cloud')
+
     await user.click(screen.getByRole('radio', { name: '本地' }))
 
     expect(props.onUseLocal).toHaveBeenCalledOnce()
+    expect(modeSwitch).toHaveClass('is-local')
   })
 
   it('keeps anonymous learners in local storage until cloud login succeeds', async () => {

@@ -100,7 +100,7 @@ export function StorageModeMenu({
             <button type="button" aria-label="关闭学习档案模式菜单" onClick={() => setOpen(false)}>×</button>
           </div>
 
-          <fieldset className="storage-mode-options">
+          <fieldset className={`storage-mode-options is-${selectedMode}`}>
             <legend className="sr-only">学习数据存储位置</legend>
             <label className={selectedMode === 'cloud' ? 'is-active' : undefined}>
               <input

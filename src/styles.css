@@ -264,42 +264,72 @@ h1 {
 }
 
 .storage-mode-options {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 4px;
-  padding: 4px;
-  margin: 10px 0 12px;
+  width: 138px;
+  min-height: 32px;
+  padding: 3px;
+  margin: 8px 0 12px auto;
   background: var(--soft);
-  border: 0;
-  border-radius: 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+.storage-mode-options::before {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  content: '';
+  background: var(--panel);
+  border: 1px solid color-mix(in srgb, var(--primary) 45%, var(--line));
+  border-radius: 999px;
+  box-shadow: 0 2px 7px color-mix(in srgb, var(--text) 10%, transparent);
+  transition: transform 180ms ease;
+}
+
+.storage-mode-options.is-local::before {
+  transform: translateX(100%);
 }
 
 .storage-mode-options label {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
   width: 100%;
   min-width: 0;
-  padding: 7px 12px;
+  min-height: 26px;
+  padding: 4px 9px;
   color: var(--muted);
   background: transparent;
-  border-radius: 8px;
+  border-radius: 999px;
   cursor: pointer;
+  font-size: 0.76rem;
   font-weight: 750;
+  transition: color 150ms ease;
 }
 
 .storage-mode-options label.is-active {
   color: var(--text);
-  background: var(--panel);
-  box-shadow: 0 1px 4px color-mix(in srgb, var(--text) 12%, transparent);
+  background: transparent;
+  box-shadow: none;
 }
 
 .storage-mode-options input {
-  width: 15px;
-  height: 15px;
-  margin: 0;
-  accent-color: var(--primary);
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.storage-mode-options label:has(input:focus-visible) {
+  outline: 2px solid var(--indigo);
+  outline-offset: 2px;
 }
 
 .app-header.is-collapsed {
@@ -481,6 +511,7 @@ h1 {
 }
 
 .account-gate-compact .status-actions {
+  justify-content: flex-end;
   gap: 8px;
   margin-top: 4px;
 }
@@ -521,6 +552,7 @@ h1 {
 .account-gate-compact .account-otp-actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 8px;
   margin-top: 10px;
 }
@@ -566,7 +598,7 @@ h1 {
 
 .storage-mode-cloud-user button,
 .storage-mode-clear {
-  justify-self: center;
+  justify-self: end;
   min-height: 34px;
   padding: 6px 10px;
   color: var(--text);
@@ -590,7 +622,7 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 8px;
   padding-top: 2px;
 }
@@ -623,7 +655,7 @@ h1 {
   }
 
   .account-gate-compact .account-otp-actions {
-    justify-content: center;
+    justify-content: flex-end;
   }
 }
 
@@ -2390,8 +2422,12 @@ h1 {
 
 .profile-transfer-compact .profile-transfer-actions {
   gap: 8px;
-  justify-content: flex-start;
+  justify-content: flex-end;
   margin-top: 0;
+}
+
+.profile-transfer-compact .profile-transfer-confirm-actions {
+  justify-content: flex-end;
 }
 
 .profile-transfer-compact .profile-transfer-actions > * {
