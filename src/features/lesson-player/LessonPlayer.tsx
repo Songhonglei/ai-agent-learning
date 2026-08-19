@@ -20,7 +20,7 @@ import {
 } from '../favorites/FavoriteButton'
 import { Quiz } from '../quiz/Quiz'
 import { SourceEvidence } from '../source-evidence/SourceEvidence'
-import hongshuAvatar from '../../../visuals/hongshu-avatar.svg'
+import hongshuAvatar from '../../assets/brand/hongshu-avatar.svg'
 import { appPath } from '../../shared/runtime/app-path'
 import { fullyAuthoredLessonIds, learningMapLessonIds } from '../../content/learning-map'
 import { randomMentorQuote } from '../../shared/ui/mentorQuotes'

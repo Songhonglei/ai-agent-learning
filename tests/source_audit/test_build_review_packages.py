@@ -116,7 +116,7 @@ class ReviewPackageMarkdownTests(unittest.TestCase):
             "统一公式（全书锚点）",
         )
         self.assertEqual(
-            outline["02-课程大纲.md:2-2"]["heading"],
+            outline["docs/project/02-课程大纲.md:2-2"]["heading"],
             "0-1 Lesson 0-1",
         )
 class ReviewPackageBundleTests(unittest.TestCase):

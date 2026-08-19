@@ -369,7 +369,7 @@ class MigrationCliTests(unittest.TestCase):
                 "--review-ledger", str(workspace.ledger),
                 "--policy", str(workspace.policy),
                 "--analysis", "reference/book-analysis.md",
-                "--course-outline", "02-课程大纲.md",
+                "--course-outline", "docs/project/02-课程大纲.md",
                 "--review-evidence-root", str(evidence_root),
                 "--coverage-report", str(root / "coverage.md"),
                 "--visual-report", str(root / "visual.md"),

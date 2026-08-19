@@ -30,7 +30,7 @@ class MustKeepTests(unittest.TestCase):
             {
                 "heading": heading,
                 "text": "\n".join(lines[start + 1 : end]),
-                "path": path.name if path.name == "02-课程大纲.md" else f"reference/{path.name}",
+                "path": f"docs/project/{path.name}" if path.name == "02-课程大纲.md" else f"reference/{path.name}",
                 "startLine": start + 2,
                 "endLine": end,
             }
@@ -44,7 +44,7 @@ class MustKeepTests(unittest.TestCase):
         inventory = build_must_keep_inventory(
             sample_policy(),
             self._markdown_sections(root / "reference/book-analysis.md"),
-            self._markdown_sections(root / "02-课程大纲.md"),
+            self._markdown_sections(root / "docs/project/02-课程大纲.md"),
         )
         self.assertEqual(len(inventory), 25)
         self.assertEqual(

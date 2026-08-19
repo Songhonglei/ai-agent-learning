@@ -8071,7 +8071,7 @@
       "0-2"
     ],
     "markdownRefs": [
-      "02-课程大纲.md:19"
+      "docs/project/02-课程大纲.md:19"
     ],
     "mustKeepIds": [],
     "reason": "全页从真实业务反馈、Evaluation、架构原则与Agent自举收束到统一公式和全书结构图，全部服务0-1与0-2导论目标。",

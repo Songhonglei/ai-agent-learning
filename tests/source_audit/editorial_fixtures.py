@@ -604,7 +604,7 @@ def sample_outline_sections():
         "headingLevel": 2,
         "lessonId": lesson_id,
         "text": f"核心内容：课程目标 {lesson_id}",
-        "path": "02-课程大纲.md",
+        "path": "docs/project/02-课程大纲.md",
         "startLine": number + 2,
         "endLine": number + 2,
     } for number, lesson_id in enumerate(_LESSON_IDS)]
@@ -619,7 +619,7 @@ def sample_must_keep_inventory():
         inventory.append({
             "mustKeepId": f"course-objective-{lesson_id}",
             "text": f"课程目标 {lesson_id}",
-            "sourceRef": f"02-课程大纲.md:{_LESSON_IDS.index(lesson_id) + 2}",
+            "sourceRef": f"docs/project/02-课程大纲.md:{_LESSON_IDS.index(lesson_id) + 2}",
             "primarySourceRoutes": _fresh(routes[lesson_id]["primary"]),
             "secondarySourceRoutes": _fresh(routes[lesson_id]["secondary"]),
             "lessonIds": [lesson_id],
@@ -2012,7 +2012,7 @@ def sample_freeze_args():
         ledger="reference/source-audit/review-ledger.json",
         policy="reference/source-audit/editorial-policy.json",
         analysis="reference/book-analysis.md",
-        course_outline="02-课程大纲.md",
+        course_outline="docs/project/02-课程大纲.md",
         output="tmp/freeze.json",
     )
 

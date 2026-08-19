@@ -19,7 +19,7 @@ import {
 import { StatusPanel } from '../shared/ui/StatusPanel'
 import { appPath, deploymentBasePath } from '../shared/runtime/app-path'
 import { ThemeToggle } from './theme'
-import agentLearningLogo from '../../visuals/agent-learning-logo.svg'
+import agentLearningLogo from '../assets/brand/agent-learning-logo.svg'
 
 function LearningMapPage({ profile }: { profile: LearningProfile }) {
   if (learningMapNodes.length === 0) {

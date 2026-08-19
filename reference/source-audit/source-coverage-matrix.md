@@ -519,7 +519,7 @@ PDF 指纹：27dba7a82ce46fbaa60c27a99e633a029db455ec2ccec08c79466c57f317b4ac
 | page-007 | page | 7 | — | included | reviewed | 0-1、0-2 | — | — | — | — |
 | page-008 | page | 8 | — | included | reviewed | 0-1、0-2 | — | — | — | — |
 | page-009 | page | 9 | — | included | reviewed | 0-1、0-2 | — | — | — | — |
-| page-010 | page | 10 | — | included | reviewed | 0-1、0-2 | 02-课程大纲.md:19 | — | — | — |
+| page-010 | page | 10 | — | included | reviewed | 0-1、0-2 | docs/project/02-课程大纲.md:19 | — | — | — |
 | page-011 | page | 11 | — | included | reviewed | 0-1、0-2 | — | — | — | — |
 | page-012 | page | 12 | — | included | reviewed | 0-1、0-2 | — | — | — | — |
 | page-013 | page | 13 | — | included | reviewed | 0-1、0-2 | — | — | — | — |

@@ -56,7 +56,7 @@
 
 ## 追溯与验收
 
-- 课程大纲：`02-课程大纲.md` 的 0-2 条目。
+- 课程大纲：`docs/project/02-课程大纲.md` 的 0-2 条目。
 - 机器可读决定：`reference/source-audit/coverage-decisions.json` 中 `page-010`、`figure-0-1`、`page-015`、`page-016`、`page-020`、`experiment-1-1`、`figure-1-2`、`figure-0-2`。
 - 视觉门禁：`figure-0-1` 必须以可访问的语义核心重绘出现；`figure-1-2` 必须以文字 / 表格方式出现。
 - 课程验证：每道互动与测验题都要标注上述来源 ID；不得以具体产品动态能力替代三要素概念判断。

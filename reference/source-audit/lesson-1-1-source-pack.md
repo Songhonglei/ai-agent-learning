@@ -42,7 +42,7 @@
 
 ## 追溯与验收
 
-- 课程大纲：`02-课程大纲.md` 的 1-1 条目。
+- 课程大纲：`docs/project/02-课程大纲.md` 的 1-1 条目。
 - 机器可读决定：`reference/source-audit/coverage-decisions.json` 中 `figure-2-1`、`page-035`、`page-052`。
 - 视觉处理：`reference/source-audit/visual-asset-index.md` 中 `figure-2-1`。
 - 阶段A门禁要求至少存在一个映射至 1-1 的 `semantic-core` 重绘来源及其文字替代；当前由 `figure-2-1` 满足。

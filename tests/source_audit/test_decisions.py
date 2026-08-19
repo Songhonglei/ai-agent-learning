@@ -52,7 +52,7 @@ class DecisionContractTests(unittest.TestCase):
     def test_markdown_refs_are_project_relative_with_positive_lines(self):
         decision = sample_reviewed_decision()
         for value in (
-            "02-课程大纲.md:24",
+            "docs/project/02-课程大纲.md:24",
             "reference/book-analysis.md:52-78",
         ):
             valid = copy.deepcopy(decision)
