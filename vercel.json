@@ -7,7 +7,8 @@
   ],
   "functions": {
     "api/course-answer.mjs": {
-      "maxDuration": 30
+      "maxDuration": 30,
+      "includeFiles": "reference/source-audit/lesson-*-source-pack.md"
     }
   }
 }
