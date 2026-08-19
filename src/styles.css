@@ -212,8 +212,6 @@ h1 {
 
 .storage-mode-trigger.is-local {
   color: var(--primary-text);
-  background: color-mix(in srgb, var(--primary) 13%, var(--panel));
-  border-color: color-mix(in srgb, var(--primary) 36%, var(--line));
 }
 
 .storage-mode-trigger {
