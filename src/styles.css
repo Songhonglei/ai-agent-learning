@@ -228,6 +228,76 @@ h1 {
   border-radius: 12px;
 }
 
+.account-gate {
+  margin: 0 0 14px;
+  padding: 22px 24px;
+  color: var(--text);
+  background: color-mix(in srgb, var(--soft) 76%, var(--panel));
+  border: 1px solid color-mix(in srgb, var(--primary) 60%, var(--line));
+  border-radius: 18px;
+}
+
+.account-gate h2 {
+  margin-bottom: 7px;
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+}
+
+.account-gate > p:not(.status-kicker) {
+  max-width: 760px;
+  margin-bottom: 16px;
+  color: var(--muted);
+}
+
+.account-gate-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 270px));
+  gap: 12px 16px;
+}
+
+.account-gate-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--text);
+  font-size: 0.875rem;
+  font-weight: 750;
+}
+
+.account-gate-form input {
+  width: 100%;
+  min-height: 42px;
+  padding: 8px 11px;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.account-gate-form .status-actions,
+.account-gate-error {
+  grid-column: 1 / -1;
+}
+
+.account-gate-error {
+  margin: 0;
+  color: var(--warning);
+  font-weight: 700;
+}
+
+.account-gate-success {
+  max-width: 680px;
+  padding: 11px 14px;
+  color: var(--primary-text);
+  background: color-mix(in srgb, var(--primary) 12%, var(--panel));
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .account-gate-form {
+    grid-template-columns: 1fr;
+  }
+}
+
 .app-frame {
   min-height: 720px;
   overflow: hidden;

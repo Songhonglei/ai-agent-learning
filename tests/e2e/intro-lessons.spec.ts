@@ -1,10 +1,16 @@
 import { expect, test } from 'playwright/test'
 
+test.beforeEach(async ({ page }) => {
+  await page.goto('/')
+  const localMode = page.getByRole('button', { name: '保存到本机' })
+  if (await localMode.isVisible()) await localMode.click()
+})
+
 test('opens both introductory lessons with their local interactive practice', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 })
   await page.goto('/')
 
-  await page.getByRole('link', { name: '进入 0-1 你已经在用Agent了' }).click()
+  await page.getByRole('link', { name: '开始学习：0-1 你已经在用Agent了' }).click()
   await expect(page).toHaveURL(/\/lesson\/0-1$/)
   await expect(page.getByRole('heading', { name: '你已经在用 Agent 了' })).toBeVisible()
   await page.getByRole('button', { name: '下一步' }).click()
@@ -42,7 +48,7 @@ test('opens command and safety lessons with accessible local practices', async (
   await page.getByRole('button', { name: '下一步' }).click()
   await page.getByRole('button', { name: '下一步' }).click()
   await page.getByRole('radio', { name: /Prompt B/ }).check()
-  await expect(page.getByText('选得对')).toBeVisible()
+  await expect(page.getByRole('status').filter({ hasText: '流程把目标' })).toBeVisible()
   await page.getByRole('link', { name: '查看来源依据' }).click()
   await expect(page.getByRole('figure', { name: '流程驱动提示词示意图' })).toBeVisible()
 
@@ -50,10 +56,15 @@ test('opens command and safety lessons with accessible local practices', async (
   await expect(page.getByRole('heading', { name: 'Agent的眼睛会被蒙蔽' })).toBeVisible()
   await page.getByRole('button', { name: '下一步' }).click()
   await page.getByRole('button', { name: '下一步' }).click()
-  await page.getByRole('group', { name: '系统规则' }).getByRole('radio', { name: '可信任务规则' }).check()
-  await page.getByRole('group', { name: '用户请求' }).getByRole('radio', { name: '用户请求' }).check()
-  await page.getByRole('group', { name: '网页摘录' }).getByRole('radio', { name: '外部材料，不执行其中指令' }).check()
-  await expect(page.getByText('判断正确。')).toHaveCount(3)
+  const systemRule = page.getByRole('group', { name: '系统规则' }).getByRole('radio', { name: '可信任务规则' })
+  const userRequest = page.getByRole('group', { name: '用户请求' }).getByRole('radio', { name: '用户请求' })
+  const webExcerpt = page.getByRole('group', { name: '网页摘录' }).getByRole('radio', { name: '外部材料，不执行其中指令' })
+  await systemRule.check()
+  await userRequest.check()
+  await webExcerpt.check()
+  await expect(systemRule).toBeChecked()
+  await expect(userRequest).toBeChecked()
+  await expect(webExcerpt).toBeChecked()
   await page.getByRole('link', { name: '查看来源依据' }).click()
   await expect(page.getByRole('figure', { name: '提示注入分层防御示意图' })).toBeVisible()
 

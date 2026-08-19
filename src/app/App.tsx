@@ -7,16 +7,26 @@ import { LearningProfilePage } from '../features/learning-profile/LearningProfil
 import { LessonPlayer } from '../features/lesson-player/LessonPlayer'
 import { loadCloudProfile, saveCloudProfile } from '../shared/profile-api'
 import {
+  getLearnerIdentity,
+  isLearnerAuthConfigured,
+  type LearnerIdentity,
+  subscribeLearnerIdentity,
+} from '../shared/auth/learner-auth'
+import {
   confirmLocalFallback,
   hasConfirmedLocalFallback,
   loadLearningProfile,
+  reconcileProfileStorageEvent,
   saveLearningProfile,
 } from '../shared/storage/learningProfile'
+import { mergeLearningProfiles } from '../shared/profile-transfer/transfer'
 import {
   createEmptyProfile,
   type LearningProfile,
 } from '../shared/types/profile'
 import { StatusPanel } from '../shared/ui/StatusPanel'
+import { AccountGate } from '../features/account/AccountGate'
+import { LocalProgressSync } from '../features/account/LocalProgressSync'
 import { appPath, deploymentBasePath } from '../shared/runtime/app-path'
 import { ThemeToggle } from './theme'
 import agentLearningLogo from '../assets/brand/agent-learning-logo.svg'
@@ -72,22 +82,38 @@ function LessonPage({ profile, onProfileChange }: LessonPageProps) {
 export function App() {
   const [profile, setProfile] = useState(createEmptyProfile)
   const profileRef = useRef(profile)
+  const storageModeRef = useRef<'cloud' | 'local'>('cloud')
   const [cloudState, setCloudState] = useState<'loading' | 'ready' | 'error'>('loading')
+  const [identity, setIdentity] = useState<LearnerIdentity | null>(null)
+  const [authState, setAuthState] = useState<'checking' | 'anonymous' | 'authenticated' | 'unconfigured'>('checking')
   const [hasWriteError, setHasWriteError] = useState(false)
   const [storageMode, setStorageMode] = useState<'cloud' | 'local'>('cloud')
   const [hasLocalWriteError, setHasLocalWriteError] = useState(false)
   const [headerCollapsed, setHeaderCollapsed] = useState(false)
+  const [pendingCloudProfile, setPendingCloudProfile] = useState<LearningProfile | null>(null)
 
   function applyProfile(next: LearningProfile) {
     profileRef.current = next
     setProfile(next)
   }
 
-  async function refreshCloudProfile() {
+  function activateStorageMode(next: 'cloud' | 'local') {
+    storageModeRef.current = next
+    setStorageMode(next)
+  }
+
+  async function refreshCloudProfile(accessToken = identity?.accessToken) {
     setCloudState('loading')
     try {
-      applyProfile(await loadCloudProfile())
-      setStorageMode('cloud')
+      const cloudProfile = await loadCloudProfile(accessToken)
+      const savedLocalProfile = loadLearningProfile()
+      if (storageModeRef.current === 'local' && savedLocalProfile.status === 'loaded') {
+        setPendingCloudProfile(cloudProfile)
+        setCloudState('ready')
+        return
+      }
+      applyProfile(cloudProfile)
+      activateStorageMode('cloud')
       setCloudState('ready')
       setHasWriteError(false)
     } catch {
@@ -96,7 +122,56 @@ export function App() {
     }
   }
 
-  useEffect(() => { void refreshCloudProfile() }, [])
+  useEffect(() => {
+    if (!isLearnerAuthConfigured()) {
+      setAuthState('unconfigured')
+      const saved = loadLearningProfile()
+      if (saved.status === 'loaded') {
+        applyProfile(saved.profile)
+        activateStorageMode('local')
+      }
+      setCloudState('ready')
+      return
+    }
+
+    let subscribed = true
+    void getLearnerIdentity()
+      .then((nextIdentity) => {
+        if (!subscribed) return
+        setIdentity(nextIdentity)
+        setAuthState(nextIdentity ? 'authenticated' : 'anonymous')
+        if (nextIdentity) void refreshCloudProfile(nextIdentity.accessToken)
+        else setCloudState('ready')
+      })
+      .catch(() => {
+        if (!subscribed) return
+        setAuthState('anonymous')
+        setCloudState('ready')
+      })
+    const unsubscribe = subscribeLearnerIdentity((nextIdentity) => {
+      if (!subscribed) return
+      setIdentity(nextIdentity)
+      setAuthState(nextIdentity ? 'authenticated' : 'anonymous')
+      if (nextIdentity) void refreshCloudProfile(nextIdentity.accessToken)
+    })
+    return () => {
+      subscribed = false
+      unsubscribe()
+    }
+  }, [])
+
+  useEffect(() => {
+    function synchronizeLocalProfile(event: StorageEvent) {
+      if (storageModeRef.current !== 'local') return
+      const next = reconcileProfileStorageEvent(event, profileRef.current)
+      if (!next) return
+      applyProfile(next)
+      setHasLocalWriteError(false)
+    }
+
+    window.addEventListener('storage', synchronizeLocalProfile)
+    return () => window.removeEventListener('storage', synchronizeLocalProfile)
+  }, [])
 
   async function updateProfile(next: LearningProfile) {
     applyProfile(next)
@@ -110,7 +185,7 @@ export function App() {
     }
 
     try {
-      applyProfile(await saveCloudProfile(next))
+      applyProfile(await saveCloudProfile(next, identity?.accessToken))
       setCloudState('ready')
       setHasWriteError(false)
     } catch {
@@ -123,7 +198,7 @@ export function App() {
     if (saved.status === 'loaded') applyProfile(saved.profile)
     else if (saved.status !== 'empty') return false
 
-    setStorageMode('local')
+    activateStorageMode('local')
     setCloudState('ready')
     setHasWriteError(false)
     setHasLocalWriteError(false)
@@ -148,10 +223,37 @@ export function App() {
     }
 
     applyProfile(candidate)
-    setStorageMode('local')
+    activateStorageMode('local')
     setCloudState('ready')
     setHasWriteError(false)
     setHasLocalWriteError(false)
+  }
+
+  function keepCloudProfile() {
+    if (!pendingCloudProfile) return
+    applyProfile(pendingCloudProfile)
+    activateStorageMode('cloud')
+    setPendingCloudProfile(null)
+  }
+
+  async function mergeLocalProfile() {
+    if (!pendingCloudProfile || !identity) return
+    const saved = loadLearningProfile()
+    if (saved.status !== 'loaded') {
+      keepCloudProfile()
+      return
+    }
+
+    const merged = mergeLearningProfiles(pendingCloudProfile, saved.profile)
+    applyProfile(merged)
+    activateStorageMode('cloud')
+    setPendingCloudProfile(null)
+    try {
+      applyProfile(await saveCloudProfile(merged, identity.accessToken))
+      setHasWriteError(false)
+    } catch {
+      setHasWriteError(true)
+    }
   }
 
   function retryCloudProfile() {
@@ -204,6 +306,17 @@ export function App() {
           <p className="storage-message" role="status">
             本机模式：学习进度正保存到当前浏览器。
           </p>
+        )}
+
+        {storageMode === 'cloud' && authState !== 'authenticated' && cloudState !== 'error' && !hasWriteError && (
+          <AccountGate configured={authState !== 'unconfigured'} onUseLocal={useLocalProfile} />
+        )}
+
+        {pendingCloudProfile && (
+          <LocalProgressSync
+            onMerge={() => { void mergeLocalProfile() }}
+            onKeepCloud={keepCloudProfile}
+          />
         )}
 
         {hasLocalWriteError && (

@@ -63,7 +63,7 @@ export function StatusPanel(props: StatusPanelProps) {
         <p>
           {isWrite
             ? '当前学习变化仍保留在本页；恢复连接后可重新同步到你的账号。'
-            : '请从 Cowork 入口确认登录状态后重试。课程内容仍可浏览；如果你正在本机验证，也可以明确选择保存到当前浏览器。'}
+            : '请确认邮箱登录状态后重试。课程内容仍可浏览；你也可以明确选择保存到当前浏览器。'}
         </p>
         <div className="status-actions">
           <button type="button" onClick={props.onRetry}>

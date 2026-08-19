@@ -2,7 +2,7 @@ function currentPathname() {
   return typeof window === 'undefined' ? '' : window.location.pathname
 }
 
-/** Keeps browser navigation within Cowork's `/s/<alias>` deployment mount. */
+/** Keeps browser navigation within a mounted deployment alias when one is present. */
 export function deploymentBasePath(pathname = currentPathname()) {
   return pathname.match(/^\/s\/[^/]+(?=\/|$)/)?.[0] ?? ''
 }

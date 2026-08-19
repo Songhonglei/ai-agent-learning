@@ -1,7 +1,0 @@
-# Cowork 运行时会自动注入 db.properties；不要填写或提交真实凭据。
-db.type=postgresql
-db.host=replace-at-runtime
-db.port=5432
-db.username=replace-at-runtime
-db.password=replace-at-runtime
-db.database=replace-at-runtime

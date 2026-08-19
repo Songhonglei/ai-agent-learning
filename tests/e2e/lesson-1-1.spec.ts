@@ -64,8 +64,10 @@ async function seedLegacyProgress(page: Page) {
 
 async function openLessonFromMap(page: Page) {
   await page.goto('/')
+  const localMode = page.getByRole('button', { name: '保存到本机' })
+  if (await localMode.isVisible()) await localMode.click()
   await expect(page.getByRole('heading', { name: '你的学习地图' })).toBeVisible()
-  await page.getByRole('link', { name: /进入 1-1 Agent的记忆有边界/ }).click()
+  await page.getByRole('link', { name: /开始学习：1-1 Agent的记忆有边界/ }).click()
   await expect(page).toHaveURL(/\/lesson\/1-1$/)
   await expect(page.getByRole('heading', { name: 'Agent的记忆有边界' })).toBeVisible()
 }
@@ -226,7 +228,7 @@ async function completeStageTwoJourney(page: Page) {
   await page.getByRole('radio', { name: correctAnswers[1] }).check()
   await page.getByRole('radio', { name: correctAnswers[2] }).check()
   await expect(page.getByText('3 / 3 已答')).toBeVisible()
-  await expect(page.getByRole('status', { name: '第 1 题反馈' })).toContainText('还差一点')
+  await expect(page.getByRole('status', { name: '第 1 题反馈' })).toContainText('答错也不会阻断课程')
 
   await page.getByRole('button', { name: '收藏题目：Agent 要修复异常' }).click()
   await expect(page.getByRole('button', { name: '取消收藏题目：Agent 要修复异常' })).toBeVisible()
@@ -280,7 +282,7 @@ async function verifyReviewExportAndImports(page: Page) {
   expect(JSON.stringify(exported)).not.toContain('情境导入')
   expect(exported.wrongAnswers).toContainEqual(expect.objectContaining({ mastered: true }))
 
-  const fileInput = page.getByLabel('选择学习档案备份')
+  const fileInput = page.getByLabel('导入学习档案')
   const storageBeforeCancel = await page.evaluate((key) => localStorage.getItem(key), learningProfileKey)
   const cancelCandidate = {
     ...exported,
@@ -379,6 +381,11 @@ test('两个标签页同步全局主题与收藏档案', async ({ context }) => 
     firstTab.goto('/lesson/1-1'),
     secondTab.goto('/profile'),
   ])
+
+  for (const tab of [firstTab, secondTab]) {
+    const localMode = tab.getByRole('button', { name: '保存到本机' })
+    if (await localMode.isVisible()) await localMode.click()
+  }
 
   await firstTab.getByRole('button', { name: '收藏本课概念' }).click()
   await expect(secondTab.getByText('1 项收藏')).toBeVisible()

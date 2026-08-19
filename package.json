@@ -15,7 +15,7 @@
     "verify:preview": "python3 scripts/verify-production-preview.py"
   },
   "dependencies": {
-    "pg": "^8.16.3"
+    "@supabase/supabase-js": "^2.112.3"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",

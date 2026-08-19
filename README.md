@@ -11,15 +11,16 @@
 
 ## 开源与部署
 
-应用包含学习地图、情境练习、来源依据、错题与收藏、浏览器本地学习档案，以及基于审核课程资料的 AI 自由提问。
+应用包含学习地图、情境练习、来源依据、错题与收藏、云端或浏览器本地学习档案，以及基于审核课程资料的 AI 自由提问。
 
-- **Cowork**：完整部署模式，使用平台 SSO、PostgreSQL 学习档案与 Runway 网关。
-- **Vercel**：静态前端 + `/api/course-answer` Serverless Function。学习档案在没有外接数据库时会降级为用户确认后的浏览器本地存储；AI 自由提问可正常使用。
-- **开源边界**：原始 PDF 不随仓库分发；它保留在受控部署环境。非 Cowork 部署可通过 `VITE_SOURCE_DOCUMENT_URL` 配置一个已获许可的公开文档地址，才会显示可点击的来源链接。
+- **Vercel**：静态前端 + `/api/course-answer`、`/api/profile` Serverless Functions。
+- **学习身份**：首次输入名称和邮箱，通过一次性邮箱登录链接验证身份；学习档案随后按账号保存。
+- **本机降级**：用户可选择仅在当前浏览器保存进度，并在之后导出或合并至云端档案。
+- **开源边界**：原始 PDF 不随仓库分发。可通过 `VITE_SOURCE_DOCUMENT_URL` 配置一个已获许可的公开文档地址，才会显示可点击的来源链接。
 
 ### Vercel 配置
 
-在 Vercel 项目的 **Environment Variables** 中配置（Production / Preview / Development 均按需要勾选）：
+在 Vercel 项目的 **Environment Variables** 中配置（Production / Preview / Development 均按需要勾选）。AI 问答：
 
 ```text
 AI_BASE_URL=https://your-gateway.example/v1
@@ -29,7 +30,19 @@ AI_MODEL=your-model-name
 AI_TIMEOUT_MS=20000
 ```
 
-上述变量只由服务器函数读取；不要使用 `VITE_` 前缀存放密钥。若接入 Cowork 的 Runway 网关，保留 `AI_API_STYLE=runway-bedrock`，无需填写 `AI_MODEL`。完整字段示例见 [`.env.example`](.env.example)。
+上述变量只由服务器函数读取；不要使用 `VITE_` 前缀存放密钥。
+
+云端学习档案使用 Supabase Auth + Postgres。在 Vercel Marketplace 安装 Supabase 后，执行 `infrastructure/supabase/migrations/202608190001_learning_profiles.sql`，并添加：
+
+```text
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+SUPABASE_SECRET_KEY=sb_secret_...
+```
+
+其中两个 `VITE_` 值用于浏览器发起邮箱登录，属于公开项目配置；`SUPABASE_SECRET_KEY` 仅由 `/api/profile` 使用，必须设为 Sensitive，且不得提交到仓库。还需在 Supabase Authentication 的 URL Configuration 中设置 Site URL 与允许的 Vercel 回调地址，并为生产邮件配置 SMTP。
 
 部署前执行：
 
@@ -40,7 +53,7 @@ npm run test:run
 npm run build
 ```
 
-Vercel 会自动识别 `vercel.json` 中的 SPA 回退和 `api/course-answer.mjs` 函数。
+Vercel 会自动识别 `vercel.json` 中的 SPA 回退，以及 `api/course-answer.mjs` 与 `api/profile.mjs` 函数。
 
 ---
 
@@ -50,7 +63,8 @@ Vercel 会自动识别 `vercel.json` 中的 SPA 回退和 `api/course-answer.mjs
 |---|---|
 | `README.md` | 项目说明、运行方式与部署约定 |
 | `src/` | React 应用源码；`src/assets/brand/` 存放运行时品牌资源 |
-| `api/`、`server/` | 服务端 API 与本地开发服务 |
+| `api/`、`server/` | Vercel Serverless API 与本地 AI 问答服务 |
+| `infrastructure/supabase/` | 云端学习档案的数据库迁移脚本 |
 | `tests/` | 单元测试、来源审计与端到端测试（`tests/e2e/`） |
 | `docs/project/` | PRD、课程大纲、视觉规范、交互方案、技术架构、开发计划与决策记录 |
 | `docs/visuals/prototypes/` | 设计过程中的视觉稿与静态原型，不参与应用构建 |
@@ -92,7 +106,7 @@ Vercel 会自动识别 `vercel.json` 中的 SPA 回退和 `api/course-answer.mjs
 | 红叔角色设定 | ✅ 已确认 | 见 `docs/project/04-交互与AI方案.md` |
 | 视觉基线 | 已冻结 | 色彩、字体、布局及导师形象资源已统一定义 |
 | 技术架构 | 已冻结 | React + Vite + TypeScript、服务器端 AI 调用与本地学习档案降级方案 |
-| 部署形态 | 已支持 | Cowork 与 Vercel；具体环境由部署配置决定 |
+| 部署形态 | 已支持 | Vercel + Supabase；本机模式可在不登录时使用 |
 | AI 自由问答 | 已支持 | 仅使用服务端密钥，并依据逐课审核来源包回答 |
 | 质量门槛 | 已定义 | 来源完整性、进度恢复、人工审核与关键无障碍为核心验收项 |
 
@@ -132,13 +146,13 @@ npm run serve:ai
 3. 恢复时选择该 JSON，先查看逐课程取舍及收藏、错题合并预览。
 4. 点击“确认导入”才会写入；“取消导入”、无效文件和未来版本文件均不会改动当前档案。
 
-学习档案默认只保存在当前浏览器的 localStorage；应用不会自动上传备份或学习数据。
+完成邮箱验证后，学习档案会同步到该账号；未登录时，用户可明确选择仅保存到当前浏览器。导出备份默认只在本机生成，不会自动上传。
 
 ## 安全与数据边界
 
 - 原始 PDF 与任何生产密钥均不随开源仓库分发。
 - API 密钥只能配置在服务器端环境变量或受忽略的本地配置文件中，不得使用 `VITE_` 前缀或提交到仓库。
-- 非 Cowork 环境默认使用浏览器本地学习档案；云端档案不可用时，用户可确认后保存至 localStorage。
+- 云端档案需要邮箱验证；云端暂不可用时，用户可确认后保存至 localStorage。
 - 课程互动与 FAQ 可离线运行；自由提问仅在服务端 AI 配置完整时可用。
 
 ---
