@@ -91,4 +91,26 @@ describe('StorageModeMenu', () => {
     expect(screen.getByRole('button', { name: '学习档案模式' }))
       .toHaveAttribute('data-tooltip', '学习数据云端存储')
   })
+
+  it('signs out the authenticated learner before closing the menu', async () => {
+    let finishSignOut: (() => void) | undefined
+    const props = renderMenu('cloud', {
+      accessToken: 'token',
+      email: 'learner@example.com',
+      displayName: 'Learner',
+    })
+    props.onSignOut.mockImplementation(() => new Promise<void>((resolve) => {
+      finishSignOut = resolve
+    }))
+    const user = userEvent.setup()
+
+    await user.click(screen.getByRole('button', { name: '学习档案模式' }))
+    await user.click(screen.getByRole('button', { name: '登出用户' }))
+
+    expect(props.onSignOut).toHaveBeenCalledOnce()
+    expect(screen.getByRole('button', { name: '正在登出…' })).toBeDisabled()
+
+    finishSignOut?.()
+    expect(await screen.findByRole('button', { name: '学习档案模式' })).toHaveAttribute('aria-expanded', 'false')
+  })
 })

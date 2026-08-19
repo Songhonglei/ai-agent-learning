@@ -272,14 +272,15 @@ export function App() {
     setHasLocalWriteError(true)
   }
 
-  function signOut() {
-    signOutLearner()
-      .then(() => {
-        setIdentity(null)
-        setAuthState('anonymous')
-        enterAnonymousLocalMode()
-      })
-      .catch(() => setHasWriteError(true))
+  async function signOut() {
+    try {
+      await signOutLearner()
+      setIdentity(null)
+      setAuthState('anonymous')
+      enterAnonymousLocalMode()
+    } catch {
+      setHasWriteError(true)
+    }
   }
 
   function enterAnonymousLocalMode() {

@@ -11,7 +11,7 @@ interface StorageModeMenuProps {
   configured: boolean
   onUseCloud(): void
   onUseLocal(): void
-  onSignOut(): void
+  onSignOut(): void | Promise<void>
   onClearLocal(): void
   onProfileImport(profile: LearningProfile): void
 }
@@ -62,7 +62,7 @@ export function StorageModeMenu({
   async function handleSignOut() {
     setSigningOut(true)
     try {
-      onSignOut()
+      await onSignOut()
       setOpen(false)
     } finally {
       setSigningOut(false)
@@ -131,7 +131,7 @@ export function StorageModeMenu({
                 <strong>{identity.displayName || identity.email}</strong>
                 {identity.displayName && <span>{identity.email}</span>}
                 <button type="button" onClick={() => { void handleSignOut() }} disabled={signingOut}>
-                  {signingOut ? '正在退出…' : '退出登录'}
+                  {signingOut ? '正在登出…' : '登出用户'}
                 </button>
               </div>
             ) : (
