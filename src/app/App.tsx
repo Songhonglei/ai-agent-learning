@@ -20,6 +20,10 @@ import {
   reconcileProfileStorageEvent,
   saveLearningProfile,
 } from '../shared/storage/learningProfile'
+import {
+  loadStorageModePreference,
+  saveStorageModePreference,
+} from '../shared/storage/storageMode'
 import { mergeLearningProfiles } from '../shared/profile-transfer/transfer'
 import {
   createEmptyProfile,
@@ -147,7 +151,8 @@ export function App() {
       activeAccessToken = nextAccessToken
       setIdentity(nextIdentity)
       setAuthState(nextIdentity ? 'authenticated' : 'anonymous')
-      if (nextIdentity) void refreshCloudProfile(nextIdentity.accessToken)
+      if (nextIdentity && loadStorageModePreference() === 'local') restoreLocalProfile()
+      else if (nextIdentity) void refreshCloudProfile(nextIdentity.accessToken)
       else enterAnonymousLocalMode()
     }
 
@@ -243,6 +248,7 @@ export function App() {
     }
 
     applyProfile(candidate)
+    saveStorageModePreference('local')
     activateStorageMode('local')
     setCloudState('ready')
     setHasWriteError(false)
@@ -250,6 +256,7 @@ export function App() {
   }
 
   function useCloudProfile() {
+    saveStorageModePreference('cloud')
     if (!identity) return
     activateStorageMode('cloud')
     setHasWriteError(false)
@@ -270,6 +277,24 @@ export function App() {
       return
     }
     setHasLocalWriteError(true)
+  }
+
+  function importLocalProfile(next: LearningProfile) {
+    if (
+      !confirmLocalFallback()
+      || !saveLearningProfile(next)
+      || !saveStorageModePreference('local')
+    ) {
+      setHasLocalWriteError(true)
+      return
+    }
+
+    applyProfile(next)
+    activateStorageMode('local')
+    setCloudState('ready')
+    setHasWriteError(false)
+    setHasLocalWriteError(false)
+    window.setTimeout(() => window.location.reload(), 0)
   }
 
   async function signOut() {
@@ -368,7 +393,7 @@ export function App() {
             onUseLocal={useLocalProfile}
             onSignOut={signOut}
             onClearLocal={clearLocalProfile}
-            onProfileImport={updateProfile}
+            onProfileImport={importLocalProfile}
           />
           <a className="header-icon-button profile-link" href={appPath('/profile')} aria-label="学习档案" data-tooltip="学习档案">
             <span aria-hidden="true">▣</span>

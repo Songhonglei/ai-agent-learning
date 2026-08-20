@@ -53,6 +53,26 @@ describe('StorageModeMenu', () => {
     expect(props.onClearLocal).toHaveBeenCalledOnce()
   })
 
+  it('closes the menu after a local profile is confirmed', async () => {
+    const props = renderMenu('local')
+    const incoming = createEmptyProfile()
+    incoming.favoriteContentIds = ['lesson-0-1']
+    incoming.updatedAt = '2026-08-20T10:00:00.000Z'
+    const user = userEvent.setup()
+
+    await user.click(screen.getByRole('button', { name: '学习档案模式' }))
+    await user.upload(screen.getByLabelText('导入学习档案'), new File(
+      [JSON.stringify(incoming)],
+      'learning-profile.json',
+      { type: 'application/json' },
+    ))
+    await user.click(await screen.findByRole('button', { name: '确认导入' }))
+
+    expect(props.onProfileImport).toHaveBeenCalledOnce()
+    expect(screen.getByRole('button', { name: '学习档案模式' }))
+      .toHaveAttribute('aria-expanded', 'false')
+  })
+
   it('switches to the requested storage mode from the radio group', async () => {
     const props = renderMenu('cloud', {
       accessToken: 'token',
@@ -81,7 +101,7 @@ describe('StorageModeMenu', () => {
     await user.click(trigger)
     await user.click(screen.getByRole('radio', { name: '云端档案' }))
 
-    expect(props.onUseCloud).not.toHaveBeenCalled()
+    expect(props.onUseCloud).toHaveBeenCalledOnce()
     expect(screen.getByRole('button', { name: '发送验证码' })).toBeInTheDocument()
   })
 

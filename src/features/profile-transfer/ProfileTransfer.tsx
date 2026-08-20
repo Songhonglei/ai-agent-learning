@@ -166,7 +166,16 @@ export function ProfileTransfer({
         <div className="profile-transfer-preview" role="status" aria-live="polite">
           <h3>导入影响</h3>
           <p className="profile-transfer-conflict-count">
-            将覆盖本地已有记录：<strong>{preview.conflictCount} 项</strong>
+            {preview.changeCount === 0 ? (
+              <>档案内容与本地记录一致，无需更新。</>
+            ) : preview.conflictCount === 0 ? (
+              <>将写入学习记录：<strong>{preview.changeCount} 项</strong></>
+            ) : (
+              <>
+                将写入 <strong>{preview.changeCount} 项</strong>学习记录，
+                其中覆盖本地已有记录 <strong>{preview.conflictCount} 项</strong>。
+              </>
+            )}
           </p>
           <div className="profile-transfer-confirm-actions">
             <button type="button" onClick={() => setPreview(null)}>取消导入</button>

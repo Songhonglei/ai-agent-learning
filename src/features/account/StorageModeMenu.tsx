@@ -71,7 +71,7 @@ export function StorageModeMenu({
 
   function selectCloud() {
     setSelectedMode('cloud')
-    if (identity) onUseCloud()
+    onUseCloud()
   }
 
   function selectLocal() {
@@ -142,7 +142,11 @@ export function StorageModeMenu({
             <div className="storage-mode-local">
               <ProfileTransfer
                 profile={profile}
-                onConfirm={onProfileImport}
+                onConfirm={(next) => {
+                  onProfileImport(next)
+                  setSelectedMode('local')
+                  setOpen(false)
+                }}
                 onClear={onClearLocal}
                 compact
               />

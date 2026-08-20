@@ -32,7 +32,7 @@ describe('ProfileTransfer', () => {
     ))
 
     expect(await screen.findByText('导入影响')).toBeInTheDocument()
-    expect(screen.getByText(/将覆盖本地已有记录/)).toHaveTextContent('0 项')
+    expect(screen.getByText(/将写入学习记录/)).toHaveTextContent('1 项')
     expect(onConfirm).not.toHaveBeenCalled()
 
     await user.click(screen.getByRole('button', { name: '取消导入' }))

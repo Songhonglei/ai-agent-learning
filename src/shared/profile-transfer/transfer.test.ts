@@ -304,7 +304,31 @@ describe('profile transfer', () => {
 
     expect(preview.status).toBe('ready')
     if (preview.status !== 'ready') throw new Error('Expected a ready preview')
+    expect(preview.changeCount).toBe(3)
     expect(preview.conflictCount).toBe(1)
     expect(preview.candidate.favoriteContentIds).toEqual(['lesson-1-1', 'lesson-1-2'])
+  })
+
+  it('reports imported records even when an empty local profile has no conflicts', () => {
+    const current = profileAt('2026-08-20T10:00:00.000Z')
+    const incoming = profileAt('2026-08-18T10:00:00.000Z')
+    incoming.courses['0-1'].completedStepIds = ['scene', 'dialogue']
+    incoming.courses['0-1'].completedAt = '2026-08-18T09:00:00.000Z'
+    incoming.favoriteContentIds = ['lesson-0-1']
+    incoming.wrongAnswers = [{
+      lessonId: '0-1',
+      questionId: 'q1',
+      selectedOptionId: 'wrong',
+      sourceRefIds: [],
+      mastered: false,
+      recordedAt: '2026-08-18T09:00:00.000Z',
+    }]
+
+    const preview = previewProfileImport(JSON.stringify(incoming), current)
+
+    expect(preview.status).toBe('ready')
+    if (preview.status !== 'ready') throw new Error('Expected a ready preview')
+    expect(preview.changeCount).toBe(3)
+    expect(preview.conflictCount).toBe(0)
   })
 })

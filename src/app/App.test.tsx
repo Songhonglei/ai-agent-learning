@@ -1,4 +1,4 @@
-import { act, cleanup, render, screen, within } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import '@testing-library/jest-dom/vitest'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
@@ -131,6 +131,42 @@ describe('App routes and global learning profile', () => {
         '0-1': { completedStepIds: ['scene-daily-agent'] },
       },
     })
+  })
+
+  it('imports into local storage, switches to local mode, and schedules a page refresh', async () => {
+    const user = userEvent.setup()
+    const incoming = profileAt('2026-08-18T12:43:29.229Z')
+    incoming.courses['0-1'].completedStepIds = [
+      'scene-daily-agent',
+      'dialogue-agent-loop',
+    ]
+    incoming.courses['0-1'].completedAt = '2026-08-18T12:40:00.000Z'
+    incoming.favoriteContentIds = ['lesson-0-1']
+    window.history.pushState({}, '', '/')
+    render(<App />)
+
+    await user.click(screen.getByRole('button', { name: '学习档案模式' }))
+    await user.upload(screen.getByLabelText('导入学习档案'), new File(
+      [JSON.stringify(incoming)],
+      'learning-profile.json',
+      { type: 'application/json' },
+    ))
+
+    expect(await screen.findByText(/将写入学习记录/)).toHaveTextContent('2 项')
+    const setTimeout = vi.spyOn(window, 'setTimeout').mockImplementation(() => 1)
+    fireEvent.click(screen.getByRole('button', { name: '确认导入' }))
+
+    expect(screen.getByRole('button', { name: '学习档案模式' }))
+      .toHaveAttribute('data-tooltip', '学习数据本地存储')
+    expect(JSON.parse(localStorage.getItem(LEARNING_PROFILE_STORAGE_KEY) ?? '')).toMatchObject({
+      courses: {
+        '0-1': {
+          completedStepIds: ['scene-daily-agent', 'dialogue-agent-loop'],
+        },
+      },
+      favoriteContentIds: ['lesson-0-1'],
+    })
+    expect(setTimeout).toHaveBeenCalled()
   })
 
   it('merges pending in-memory learning with concurrent canonical changes on write retry', async () => {

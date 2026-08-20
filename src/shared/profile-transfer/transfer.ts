@@ -12,7 +12,12 @@ import type {
 import { isValidUtcIsoTimestamp } from '../types/profile'
 
 export type ImportPreview =
-  | { status: 'ready'; candidate: LearningProfile; conflictCount: number }
+  | {
+      status: 'ready'
+      candidate: LearningProfile
+      changeCount: number
+      conflictCount: number
+    }
   | { status: 'invalid'; message: string }
   | { status: 'future-version'; message: string }
 
@@ -270,6 +275,40 @@ function countImportConflicts(
   return conflicts
 }
 
+function countImportChanges(
+  current: LearningProfile,
+  candidate: LearningProfile,
+): number {
+  let changes = 0
+
+  for (const [lessonId, candidateCourse] of Object.entries(candidate.courses)) {
+    if (!courseHasSavableLearningData(candidateCourse)) continue
+    const currentCourse = current.courses[lessonId]
+    if (!currentCourse || recordsDiffer(currentCourse, candidateCourse)) changes += 1
+  }
+
+  const currentWrongAnswers = new Map(
+    current.wrongAnswers.map((wrongAnswer) => [wrongAnswerId(wrongAnswer), wrongAnswer]),
+  )
+  for (const candidateWrongAnswer of candidate.wrongAnswers) {
+    const currentWrongAnswer = currentWrongAnswers.get(wrongAnswerId(candidateWrongAnswer))
+    if (!currentWrongAnswer || recordsDiffer(currentWrongAnswer, candidateWrongAnswer)) changes += 1
+  }
+
+  for (const favoriteId of candidate.favoriteContentIds) {
+    if (!current.favoriteContentIds.includes(favoriteId)) changes += 1
+  }
+
+  for (const kind of ['pretest', 'posttest'] as AssessmentKind[]) {
+    const candidateAssessment = candidate.assessments[kind]
+    if (!candidateAssessment) continue
+    const currentAssessment = current.assessments[kind]
+    if (!currentAssessment || recordsDiffer(currentAssessment, candidateAssessment)) changes += 1
+  }
+
+  return changes
+}
+
 export function previewProfileImport(json: string, current: LearningProfile): ImportPreview {
   try {
     JSON.parse(json)
@@ -298,6 +337,7 @@ export function previewProfileImport(json: string, current: LearningProfile): Im
   return {
     status: 'ready',
     candidate,
+    changeCount: countImportChanges(current, candidate),
     conflictCount: countImportConflicts(current, candidate),
   }
 }
