@@ -275,7 +275,7 @@ describe('profile transfer', () => {
     })
   })
 
-  it('builds a human-readable preview with retained, imported, and merged decisions', () => {
+  it('summarizes only the number of local records that the import will overwrite', () => {
     const current = profileAt('2026-08-05T10:00:00.000Z')
     current.courses['1-1'] = {
       currentStepId: 'current-step',
@@ -304,9 +304,7 @@ describe('profile transfer', () => {
 
     expect(preview.status).toBe('ready')
     if (preview.status !== 'ready') throw new Error('Expected a ready preview')
-    expect(preview.summary.join('\n')).toContain('保留')
-    expect(preview.summary.join('\n')).toContain('导入')
-    expect(preview.summary.join('\n')).toContain('合并')
+    expect(preview.conflictCount).toBe(1)
     expect(preview.candidate.favoriteContentIds).toEqual(['lesson-1-1', 'lesson-1-2'])
   })
 })

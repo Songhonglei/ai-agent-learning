@@ -12,7 +12,7 @@ import type {
 import { isValidUtcIsoTimestamp } from '../types/profile'
 
 export type ImportPreview =
-  | { status: 'ready'; candidate: LearningProfile; summary: string[] }
+  | { status: 'ready'; candidate: LearningProfile; conflictCount: number }
   | { status: 'invalid'; message: string }
   | { status: 'future-version'; message: string }
 
@@ -148,6 +148,13 @@ function chooseProfileValue<T>(
   return newerSide(currentUpdatedAt, incomingUpdatedAt) === 'incoming' ? incoming : current
 }
 
+function courseHasSavableLearningData(course: CourseProgress): boolean {
+  return course.completedAt !== undefined
+    || course.completedStepIds.length > 0
+    || Object.keys(course.answers).length > 0
+    || Object.values(course.experimentStates).some((selectedIds) => selectedIds.length > 0)
+}
+
 export function hasSavableLearningData(profile: LearningProfile): boolean {
   if (
     profile.wrongAnswers.length > 0
@@ -157,12 +164,7 @@ export function hasSavableLearningData(profile: LearningProfile): boolean {
     return true
   }
 
-  return Object.values(profile.courses).some((course) => (
-    course.completedAt !== undefined
-    || course.completedStepIds.length > 0
-    || Object.keys(course.answers).length > 0
-    || Object.values(course.experimentStates).some((selectedIds) => selectedIds.length > 0)
-  ))
+  return Object.values(profile.courses).some(courseHasSavableLearningData)
 }
 
 export function exportProfile(profile: LearningProfile): string {
@@ -229,35 +231,43 @@ export function mergeLearningProfiles(
   }
 }
 
-function buildImportSummary(
-  current: LearningProfile,
-  incoming: LearningProfile,
-): string[] {
-  const summary: string[] = []
+function recordsDiffer(left: unknown, right: unknown): boolean {
+  return JSON.stringify(left) !== JSON.stringify(right)
+}
 
-  for (const lessonId of Object.keys(current.courses)) {
-    const currentCourse = current.courses[lessonId]
-    const incomingCourse = incoming.courses[lessonId]
-    const side = preferredCourseSide(
-      currentCourse,
-      incomingCourse,
-      current.updatedAt,
-      incoming.updatedAt,
-    )
-    summary.push(
-      side === 'incoming'
-        ? `导入：课程 ${lessonId} 使用备份中更完整或更新的学习记录。`
-        : `保留：课程 ${lessonId} 使用当前更完整或同等的学习记录。`,
-    )
+function countImportConflicts(
+  current: LearningProfile,
+  candidate: LearningProfile,
+): number {
+  let conflicts = 0
+
+  for (const [lessonId, currentCourse] of Object.entries(current.courses)) {
+    if (!courseHasSavableLearningData(currentCourse)) continue
+    const candidateCourse = candidate.courses[lessonId]
+    if (candidateCourse && recordsDiffer(currentCourse, candidateCourse)) conflicts += 1
   }
 
-  const mergedFavorites = mergeFavoriteIds(current.favoriteContentIds, incoming.favoriteContentIds)
-  const mergedWrongAnswers = mergeWrongAnswers(current.wrongAnswers, incoming.wrongAnswers)
-  summary.push(
-    `合并：收藏去重后 ${mergedFavorites.length} 项，错题去重后 ${mergedWrongAnswers.length} 项。`,
+  const candidateWrongAnswers = new Map(
+    candidate.wrongAnswers.map((wrongAnswer) => [wrongAnswerId(wrongAnswer), wrongAnswer]),
   )
-  summary.push('合并：前后测与当前步骤仅采用时间有效且更新的记录。')
-  return summary
+  for (const currentWrongAnswer of current.wrongAnswers) {
+    const candidateWrongAnswer = candidateWrongAnswers.get(wrongAnswerId(currentWrongAnswer))
+    if (candidateWrongAnswer && recordsDiffer(currentWrongAnswer, candidateWrongAnswer)) conflicts += 1
+  }
+
+  for (const kind of ['pretest', 'posttest'] as AssessmentKind[]) {
+    const currentAssessment = current.assessments[kind]
+    const candidateAssessment = candidate.assessments[kind]
+    if (
+      currentAssessment
+      && candidateAssessment
+      && recordsDiffer(currentAssessment, candidateAssessment)
+    ) {
+      conflicts += 1
+    }
+  }
+
+  return conflicts
 }
 
 export function previewProfileImport(json: string, current: LearningProfile): ImportPreview {
@@ -284,9 +294,10 @@ export function previewProfileImport(json: string, current: LearningProfile): Im
     }
   }
 
+  const candidate = mergeLearningProfiles(current, parsed.profile)
   return {
     status: 'ready',
-    candidate: mergeLearningProfiles(current, parsed.profile),
-    summary: buildImportSummary(current, parsed.profile),
+    candidate,
+    conflictCount: countImportConflicts(current, candidate),
   }
 }

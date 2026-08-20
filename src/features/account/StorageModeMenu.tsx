@@ -140,15 +140,12 @@ export function StorageModeMenu({
             )
           ) : (
             <div className="storage-mode-local">
-              <ProfileTransfer profile={profile} onConfirm={onProfileImport} compact />
-              <button
-                aria-label="清空本地学习档案"
-                className="storage-mode-clear"
-                type="button"
-                onClick={onClearLocal}
-              >
-                清空
-              </button>
+              <ProfileTransfer
+                profile={profile}
+                onConfirm={onProfileImport}
+                onClear={onClearLocal}
+                compact
+              />
             </div>
           )}
         </section>

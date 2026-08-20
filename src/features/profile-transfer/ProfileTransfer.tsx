@@ -9,6 +9,7 @@ import type { LearningProfile } from '../../shared/types/profile'
 interface ProfileTransferProps {
   profile: LearningProfile
   onConfirm: (merged: LearningProfile) => void
+  onClear?: () => void
   blockedMessage?: string
   compact?: boolean
 }
@@ -28,6 +29,7 @@ function profileFingerprint(profile: LearningProfile): string {
 export function ProfileTransfer({
   profile,
   onConfirm,
+  onClear,
   blockedMessage,
   compact = false,
 }: ProfileTransferProps) {
@@ -140,6 +142,16 @@ export function ProfileTransfer({
             onChange={handleFileChange}
           />
         </label>
+        {compact && onClear && (
+          <button
+            aria-label="清空本地学习档案"
+            className="storage-mode-clear"
+            type="button"
+            onClick={onClear}
+          >
+            清空
+          </button>
+        )}
       </div>
 
       {exportMessage && (
@@ -152,10 +164,10 @@ export function ProfileTransfer({
 
       {!blockedMessage && preview?.status === 'ready' && (
         <div className="profile-transfer-preview" role="status" aria-live="polite">
-          <h3>确认导入前，请检查这些取舍</h3>
-          <ul>
-            {preview.summary.map((item, index) => <li key={`${index}-${item}`}>{item}</li>)}
-          </ul>
+          <h3>导入影响</h3>
+          <p className="profile-transfer-conflict-count">
+            将覆盖本地已有记录：<strong>{preview.conflictCount} 项</strong>
+          </p>
           <div className="profile-transfer-confirm-actions">
             <button type="button" onClick={() => setPreview(null)}>取消导入</button>
             <button className="primary-button" type="button" onClick={handleConfirm}>

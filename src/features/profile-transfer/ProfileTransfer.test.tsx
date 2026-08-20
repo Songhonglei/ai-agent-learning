@@ -31,12 +31,12 @@ describe('ProfileTransfer', () => {
       { type: 'application/json' },
     ))
 
-    expect(await screen.findByText('确认导入前，请检查这些取舍')).toBeInTheDocument()
-    expect(screen.getByText(/合并：收藏/)).toBeInTheDocument()
+    expect(await screen.findByText('导入影响')).toBeInTheDocument()
+    expect(screen.getByText(/将覆盖本地已有记录/)).toHaveTextContent('0 项')
     expect(onConfirm).not.toHaveBeenCalled()
 
     await user.click(screen.getByRole('button', { name: '取消导入' }))
-    expect(screen.queryByText('确认导入前，请检查这些取舍')).not.toBeInTheDocument()
+    expect(screen.queryByText('导入影响')).not.toBeInTheDocument()
     expect(onConfirm).not.toHaveBeenCalled()
 
     await user.upload(input, new File(

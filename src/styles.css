@@ -2414,7 +2414,7 @@ h1 {
 }
 
 .profile-transfer-compact {
-  width: auto;
+  width: 100%;
   padding: 0;
   margin: 0;
   background: transparent;
@@ -2546,13 +2546,15 @@ h1 {
   font-size: 0.95rem;
 }
 
-.profile-transfer-preview ul {
-  display: grid;
-  gap: 6px;
-  padding-left: 20px;
+.profile-transfer-conflict-count {
   margin: 12px 0 0;
   color: var(--muted);
   font-size: 0.76rem;
+}
+
+.profile-transfer-conflict-count strong {
+  color: var(--text);
+  font-size: 0.86rem;
 }
 
 .profile-transfer-confirm-actions button {
