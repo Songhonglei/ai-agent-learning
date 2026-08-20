@@ -1,6 +1,8 @@
 import { answerCourseQuestion, readAiConfig } from '../server/course-answer.mjs'
+import { guestClientKey, takeGuestAiQuota } from '../server/guest-ai-limit.mjs'
 
 function sendJson(response, status, payload) {
+  response.setHeader('Cache-Control', 'no-store')
   response.status(status).json(payload)
 }
 
@@ -23,6 +25,13 @@ export default async function courseAnswer(request, response) {
   const config = await readAiConfig()
   if (!config) {
     return sendJson(response, 503, { error: 'AI 服务尚未完成服务器配置。' })
+  }
+
+  const quota = takeGuestAiQuota(guestClientKey(request))
+  response.setHeader('X-RateLimit-Remaining', String(quota.remaining))
+  if (!quota.allowed) {
+    response.setHeader('Retry-After', String(quota.retryAfterSeconds))
+    return sendJson(response, 429, { error: 'AI 提问有点频繁，请稍后再试。' })
   }
 
   try {

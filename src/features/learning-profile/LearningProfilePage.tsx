@@ -15,6 +15,8 @@ export interface LearningProfilePageProps {
   onProfileChange(next: LearningProfile): void
   onProfileImport?(next: LearningProfile): void
   importBlockedMessage?: string
+  storageEyebrow?: string
+  storageDescription?: string
 }
 
 const courseSummaries = learningMapModules.flatMap((module) => module.lessons)
@@ -41,6 +43,8 @@ export function LearningProfilePage({
   onProfileChange,
   onProfileImport,
   importBlockedMessage,
+  storageEyebrow = '只保存在当前浏览器',
+  storageDescription = '集中查看真实学习记录、测评、错题与收藏，并在本机备份或恢复。',
 }: LearningProfilePageProps): React.JSX.Element {
   const currentProgress = profile.courses[profile.currentLessonId]
   const unansweredWrongCount = profile.wrongAnswers.filter((item) => (
@@ -58,9 +62,9 @@ export function LearningProfilePage({
     <main className="profile-page" aria-label="学习档案内容">
       <header className="profile-hero">
         <div>
-          <p className="eyebrow">只保存在当前浏览器</p>
+          <p className="eyebrow">{storageEyebrow}</p>
           <h1>学习档案</h1>
-          <p>集中查看真实学习记录、测评、错题与收藏，并在本机备份或恢复。</p>
+          <p>{storageDescription}</p>
         </div>
         <div className="profile-hero-meta">
           <span>当前课程</span>

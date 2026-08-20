@@ -1,3 +1,5 @@
+import { isProfilePayload } from '../server/profile.mjs'
+
 const maxProfileBytes = 120_000
 
 function sendJson(response, status, payload) {
@@ -8,20 +10,6 @@ function configured() {
   const url = process.env.SUPABASE_URL?.trim()
   const publishableKey = process.env.SUPABASE_PUBLISHABLE_KEY?.trim()
   return url && publishableKey ? { url: url.replace(/\/$/, ''), publishableKey } : null
-}
-
-function isProfilePayload(value) {
-  return value
-    && typeof value === 'object'
-    && !Array.isArray(value)
-    && value.schemaVersion === 1
-    && (value.theme === 'light' || value.theme === 'dark')
-    && typeof value.currentLessonId === 'string'
-    && value.courses && typeof value.courses === 'object'
-    && Array.isArray(value.wrongAnswers)
-    && Array.isArray(value.favoriteContentIds)
-    && value.assessments && typeof value.assessments === 'object'
-    && typeof value.updatedAt === 'string'
 }
 
 async function requireUser(request, config) {

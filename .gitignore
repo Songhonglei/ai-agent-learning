@@ -7,7 +7,7 @@ config/ai.env
 config/cowork.cookie
 .cowork/
 .cowork.json
-.npmrc
+/.npmrc
 reference/原始文档.pdf
 .worktrees/
 .superpowers/sdd/
@@ -19,3 +19,4 @@ dist/
 test-results/
 playwright-report/
 .vercel
+.artifacts/

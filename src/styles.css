@@ -201,6 +201,223 @@ h1 {
   font-size: 1.05rem;
 }
 
+.identity-menu {
+  position: relative;
+  margin-left: auto;
+}
+
+.identity-menu + .profile-link {
+  margin-left: 0;
+}
+
+.identity-trigger {
+  overflow: hidden;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--soft) 76%, var(--panel));
+  border-style: dashed;
+  border-radius: 50%;
+  font-size: 0.86rem;
+}
+
+.identity-trigger.is-ready {
+  color: var(--primary-text);
+  background:
+    radial-gradient(circle at 30% 25%, color-mix(in srgb, var(--primary) 28%, transparent), transparent 46%),
+    color-mix(in srgb, var(--primary) 10%, var(--panel));
+  border-color: color-mix(in srgb, var(--primary) 62%, var(--line));
+  border-style: solid;
+  box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--panel) 76%, transparent);
+}
+
+.identity-panel {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 10px);
+  right: 0;
+  width: min(340px, calc(100vw - 24px));
+  padding: 14px;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 88% 8%, color-mix(in srgb, var(--primary) 12%, transparent), transparent 38%),
+    color-mix(in srgb, var(--panel) 97%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 22px 48px color-mix(in srgb, var(--text) 18%, transparent);
+  backdrop-filter: blur(20px);
+}
+
+.identity-panel-heading,
+.identity-panel-heading > div {
+  display: flex;
+  align-items: center;
+}
+
+.identity-panel-heading {
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 2px 11px;
+  border-bottom: 1px solid var(--line);
+}
+
+.identity-panel-heading > div {
+  gap: 8px;
+}
+
+.identity-panel-heading button {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.identity-panel-heading button:hover {
+  color: var(--text);
+  background: var(--soft);
+}
+
+.identity-status-dot {
+  width: 9px;
+  height: 9px;
+  background: var(--muted);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--muted) 12%, transparent);
+}
+
+.identity-status-dot.is-ready {
+  background: var(--primary);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 14%, transparent);
+}
+
+.identity-status-dot.is-error {
+  background: var(--warning);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--warning) 14%, transparent);
+}
+
+.identity-card {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 16px 4px 13px;
+}
+
+.identity-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  color: var(--primary-text);
+  background: color-mix(in srgb, var(--primary) 14%, var(--panel));
+  border: 1px solid color-mix(in srgb, var(--primary) 50%, var(--line));
+  border-radius: 15px 15px 15px 5px;
+  font-size: 1.12rem;
+  font-weight: 850;
+}
+
+.identity-card div {
+  min-width: 0;
+}
+
+.identity-card p,
+.identity-card strong,
+.identity-card span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.identity-card p {
+  margin: 0 0 1px;
+  color: var(--primary-text);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.identity-card strong {
+  font-size: 1rem;
+}
+
+.identity-card span {
+  margin-top: 1px;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.identity-message {
+  margin: 0;
+  padding: 14px 4px 12px;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.identity-message p {
+  margin-bottom: 9px;
+}
+
+.identity-message button,
+.identity-profile-link {
+  min-height: 34px;
+  padding: 6px 10px;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  font-size: 0.82rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.identity-sync-note {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--soft) 78%, var(--panel));
+  border-radius: 11px;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.identity-sync-note > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  color: var(--primary-text);
+  background: color-mix(in srgb, var(--primary) 14%, var(--panel));
+  border-radius: 8px;
+  font-weight: 900;
+}
+
+.identity-sync-note p {
+  margin: 0;
+}
+
+.identity-sync-note strong {
+  display: block;
+  color: var(--text);
+}
+
+.identity-profile-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  color: var(--panel);
+  background: var(--primary-action);
+  border-color: var(--primary-action);
+}
+
 .storage-mode-menu {
   position: relative;
   margin-left: auto;
@@ -342,6 +559,7 @@ h1 {
 }
 
 .app-header.is-collapsed .brand,
+.app-header.is-collapsed .identity-menu,
 .app-header.is-collapsed .storage-mode-menu,
 .app-header.is-collapsed .profile-link,
 .app-header.is-collapsed .theme-toggle {
@@ -637,6 +855,16 @@ h1 {
 }
 
 @media (max-width: 640px) {
+  .identity-panel {
+    position: fixed;
+    top: 78px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-height: calc(100dvh - 90px);
+    overflow-y: auto;
+  }
+
   .storage-mode-panel {
     position: fixed;
     top: 78px;

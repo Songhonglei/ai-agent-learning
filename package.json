@@ -5,7 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && node scripts/make-vite-assets-relative.mjs",
+    "dev:internet": "vite --mode internet",
+    "dev:cowork": "vite --mode cowork",
+    "build": "npm run build:internet",
+    "build:internet": "tsc -b && vite build --mode internet",
+    "build:cowork": "tsc -b && vite build --mode cowork && node scripts/make-vite-assets-relative.mjs",
+    "prepare:cowork": "npm run build:cowork && node scripts/prepare-cowork-deploy.mjs",
     "preview": "vite preview",
     "serve:ai": "node --env-file-if-exists=config/ai.env server/index.mjs",
     "test": "vitest",
@@ -15,7 +20,8 @@
     "verify:preview": "python3 scripts/verify-production-preview.py"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.112.3"
+    "@supabase/supabase-js": "^2.112.3",
+    "pg": "^8.16.3"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",

@@ -13,6 +13,10 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
+    "baseUrl": ".",
+    "paths": {
+      "@deployment-entry": ["src/platform/internet-entry.ts"]
+    },
     "noEmit": true,
     "jsx": "react-jsx",
     "strict": true,

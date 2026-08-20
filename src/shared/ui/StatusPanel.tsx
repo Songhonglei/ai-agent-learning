@@ -1,14 +1,15 @@
 import { appPath } from '../runtime/app-path'
 
 type StatusPanelProps =
-  | { status: 'loading'; onRetry: () => void }
+  | { status: 'loading'; onRetry: () => void; platform?: 'internet' | 'cowork' }
   | { status: 'empty' }
   | {
     status: 'cloud-error'
     operation: 'read' | 'write'
     onRetry: () => void
-    onUseLocal: () => void
+    onUseLocal?: () => void
     onContinue: () => void
+    platform?: 'internet' | 'cowork'
   }
   | {
     status: 'local-storage-error'
@@ -29,11 +30,12 @@ type StatusPanelProps =
 
 export function StatusPanel(props: StatusPanelProps) {
   if (props.status === 'loading') {
+    const isCowork = props.platform === 'cowork'
     return (
       <section className="status-panel" role="status" aria-live="polite">
         <p className="status-kicker">正在准备</p>
         <h1>课程加载中</h1>
-        <p>本地课程正在准备。若等待过久，可以重新加载一次。</p>
+        <p>{isCowork ? '正在读取你的 Cowork 学习档案。若等待过久，可以重新加载一次。' : '本地课程正在准备。若等待过久，可以重新加载一次。'}</p>
         <div className="status-actions">
           <button className="primary-button" type="button" onClick={props.onRetry}>重试加载</button>
         </div>
@@ -56,20 +58,23 @@ export function StatusPanel(props: StatusPanelProps) {
 
   if (props.status === 'cloud-error') {
     const isWrite = props.operation === 'write'
+    const isCowork = props.platform === 'cowork'
     return (
       <section className="status-panel status-panel-inline" role="status" aria-live="polite">
-        <p className="status-kicker">云端学习档案暂不可用</p>
+        <p className="status-kicker">{isCowork ? 'Cowork 学习档案暂不可用' : '云端学习档案暂不可用'}</p>
         <h2>{isWrite ? '学习进度暂未同步' : '暂时无法读取学习档案'}</h2>
         <p>
           {isWrite
-            ? '当前学习变化仍保留在本页；恢复连接后可重新同步到你的账号。'
-            : '请确认邮箱登录状态后重试。课程内容仍可浏览；你也可以明确选择保存到当前浏览器。'}
+            ? `当前学习变化仍保留在本页；恢复连接后可重新同步到你的${isCowork ? ' Cowork' : ''}账号。`
+            : isCowork
+              ? '请从 Cowork 入口确认 SSO 登录状态后重试。课程内容仍可浏览，但不会切换到浏览器本地存储。'
+              : '请确认邮箱登录状态后重试。课程内容仍可浏览；你也可以明确选择保存到当前浏览器。'}
         </p>
         <div className="status-actions">
           <button type="button" onClick={props.onRetry}>
             {isWrite ? '重试同步学习进度' : '重试读取学习档案'}
           </button>
-          <button type="button" onClick={props.onUseLocal}>保存到本机</button>
+          {props.onUseLocal ? <button type="button" onClick={props.onUseLocal}>保存到本机</button> : null}
           <button className="primary-button" type="button" onClick={props.onContinue}>继续学习</button>
         </div>
       </section>
@@ -79,11 +84,11 @@ export function StatusPanel(props: StatusPanelProps) {
   if (props.status === 'local-storage-error') {
     return (
       <section className="status-panel status-panel-inline" role="status" aria-live="polite">
-        <p className="status-kicker">本机存储暂不可用</p>
-        <h2>进度还没有保存到浏览器</h2>
-        <p>当前学习变化仍保留在本页。请检查浏览器是否允许本站点使用本地存储，然后重试保存。</p>
+        <p className="status-kicker">浏览器存储遇到问题</p>
+        <h2>本地进度暂时不可用</h2>
+        <p>本地进度暂时无法保存，你仍可继续学习。当前学习进度仍保留在本页，重试不会重新读取覆盖。</p>
         <div className="status-actions">
-          <button type="button" onClick={props.onRetry}>重试本机保存</button>
+          <button type="button" onClick={props.onRetry}>重试保存当前进度</button>
           <button className="primary-button" type="button" onClick={props.onContinue}>继续学习</button>
         </div>
       </section>

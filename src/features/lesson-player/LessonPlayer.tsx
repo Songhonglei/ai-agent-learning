@@ -30,6 +30,7 @@ export interface LessonPlayerProps {
   courseProgress: CourseProgress
   profile: LearningProfile
   onProfileChange: (next: LearningProfile) => void
+  persistenceLabel?: string
 }
 
 const stepLabels: Record<LessonStep['type'], string> = {
@@ -46,6 +47,7 @@ export function LessonPlayer({
   courseProgress,
   profile,
   onProfileChange,
+  persistenceLabel = '本地自动保存',
 }: LessonPlayerProps): React.JSX.Element {
   const mentorQuote = useMemo(() => randomMentorQuote(), [lesson.id])
   const openedQuestionAnchor = useRef<string | null>(null)
@@ -195,7 +197,7 @@ export function LessonPlayer({
           <div className="lesson-meta">
             <span>预计 {lesson.durationMinutes} 分钟</span>
             <span>步骤 {currentIndex + 1} / {lesson.steps.length}</span>
-            <span>本地自动保存</span>
+            <span>{persistenceLabel}</span>
           </div>
           <progress
             className="lesson-progress"

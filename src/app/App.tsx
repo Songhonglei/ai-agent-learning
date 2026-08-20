@@ -35,6 +35,7 @@ import { LocalProgressSync } from '../features/account/LocalProgressSync'
 import { appPath, deploymentBasePath } from '../shared/runtime/app-path'
 import { ThemeToggle } from './theme'
 import agentLearningLogo from '../assets/brand/agent-learning-logo.svg'
+import { VisitorApp } from './VisitorApp'
 
 function LearningMapPage({ profile }: { profile: LearningProfile }) {
   if (learningMapNodes.length === 0) {
@@ -84,7 +85,7 @@ function LessonPage({ profile, onProfileChange }: LessonPageProps) {
   )
 }
 
-export function App() {
+function InternetAccountApp() {
   const [profile, setProfile] = useState(createEmptyProfile)
   const profileRef = useRef(profile)
   const storageModeRef = useRef<'cloud' | 'local'>('local')
@@ -474,4 +475,8 @@ export function App() {
       </div>
     </BrowserRouter>
   )
+}
+
+export function App() {
+  return isLearnerAuthConfigured() ? <InternetAccountApp /> : <VisitorApp />
 }

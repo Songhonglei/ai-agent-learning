@@ -11,12 +11,14 @@
 
 ## 开源与部署
 
-应用包含学习地图、情境练习、来源依据、错题与收藏、云端或浏览器本地学习档案，以及基于审核课程资料的 AI 自由提问。
+应用采用“一个开源仓库、两种隔离部署”的模式。课程内容、学习引擎、档案格式和视觉界面共享，身份、数据库和 AI 运行时按部署目标切换。
 
-- **Vercel**：静态前端 + `/api/course-answer`、`/api/profile` Serverless Functions。
-- **学习身份**：首次输入名称和邮箱，通过一次性邮箱登录链接验证身份；学习档案随后按账号保存。
-- **本机降级**：用户可选择仅在当前浏览器保存进度，并在之后导出或合并至云端档案。
+- **Internet / Vercel**：公开访问。访客无需登录即可学习、在浏览器本地保存进度并使用 AI 自由问答；注册用户通过 Supabase 邮箱 OTP 登录并同步云端档案。
+- **Cowork / 企业内网**：只接受 Cowork SSO，档案写入 Cowork PostgreSQL，AI 走 Runway。没有邮箱登录、匿名身份或本地存储回退。
+- **数据边界**：两端不共享用户表和学习数据；用户需要迁移时，使用不含身份与令牌的学习档案 JSON。
 - **开源边界**：原始 PDF 不随仓库分发。可通过 `VITE_SOURCE_DOCUMENT_URL` 配置一个已获许可的公开文档地址，才会显示可点击的来源链接。
+
+完整的需求、兼容策略和验收矩阵见 [`docs/project/dual-deployment-refactor-plan.md`](docs/project/dual-deployment-refactor-plan.md)。
 
 ### Vercel 配置
 
@@ -49,10 +51,21 @@ SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 npm ci
 npm run test:server
 npm run test:run
-npm run build
+npm run build:internet
 ```
 
 Vercel 会自动识别 `vercel.json` 中的 SPA 回退，以及 `api/course-answer.mjs` 与 `api/profile.mjs` 函数。
+
+### Cowork 构建
+
+```bash
+npm ci
+npm run test:server
+npm run build:cowork
+COURSE_SOURCE_PDF=/absolute/path/to/licensed-source.pdf npm run prepare:cowork
+```
+
+`prepare:cowork` 只把 Cowork 运行所需的静态资源、Node 服务、审计来源包和最小 `pg` 依赖写入 `.artifacts/cowork/`。该 staging 不包含 Supabase、Vercel Functions 或任何密钥，应交给 Cowork 发布工具对原 `workId` 执行原位升级。
 
 ---
 
@@ -62,7 +75,9 @@ Vercel 会自动识别 `vercel.json` 中的 SPA 回退，以及 `api/course-answ
 |---|---|
 | `README.md` | 项目说明、运行方式与部署约定 |
 | `src/` | React 应用源码；`src/assets/brand/` 存放运行时品牌资源 |
-| `api/`、`server/` | Vercel Serverless API 与本地 AI 问答服务 |
+| `api/`、`server/` | Vercel Serverless API、Cowork Node 服务与共享 AI 问答逻辑 |
+| `src/platform/` | Internet / Cowork 构建入口与能力契约 |
+| `deploy/cowork/` | Cowork 最小运行依赖；staging 由脚本生成，不作为第二份源码 |
 | `infrastructure/supabase/` | 云端学习档案的数据库迁移脚本 |
 | `tests/` | 单元测试、来源审计与端到端测试（`tests/e2e/`） |
 | `docs/project/` | PRD、课程大纲、视觉规范、交互方案、技术架构、开发计划与决策记录 |
@@ -105,7 +120,7 @@ Vercel 会自动识别 `vercel.json` 中的 SPA 回退，以及 `api/course-answ
 | 红叔角色设定 | ✅ 已确认 | 见 `docs/project/04-交互与AI方案.md` |
 | 视觉基线 | 已冻结 | 色彩、字体、布局及导师形象资源已统一定义 |
 | 技术架构 | 已冻结 | React + Vite + TypeScript、服务器端 AI 调用与本地学习档案降级方案 |
-| 部署形态 | 已支持 | Vercel + Supabase；本机模式可在不登录时使用 |
+| 部署形态 | 已支持 | 同仓支持 Vercel Internet 模式与 Cowork SSO 内网模式 |
 | AI 自由问答 | 已支持 | 仅使用服务端密钥，并依据逐课审核来源包回答 |
 | 质量门槛 | 已定义 | 来源完整性、进度恢复、人工审核与关键无障碍为核心验收项 |
 
@@ -124,11 +139,12 @@ npm install
 npm run dev
 ```
 
-Vite 默认提供本地地址 `http://localhost:5173`。另开终端可执行完整验收：
+Vite 默认提供 Internet 模式的本地地址 `http://localhost:5173`。也可以显式运行 `npm run dev:internet` 或 `npm run dev:cowork`。另开终端可执行完整验收：
 
 ```bash
 npm run test:run
-npm run build
+npm run build:internet
+npm run build:cowork
 npm run test:e2e
 ```
 
@@ -151,7 +167,8 @@ npm run serve:ai
 
 - 原始 PDF 与任何生产密钥均不随开源仓库分发。
 - API 密钥只能配置在服务器端环境变量或受忽略的本地配置文件中，不得使用 `VITE_` 前缀或提交到仓库。
-- 云端档案需要邮箱验证；云端暂不可用时，用户可确认后保存至 localStorage。
+- Internet 云端档案需要邮箱验证；访客始终可以使用 localStorage。Cowork 档案只接受 SSO 身份且不降级到浏览器存储。
+- Internet 访客 AI 接口受课程白名单、长度限制和轻量限流保护；生产环境仍应配置平台级或共享存储限流。
 - 课程互动与 FAQ 可离线运行；自由提问仅在服务端 AI 配置完整时可用。
 
 ---
