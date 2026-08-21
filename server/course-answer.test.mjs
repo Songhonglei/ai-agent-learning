@@ -71,9 +71,12 @@ test('moves model inline source IDs into the separate citation list', async () =
     },
     request: async (url, options) => {
       assert.equal(url, runwayEndpoint('https://example.test/v1'))
+      assert.equal(options.headers.token, 'server-only-key')
+      assert.ok(!('api-key' in options.headers))
+      assert.ok(!('Authorization' in options.headers))
       const body = JSON.parse(options.body)
       assert.equal(body.anthropic_version, 'bedrock-2023-05-31')
-      assert.equal(body.max_tokens, 8000)
+      assert.equal(body.max_tokens, 4096)
       assert.equal(typeof body.system, 'string')
       assert.equal(body.messages.length, 1)
       assert.equal(body.messages[0].role, 'user')

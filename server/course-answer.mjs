@@ -121,7 +121,6 @@ export async function answerCourseQuestion({ courseId, question, config, request
         'Content-Type': 'application/json',
       } : {
         token: config.apiKey,
-        'api-key': config.apiKey,
         'Content-Type': 'application/json',
       },
       signal: controller.signal,
@@ -134,7 +133,7 @@ export async function answerCourseQuestion({ courseId, question, config, request
         ],
       } : {
         anthropic_version: 'bedrock-2023-05-31',
-        max_tokens: 8000,
+        max_tokens: 4096,
         system,
         messages: [
           { role: 'user', content: userMessage },
