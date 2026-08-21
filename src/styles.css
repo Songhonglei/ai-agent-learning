@@ -600,6 +600,48 @@ h1 {
   color: var(--muted);
 }
 
+.local-progress-sync {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 5px 28px;
+  align-items: center;
+  padding: 18px 20px;
+}
+
+.local-progress-sync .status-kicker,
+.local-progress-sync h2,
+.local-progress-sync > p:not(.status-kicker) {
+  grid-column: 1;
+  margin: 0;
+}
+
+.local-progress-sync h2 {
+  font-size: clamp(1.15rem, 1.4vw, 1.35rem);
+}
+
+.local-progress-sync > p:not(.status-kicker) {
+  max-width: 880px;
+  font-size: 0.88rem;
+}
+
+.local-progress-sync .local-progress-sync-actions {
+  grid-column: 2;
+  grid-row: 1 / 4;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  margin: 0;
+}
+
+.local-progress-sync .local-progress-sync-actions button {
+  width: auto;
+  min-width: 0;
+  min-height: 34px;
+  padding: 7px 11px;
+  border-radius: 9px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
 .account-gate-form {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 270px));
@@ -3538,6 +3580,20 @@ h1 {
   .status-panel {
     padding: 36px 20px;
     margin: 36px auto;
+  }
+
+  .local-progress-sync {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 16px 18px;
+  }
+
+  .local-progress-sync .local-progress-sync-actions {
+    grid-column: 1;
+    grid-row: auto;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 8px;
   }
 
   .source-evidence-heading,

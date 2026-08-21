@@ -7,7 +7,8 @@
   ],
   "functions": {
     "api/course-answer.mjs": {
-      "maxDuration": 30,
+      "maxDuration": 60,
+      "regions": ["sin1"],
       "includeFiles": "reference/source-audit/lesson-*-source-pack.md"
     }
   }

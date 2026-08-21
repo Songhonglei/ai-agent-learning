@@ -75,3 +75,23 @@ export function createEmptyProfile(): LearningProfile {
     updatedAt: new Date().toISOString(),
   }
 }
+
+export function hasLearningActivity(profile: LearningProfile): boolean {
+  const emptyProfile = createEmptyProfile()
+  if (profile.currentLessonId !== emptyProfile.currentLessonId) return true
+  if (
+    profile.wrongAnswers.length > 0
+    || profile.favoriteContentIds.length > 0
+    || Object.keys(profile.assessments).length > 0
+  ) {
+    return true
+  }
+
+  return Object.entries(profile.courses).some(([lessonId, course]) => {
+    const emptyCourse = emptyProfile.courses[lessonId]
+    if (!emptyCourse || course.currentStepId !== emptyCourse.currentStepId) return true
+    if (course.completedAt || course.completedStepIds.length > 0) return true
+    if (Object.keys(course.answers).length > 0) return true
+    return Object.values(course.experimentStates).some((selectedIds) => selectedIds.length > 0)
+  })
+}

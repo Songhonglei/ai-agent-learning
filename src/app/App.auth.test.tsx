@@ -49,6 +49,24 @@ describe('App authenticated storage mode', () => {
     })
   })
 
+  it('enters cloud mode without prompting when the saved local profile has no learning activity', async () => {
+    localStorage.setItem(LEARNING_PROFILE_STORAGE_KEY, JSON.stringify({
+      ...createEmptyProfile(),
+      theme: 'dark',
+      updatedAt: '2026-08-21T08:00:00.000Z',
+    }))
+    window.history.pushState({}, '', '/')
+
+    render(<App />)
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: '学习档案模式' }))
+        .toHaveAttribute('data-tooltip', '学习数据云端存储')
+    })
+    expect(screen.queryByRole('heading', { name: '要合并到这个学习档案吗？' }))
+      .not.toBeInTheDocument()
+  })
+
   it('restores the imported local profile after reload even when the learner is signed in', async () => {
     const localProfile = createEmptyProfile()
     localProfile.courses['0-1'].completedStepIds = ['scene-daily-agent']

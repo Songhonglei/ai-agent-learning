@@ -27,6 +27,7 @@ import {
 import { mergeLearningProfiles } from '../shared/profile-transfer/transfer'
 import {
   createEmptyProfile,
+  hasLearningActivity,
   type LearningProfile,
 } from '../shared/types/profile'
 import { StatusPanel } from '../shared/ui/StatusPanel'
@@ -113,7 +114,11 @@ function InternetAccountApp() {
     try {
       const cloudProfile = await loadCloudProfile(accessToken)
       const savedLocalProfile = loadLearningProfile()
-      if (storageModeRef.current === 'local' && savedLocalProfile.status === 'loaded') {
+      if (
+        storageModeRef.current === 'local'
+        && savedLocalProfile.status === 'loaded'
+        && hasLearningActivity(savedLocalProfile.profile)
+      ) {
         setPendingCloudProfile(cloudProfile)
         applyProfile(cloudProfile)
         activateStorageMode('cloud')

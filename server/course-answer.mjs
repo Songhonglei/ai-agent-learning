@@ -75,6 +75,19 @@ function openAiAnswerText(payload) {
     .trim()
 }
 
+async function modelServiceError(response) {
+  let providerCode = ''
+  try {
+    const payload = await response.json()
+    providerCode = payload?.error?.code ?? payload?.code ?? payload?.Code ?? ''
+  } catch {
+    // Some gateways return an empty or non-JSON error response.
+  }
+
+  const suffix = typeof providerCode === 'string' && providerCode ? ` (${providerCode})` : ''
+  return new Error(`模型服务返回 ${response.status}${suffix}`)
+}
+
 function citedSourceIds(answer) {
   return [...new Set(answer.match(/\b(?:page|figure)-\d+(?:-\d+)?\b/g) ?? [])]
 }
@@ -129,7 +142,7 @@ export async function answerCourseQuestion({ courseId, question, config, request
       }),
     })
 
-    if (!response.ok) throw new Error(`模型服务返回 ${response.status}`)
+    if (!response.ok) throw await modelServiceError(response)
     const data = await response.json()
     if (data?.Code || data?.Error) {
       throw new Error(`upstream business error: ${data.Error || data.Code}`)

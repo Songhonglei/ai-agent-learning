@@ -11,6 +11,19 @@ function requestBody(request) {
   return request.body
 }
 
+function safeErrorDetails(error) {
+  const cause = error instanceof Error && error.cause && typeof error.cause === 'object'
+    ? error.cause
+    : null
+
+  return {
+    name: error instanceof Error ? error.name : 'UnknownError',
+    message: error instanceof Error ? error.message : 'unknown error',
+    causeCode: typeof cause?.code === 'string' ? cause.code : null,
+    causeName: typeof cause?.name === 'string' ? cause.name : null,
+  }
+}
+
 /**
  * Vercel Node.js Function for the AI tutor.
  *
@@ -47,7 +60,7 @@ export default async function courseAnswer(request, response) {
     })
     return sendJson(response, 200, result)
   } catch (error) {
-    console.error('课程问答请求失败：', error instanceof Error ? error.message : 'unknown error')
+    console.error('课程问答请求失败：', safeErrorDetails(error))
     return sendJson(response, 502, { error: 'AI 助教暂时无法回答，请稍后重试。' })
   }
 }

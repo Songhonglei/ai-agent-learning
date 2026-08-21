@@ -3,6 +3,7 @@ import { authoredLessons } from '../../content/lessons'
 import {
   PROFILE_SCHEMA_VERSION,
   createEmptyProfile,
+  hasLearningActivity,
   isValidUtcIsoTimestamp,
 } from './profile'
 
@@ -52,5 +53,27 @@ describe('createEmptyProfile', () => {
         expect(course.currentStepId).toBe('')
       }
     }
+  })
+})
+
+describe('hasLearningActivity', () => {
+  it('ignores an untouched local profile, including theme and timestamp changes', () => {
+    const profile = {
+      ...createEmptyProfile(),
+      theme: 'dark' as const,
+      updatedAt: '2026-08-21T08:00:00.000Z',
+    }
+
+    expect(hasLearningActivity(profile)).toBe(false)
+  })
+
+  it('detects course progress and saved learning data', () => {
+    const courseProgress = createEmptyProfile()
+    courseProgress.courses['0-1'].completedStepIds = ['scene-daily-agent']
+    expect(hasLearningActivity(courseProgress)).toBe(true)
+
+    const favorite = createEmptyProfile()
+    favorite.favoriteContentIds = ['context-window']
+    expect(hasLearningActivity(favorite)).toBe(true)
   })
 })

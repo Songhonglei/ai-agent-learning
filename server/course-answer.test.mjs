@@ -130,3 +130,19 @@ test('throws on upstream business error wrapped in 200 OK', async () => {
     }), { status: 200 }),
   }), /upstream business error/)
 })
+
+test('includes the provider error code for a failed OpenAI-compatible request', async () => {
+  await assert.rejects(async () => answerCourseQuestion({
+    courseId: '1-1',
+    config: {
+      baseUrl: 'https://example.test/v1',
+      apiKey: 'server-only-key',
+      timeoutMs: 100,
+      apiStyle: 'openai-chat-completions',
+      model: 'example-model',
+    },
+    request: async () => new Response(JSON.stringify({
+      error: { code: 'invalid_api_key', message: 'redacted provider detail' },
+    }), { status: 401 }),
+  }), /模型服务返回 401 \(invalid_api_key\)/)
+})
