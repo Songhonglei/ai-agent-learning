@@ -4,227 +4,309 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="一门面向非技术学习者的开源 AI Agent 互动课程：12 节课、情境练习、AI 助教与完整学习档案。" />
-    <meta name="theme-color" content="#f4f7fb" />
-    <meta property="og:title" content="Agent 入门课 · 开源互动学习项目" />
-    <meta property="og:description" content="从日常任务出发，用 12 节互动课程理解 Agent 的上下文、知识、工具与协作。" />
+    <meta name="theme-color" content="#06101b" />
+    <meta property="og:title" content="Agent 入门课 · 开源互动学习系统" />
+    <meta property="og:description" content="给大脑装上 Agent 操作系统。用 12 节互动课程理解上下文、知识、工具与协作。" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="./assets/screenshots/home.png" />
-    <title>Agent 入门课 · 开源互动学习项目</title>
+    <title>Agent 入门课 · 开源互动学习系统</title>
     <link rel="stylesheet" href="./styles.css" />
     <script src="./script.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">跳到主要内容</a>
+    <div class="cursor-light" aria-hidden="true"></div>
+    <div class="noise" aria-hidden="true"></div>
 
     <header class="site-header" data-header>
       <a class="brand" href="#top" aria-label="Agent 入门课首页">
-        <span class="brand-mark" aria-hidden="true">A<sup>•</sup></span>
-        <span>Agent 入门课</span>
+        <span class="brand-sigil" aria-hidden="true"><i></i>A</span>
+        <span class="brand-copy"><strong>AGENT</strong><small>LEARNING SYSTEM</small></span>
       </a>
+
       <nav aria-label="页面导航">
-        <a href="#features">核心功能</a>
-        <a href="#gallery">产品截图</a>
-        <a href="#deploy">部署方式</a>
+        <a href="#system"><span>01</span>学习系统</a>
+        <a href="#showcase"><span>02</span>产品实景</a>
+        <a href="#deploy"><span>03</span>部署架构</a>
       </nav>
-      <a class="header-github" href="https://github.com/Songhonglei/ai-agent-learning" target="_blank" rel="noreferrer">
-        GitHub <span aria-hidden="true">↗</span>
+
+      <a class="github-link" href="https://github.com/Songhonglei/ai-agent-learning" target="_blank" rel="noreferrer">
+        <span>GITHUB</span><b aria-hidden="true">↗</b>
       </a>
     </header>
 
     <main id="main">
       <section class="hero" id="top">
+        <div class="hero-grid" aria-hidden="true"></div>
         <div class="hero-copy">
-          <p class="eyebrow"><span aria-hidden="true">●</span> OPEN SOURCE · AI LEARNING</p>
-          <h1>把 AI Agent<br /><em>真正学明白</em></h1>
-          <p class="hero-lead">
-            从真实工作情境出发，用一张学习地图串起上下文、知识、工具与多 Agent 协作。
-            不只读概念，还要做判断、看依据、问助教。
+          <p class="system-label hero-label"><span></span> OPEN SOURCE / LEARNING PROTOCOL 01</p>
+          <h1>
+            <span>给大脑装上</span>
+            <strong>AGENT</strong>
+            <em>操作系统</em>
+          </h1>
+          <p class="hero-intro">
+            不背术语，不刷概念。从真实任务出发，在<span>学习地图</span>里理解上下文、知识、工具与多 Agent 协作。
           </p>
           <div class="hero-actions">
-            <a class="button button-primary" href="https://my-agent-learning.vercel.app" target="_blank" rel="noreferrer">
-              立即在线体验 <span aria-hidden="true">→</span>
+            <a class="action action-primary" href="https://my-agent-learning.vercel.app" target="_blank" rel="noreferrer">
+              <span>启动学习系统</span><b aria-hidden="true">→</b>
             </a>
-            <a class="button button-secondary" href="https://github.com/Songhonglei/ai-agent-learning" target="_blank" rel="noreferrer">
-              查看开源代码
+            <a class="action action-ghost" href="https://github.com/Songhonglei/ai-agent-learning" target="_blank" rel="noreferrer">
+              <span aria-hidden="true">⌘</span> 查看源码
             </a>
           </div>
-          <ul class="hero-facts" aria-label="项目数据">
-            <li><strong>12</strong><span>节完整课程</span></li>
-            <li><strong>6</strong><span>个学习模块</span></li>
-            <li><strong>2</strong><span>种部署模式</span></li>
-          </ul>
-        </div>
-
-        <div class="hero-visual" aria-label="学习地图界面预览">
-          <div class="hero-window-bar">
-            <span></span><span></span><span></span>
-            <p>你的学习地图</p>
+          <div class="hero-proof">
+            <div><strong>12</strong><span>LESSONS<br />完整课程</span></div>
+            <div><strong>06</strong><span>MODULES<br />能力模块</span></div>
+            <div><strong>02</strong><span>RUNTIMES<br />部署模式</span></div>
           </div>
-          <img src="./assets/screenshots/home.png" alt="Agent 入门课学习地图：首页展示 12 节结构化课程" />
-          <aside class="hero-note">
-            <span>课程主线</span>
-            <strong>LLM + 上下文 + 工具</strong>
-          </aside>
-        </div>
-      </section>
-
-      <section class="value-strip" aria-label="项目价值">
-        <p>为<strong>非技术学习者</strong>设计</p>
-        <span aria-hidden="true">×</span>
-        <p>课程内容<strong>来源可追溯</strong></p>
-        <span aria-hidden="true">×</span>
-        <p>访客也能<strong>完整体验</strong></p>
-      </section>
-
-      <section class="section features" id="features">
-        <div class="section-heading">
-          <p class="eyebrow">WHY IT WORKS</p>
-          <h2>不是文档站，<br />是一套能完成的学习体验</h2>
-          <p>把“看懂、判断、练习、追问、复习”放进同一条连续路径里。</p>
         </div>
 
-        <div class="feature-grid">
-          <article class="feature-card feature-card-large">
-            <span class="feature-index">01</span>
-            <div>
-              <p class="feature-kicker">PATH</p>
-              <h3>一张地图，建立完整认知框架</h3>
-              <p>12 节课按认知、上下文、知识、工具、评估与多 Agent 协作逐步展开，进度随时恢复。</p>
-            </div>
-            <div class="mini-map" aria-hidden="true">
-              <span class="is-active">1</span><i></i><span>2</span><i></i><span>3</span><i></i><span>4</span><i></i><span>5</span><i></i><span>6</span>
-            </div>
-          </article>
-
-          <article class="feature-card">
-            <span class="feature-index">02</span>
-            <p class="feature-kicker">PRACTICE</p>
-            <h3>每个概念，都要动手判断</h3>
-            <p>课前测验、情境辨析、互动实验和课后回顾，让理解不止停在“我好像看懂了”。</p>
-          </article>
-
-          <article class="feature-card feature-card-dark">
-            <span class="feature-index">03</span>
-            <p class="feature-kicker">AI TUTOR</p>
-            <h3>自由追问，也不离开课程依据</h3>
-            <p>AI 助教只读取逐课审核来源包，并把引用页码一并返回；访客无需注册也能提问。</p>
-          </article>
-
-          <article class="feature-card">
-            <span class="feature-index">04</span>
-            <p class="feature-kicker">PROFILE</p>
-            <h3>进度、错题与收藏，自然沉淀</h3>
-            <p>本地档案开箱即用；登录后可同步云端，还能用 JSON 自主备份和迁移学习记录。</p>
-          </article>
-
-          <article class="feature-card">
-            <span class="feature-index">05</span>
-            <p class="feature-kicker">DUAL MODE</p>
-            <h3>同一份代码，服务公网与企业内网</h3>
-            <p>Internet 模式支持访客与 Supabase；Cowork 模式接入企业 SSO、PostgreSQL 与内部模型网关。</p>
-          </article>
+        <div class="hero-console" aria-label="课程系统实时预览">
+          <div class="console-head">
+            <div><i></i><i></i><i></i></div>
+            <p>COURSE_MAP.SYS</p>
+            <span>ONLINE</span>
+          </div>
+          <div class="console-body">
+            <img src="./assets/screenshots/home.png" alt="Agent 入门课十二节课程学习地图" fetchpriority="high" />
+            <div class="console-scan" aria-hidden="true"></div>
+          </div>
+          <div class="console-telemetry">
+            <span><i></i> SYSTEM READY</span>
+            <span>PROGRESS / LOCAL</span>
+            <span>AI TUTOR / ONLINE</span>
+          </div>
+          <div class="console-float console-float-a"><small>CORE FORMULA</small><strong>LLM + C + T</strong></div>
+          <div class="console-float console-float-b"><strong>12/12</strong><small>LESSONS LOADED</small></div>
         </div>
+
+        <div class="scroll-cue" aria-hidden="true"><span>SCROLL TO EXPLORE</span><i></i></div>
       </section>
 
-      <section class="section gallery" id="gallery">
-        <div class="section-heading section-heading-inline">
+      <section class="signal-strip" aria-label="学习体验特点">
+        <div><span>◆</span> VISITOR MODE <b>无需登录</b></div>
+        <div><span>◆</span> SOURCE GROUNDED <b>来源可追溯</b></div>
+        <div><span>◆</span> AI TUTOR <b>自由问答</b></div>
+        <div><span>◆</span> DUAL RUNTIME <b>双端部署</b></div>
+      </section>
+
+      <section class="section system-section" id="system">
+        <header class="section-heading reveal">
           <div>
-            <p class="eyebrow">PRODUCT TOUR</p>
-            <h2>从第一眼，到真正学会</h2>
+            <p class="system-label"><span></span> SYSTEM ARCHITECTURE / 01</p>
+            <h2>课程不是列表。<br /><em>是你的 Agent 技能树。</em></h2>
           </div>
-          <p>四个关键界面，串起一段完整学习旅程。</p>
+          <p>六个能力区、十二个任务节点。从“什么是 Agent”一路推进到工具调用、评估和多 Agent 协作。</p>
+        </header>
+
+        <div class="learning-core reveal">
+          <div class="core-orbit" aria-label="Agent 核心知识关系">
+            <div class="orbit-ring orbit-ring-a"></div>
+            <div class="orbit-ring orbit-ring-b"></div>
+            <div class="core-node"><small>CORE</small><strong>AGENT</strong><span>LLM + C + T</span></div>
+            <div class="orbit-node node-a"><b>01</b><span>认知</span></div>
+            <div class="orbit-node node-b"><b>02</b><span>上下文</span></div>
+            <div class="orbit-node node-c"><b>03</b><span>知识</span></div>
+            <div class="orbit-node node-d"><b>04</b><span>工具</span></div>
+            <div class="orbit-node node-e"><b>05</b><span>评估</span></div>
+            <div class="orbit-node node-f"><b>06</b><span>协作</span></div>
+          </div>
+
+          <div class="module-stack" aria-label="六个课程模块">
+            <article><span>MODULE 01</span><b>认识 Agent</b><small>2 LESSONS</small></article>
+            <article><span>MODULE 02</span><b>看懂上下文</b><small>3 LESSONS</small></article>
+            <article><span>MODULE 03</span><b>记忆与知识</b><small>3 LESSONS</small></article>
+            <article><span>MODULE 04</span><b>工具与行动</b><small>2 LESSONS</small></article>
+            <article><span>MODULE 05</span><b>评估 Agent</b><small>1 LESSON</small></article>
+            <article><span>MODULE 06</span><b>多 Agent</b><small>1 LESSON</small></article>
+          </div>
         </div>
 
-        <div class="gallery-grid">
-          <figure class="gallery-item gallery-item-wide">
-            <div class="screenshot-frame">
-              <img src="./assets/screenshots/home.png" alt="首页：十二节课程组成的学习地图" loading="lazy" />
-            </div>
-            <figcaption><span>01 · 首页</span><strong>先看全局，再走好每一步</strong></figcaption>
-          </figure>
-
-          <figure class="gallery-item">
-            <div class="screenshot-frame screenshot-frame-tall">
-              <img src="./assets/screenshots/quiz.png" alt="做题：情境测验和带来源依据的解析" loading="lazy" />
-            </div>
-            <figcaption><span>02 · 做题</span><strong>选完立刻知道为什么</strong></figcaption>
-          </figure>
-
-          <figure class="gallery-item">
-            <div class="screenshot-frame screenshot-frame-tall">
-              <img src="./assets/screenshots/ai-tutor.png" alt="AI 助教：基于课程来源包回答自由提问" loading="lazy" />
-            </div>
-            <figcaption><span>03 · AI 助教</span><strong>带着问题继续深挖</strong></figcaption>
-          </figure>
-
-          <figure class="gallery-item gallery-item-wide">
-            <div class="screenshot-frame">
-              <img src="./assets/screenshots/profile.png" alt="学习档案：课程进度、测验、错题和收藏汇总" loading="lazy" />
-            </div>
-            <figcaption><span>04 · 档案</span><strong>把学过的，变成可持续的记录</strong></figcaption>
-          </figure>
+        <div class="learning-loop">
+          <article class="loop-card reveal">
+            <div class="loop-icon" aria-hidden="true">◎</div>
+            <span>INPUT / 01</span>
+            <h3>先理解</h3>
+            <p>对话讲解把抽象概念放进熟悉的工作场景，不要求技术背景。</p>
+          </article>
+          <i aria-hidden="true">→</i>
+          <article class="loop-card reveal">
+            <div class="loop-icon" aria-hidden="true">◇</div>
+            <span>PROCESS / 02</span>
+            <h3>再判断</h3>
+            <p>课前测验、情境辨析与互动实验，把“看懂”变成可验证的判断。</p>
+          </article>
+          <i aria-hidden="true">→</i>
+          <article class="loop-card reveal">
+            <div class="loop-icon" aria-hidden="true">⌁</div>
+            <span>OUTPUT / 03</span>
+            <h3>继续追问</h3>
+            <p>AI 助教基于逐课审核来源回答，并把引用依据一起交给你。</p>
+          </article>
         </div>
       </section>
 
-      <section class="section deploy" id="deploy">
-        <div class="section-heading section-heading-inline">
+      <section class="showcase-section" id="showcase">
+        <header class="section-heading showcase-heading reveal">
           <div>
-            <p class="eyebrow">ONE REPO, TWO MODES</p>
-            <h2>开源不等于只有一种部署</h2>
+            <p class="system-label"><span></span> PRODUCT TELEMETRY / 02</p>
+            <h2>真正能用的学习系统，<br /><em>不靠概念图撑场面。</em></h2>
           </div>
-          <p>共享课程内核与界面，身份、存储和 AI 运行时保持边界清晰。</p>
-        </div>
+          <p>以下均为线上真实界面。四个关键画面，组成“进入课程—主动练习—自由追问—沉淀档案”的完整闭环。</p>
+        </header>
 
-        <div class="deploy-grid">
-          <article>
-            <div class="deploy-heading"><span>01</span><p>Internet / Vercel</p></div>
-            <h3>让任何人打开就能学</h3>
-            <ul>
-              <li>访客无需注册，本地保存学习进度</li>
-              <li>支持 AI 自由问答与来源引用</li>
-              <li>可选 Supabase OTP 登录与云端档案</li>
-            </ul>
+        <div class="mission-list">
+          <article class="mission mission-a reveal">
+            <div class="mission-copy">
+              <p><span>MISSION 01</span><i>地图启动</i></p>
+              <h3>先看见全局，<br />再开始第一步。</h3>
+              <p>12 节课不是孤立卡片，而是沿着 Agent 能力结构展开的任务路径。</p>
+              <ul><li>6 个能力模块</li><li>进度持续恢复</li><li>访客即开即学</li></ul>
+            </div>
+            <figure class="product-shot shot-wide" data-shot>
+              <div class="shot-chrome"><span>LIVE / HOME</span><i></i><i></i><i></i><b>01</b></div>
+              <div class="shot-media">
+                <img src="./assets/screenshots/home.png" alt="首页：由十二节课程组成的学习地图" />
+                <span class="shot-status">SCREEN ONLINE</span>
+              </div>
+              <figcaption>COURSE MAP / 1440 × 960</figcaption>
+            </figure>
           </article>
-          <article>
-            <div class="deploy-heading"><span>02</span><p>Cowork / 企业内网</p></div>
-            <h3>让组织内部安全复用</h3>
-            <ul>
-              <li>自动识别企业 SSO，无需重复注册</li>
-              <li>档案写入企业 PostgreSQL</li>
-              <li>AI 请求走内部模型网关</li>
-            </ul>
+
+          <article class="mission mission-b reveal">
+            <figure class="product-shot shot-portrait" data-shot>
+              <div class="shot-chrome"><span>LIVE / QUIZ</span><i></i><i></i><i></i><b>02</b></div>
+              <div class="shot-media">
+                <img src="./assets/screenshots/quiz.png" alt="做题：情境测验以及带来源依据的答案解析" />
+                <span class="shot-status">SCREEN ONLINE</span>
+              </div>
+              <figcaption>SCENARIO QUIZ / INSTANT FEEDBACK</figcaption>
+            </figure>
+            <div class="mission-copy">
+              <p><span>MISSION 02</span><i>情境演练</i></p>
+              <h3>选完不只告诉你<br />“对”或“错”。</h3>
+              <p>即时判断、深度解析、原书页码三层反馈，帮你把一次选择变成可迁移的理解。</p>
+              <div class="data-points"><span><b>03</b>层反馈</span><span><b>100%</b>依据标注</span></div>
+            </div>
+          </article>
+
+          <article class="mission mission-c reveal">
+            <div class="mission-copy">
+              <p><span>MISSION 03</span><i>AI 助教</i></p>
+              <h3>自由问，但回答<br />不能自由发挥。</h3>
+              <p>问题发送到服务端，AI 只接收当前课程审核来源包；回答附带引用，模型密钥不进入浏览器。</p>
+              <div class="answer-sample">
+                <small>ASK / 如何设置工具安全边界？</small>
+                <p><i></i> 权限分级 · 人工确认 · 超时取消 · 错误恢复</p>
+              </div>
+            </div>
+            <figure class="product-shot shot-portrait" data-shot>
+              <div class="shot-chrome"><span>LIVE / AI TUTOR</span><i></i><i></i><i></i><b>03</b></div>
+              <div class="shot-media shot-media-contain">
+                <img src="./assets/screenshots/ai-tutor.png" alt="AI 助教：根据本课审核来源包回答自由提问" />
+                <span class="shot-status">SCREEN ONLINE</span>
+              </div>
+              <figcaption>GROUNDED ANSWER / SOURCE CITATIONS</figcaption>
+            </figure>
+          </article>
+
+          <article class="mission mission-d reveal">
+            <figure class="product-shot shot-wide" data-shot>
+              <div class="shot-chrome"><span>LIVE / PROFILE</span><i></i><i></i><i></i><b>04</b></div>
+              <div class="shot-media">
+                <img src="./assets/screenshots/profile.png" alt="学习档案：集中呈现课程进度、错题和收藏" />
+                <span class="shot-status">SCREEN ONLINE</span>
+              </div>
+              <figcaption>LEARNING PROFILE / LOCAL FIRST</figcaption>
+            </figure>
+            <div class="mission-copy">
+              <p><span>MISSION 04</span><i>学习档案</i></p>
+              <h3>学过的内容，<br />要留下可控记录。</h3>
+              <p>进度、前后测、错题与收藏自动沉淀；访客本地保存，登录后可同步，还能自主导出 JSON。</p>
+              <ul><li>Local-first</li><li>云端可选</li><li>备份可迁移</li></ul>
+            </div>
           </article>
         </div>
       </section>
 
-      <section class="section stack" aria-labelledby="stack-title">
-        <div>
-          <p class="eyebrow">BUILT FOR EXTENSION</p>
-          <h2 id="stack-title">拿走、运行，继续改造成你的课程</h2>
+      <section class="section deploy-section" id="deploy">
+        <header class="section-heading reveal">
+          <div>
+            <p class="system-label"><span></span> DUAL RUNTIME / 03</p>
+            <h2>同一套课程内核。<br /><em>两条清晰的数据边界。</em></h2>
+          </div>
+          <p>共享课程、交互与档案格式；身份、存储和模型网关按公网与企业环境独立切换。</p>
+        </header>
+
+        <div class="runtime-board reveal">
+          <article class="runtime-card runtime-public">
+            <div class="runtime-top"><span>RUNTIME / PUBLIC</span><i>01</i></div>
+            <div class="runtime-symbol" aria-hidden="true">◎</div>
+            <h3>Internet</h3>
+            <p>Vercel · 面向所有学习者</p>
+            <dl>
+              <div><dt>IDENTITY</dt><dd>访客 / Supabase OTP</dd></div>
+              <div><dt>PROFILE</dt><dd>localStorage / Supabase</dd></div>
+              <div><dt>AI GATEWAY</dt><dd>Serverless Function</dd></div>
+            </dl>
+            <a href="https://my-agent-learning.vercel.app" target="_blank" rel="noreferrer">OPEN PUBLIC APP <b>→</b></a>
+          </article>
+
+          <div class="runtime-bridge" aria-hidden="true">
+            <span>SHARED CORE</span><i></i><b>课程 · 交互 · 档案格式</b><i></i><span>ISOLATED DATA</span>
+          </div>
+
+          <article class="runtime-card runtime-enterprise">
+            <div class="runtime-top"><span>RUNTIME / ENTERPRISE</span><i>02</i></div>
+            <div class="runtime-symbol" aria-hidden="true">⬡</div>
+            <h3>Cowork</h3>
+            <p>企业内网 · 自动识别组织身份</p>
+            <dl>
+              <div><dt>IDENTITY</dt><dd>Enterprise SSO</dd></div>
+              <div><dt>PROFILE</dt><dd>PostgreSQL</dd></div>
+              <div><dt>AI GATEWAY</dt><dd>Internal Runway</dd></div>
+            </dl>
+            <span class="runtime-private">PRIVATE NETWORK ONLY</span>
+          </article>
         </div>
-        <div class="stack-list" aria-label="技术栈">
-          <span>React 19</span><span>TypeScript</span><span>Vite</span><span>Vitest</span><span>Playwright</span><span>Supabase</span>
+      </section>
+
+      <section class="build-section">
+        <div class="build-copy reveal">
+          <p class="system-label"><span></span> BUILD YOUR OWN</p>
+          <h2>拿走，运行，<br />改造成你的课。</h2>
+          <p>React 19 + TypeScript + Vite。MIT License，课程引擎、双部署契约与测试全部开源。</p>
+          <div class="tech-tags"><span>REACT 19</span><span>TYPESCRIPT</span><span>VITE</span><span>VITEST</span><span>PLAYWRIGHT</span></div>
         </div>
-        <pre aria-label="本地启动命令"><code><span>$</span> git clone https://github.com/Songhonglei/ai-agent-learning.git
-<span>$</span> cd ai-agent-learning
-<span>$</span> npm install && npm run dev</code></pre>
+        <div class="code-terminal reveal" aria-label="项目启动命令">
+          <div class="terminal-head"><span>QUICK_START.SH</span><b>● ● ●</b></div>
+          <pre><code><span class="line-no">01</span><span class="prompt">$</span> git clone https://github.com/Songhonglei/ai-agent-learning.git
+<span class="line-no">02</span><span class="prompt">$</span> cd ai-agent-learning
+<span class="line-no">03</span><span class="prompt">$</span> npm install
+<span class="line-no">04</span><span class="prompt">$</span> npm run dev
+
+<span class="line-no">05</span><span class="success">✓ SYSTEM READY / localhost:5173</span></code></pre>
+        </div>
       </section>
 
       <section class="final-cta">
-        <p class="eyebrow">READY TO LEARN?</p>
-        <h2>下一步，不妨亲手走完第一课。</h2>
-        <p>项目遵循 MIT License。欢迎使用、改造、提交 Issue 或贡献新的课程体验。</p>
+        <div class="cta-rings" aria-hidden="true"><i></i><i></i><i></i></div>
+        <p class="system-label"><span></span> READY FOR LAUNCH</p>
+        <h2>别只研究 Agent。<br /><em>现在就开始理解它。</em></h2>
+        <p>无需注册，保留访客本地体验和 AI 自由问答。</p>
         <div class="hero-actions">
-          <a class="button button-primary" href="https://my-agent-learning.vercel.app" target="_blank" rel="noreferrer">开始学习 <span aria-hidden="true">→</span></a>
-          <a class="button button-secondary" href="https://github.com/Songhonglei/ai-agent-learning" target="_blank" rel="noreferrer">在 GitHub 上 Star</a>
+          <a class="action action-primary" href="https://my-agent-learning.vercel.app" target="_blank" rel="noreferrer"><span>启动第一课</span><b>→</b></a>
+          <a class="action action-ghost" href="https://github.com/Songhonglei/ai-agent-learning" target="_blank" rel="noreferrer"><span aria-hidden="true">★</span> STAR ON GITHUB</a>
         </div>
       </section>
     </main>
 
     <footer>
-      <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">A<sup>•</sup></span><span>Agent 入门课</span></a>
-      <p>Made for curious minds · MIT License · 2026</p>
-      <a href="https://github.com/Songhonglei/ai-agent-learning" target="_blank" rel="noreferrer">GitHub ↗</a>
+      <a class="brand" href="#top"><span class="brand-sigil" aria-hidden="true"><i></i>A</span><span class="brand-copy"><strong>AGENT</strong><small>LEARNING SYSTEM</small></span></a>
+      <p>OPEN SOURCE · MIT LICENSE · 2026</p>
+      <div><a href="https://github.com/Songhonglei/ai-agent-learning" target="_blank" rel="noreferrer">GITHUB ↗</a><span>BUILD OPEN-SOURCE</span></div>
     </footer>
   </body>
 </html>
