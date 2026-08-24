@@ -1,28 +1,106 @@
-# AI Agent 学习网站
+<div align="center">
 
-面向非技术学习者的互动式 AI Agent 入门课程。项目提供 12 节结构化课程、过程练习、来源依据、学习档案与基于审核课程资料的自由提问能力。
+# Agent 入门课
 
-| 项目属性 | 内容 |
+一门面向非技术学习者的开源 AI Agent 互动课程。
+
+用 12 节结构化课程、情境练习、AI 助教和学习档案，系统理解 Agent 的上下文、知识、工具与协作。
+
+[![在线体验](https://img.shields.io/badge/在线体验-Vercel-315ecf?style=for-the-badge)](https://my-agent-learning.vercel.app)
+[![项目主页](https://img.shields.io/badge/项目主页-GitHub_Pages-07827d?style=for-the-badge)](https://songhonglei.github.io/ai-agent-learning/)
+[![MIT License](https://img.shields.io/badge/License-MIT-14233c?style=for-the-badge)](LICENSE)
+
+</div>
+
+![Agent 入门课学习地图](site/assets/screenshots/home.png)
+
+## 为什么做这个项目
+
+很多 AI Agent 内容要么停留在概念罗列，要么默认学习者已经熟悉模型、工具调用和工程术语。这个项目尝试换一种方式：从日常工作任务出发，把“看懂、判断、练习、追问、复习”串成一条可完成的学习路径。
+
+> **Agent = LLM + 上下文 + 工具**<br />
+> 也可以理解成：**大脑 + 眼睛 + 手脚**
+
+项目适合想系统理解 Agent、但不希望先啃技术文档的产品经理、运营、设计师、业务人员和其他好奇的学习者。
+
+## 在线体验
+
+- **课程应用**：[my-agent-learning.vercel.app](https://my-agent-learning.vercel.app)
+- **项目展示页**：[songhonglei.github.io/ai-agent-learning](https://songhonglei.github.io/ai-agent-learning/)
+
+公开版本保留完整访客体验：无需注册即可学习，进度默认保存在当前浏览器，也可以直接使用 AI 自由问答。
+
+## 产品截图
+
+| 情境测验 | AI 助教 |
 |---|---|
-| 项目名称 | 红叔 Agent 入门课 |
-| 当前版本 | v0.1 |
-| 技术栈 | React、Vite、TypeScript |
-| 文档维护 | 项目团队 |
+| ![情境测验与来源解析](site/assets/screenshots/quiz.png) | ![基于课程来源包的 AI 助教](site/assets/screenshots/ai-tutor.png) |
+| 选完立即获得判断、解析与原书依据 | 自由提问，并返回逐课审核来源引用 |
 
-## 开源与部署
+| 学习地图 | 学习档案 |
+|---|---|
+| ![十二节课组成的学习地图](site/assets/screenshots/home.png) | ![学习进度、错题与收藏档案](site/assets/screenshots/profile.png) |
+| 六个模块串起完整认知框架 | 集中管理进度、测评、错题、收藏与备份 |
 
-应用采用“一个开源仓库、两种隔离部署”的模式。课程内容、学习引擎、档案格式和视觉界面共享，身份、数据库和 AI 运行时按部署目标切换。
+## 核心功能
 
-- **Internet / Vercel**：公开访问。访客无需登录即可学习、在浏览器本地保存进度并使用 AI 自由问答；注册用户通过 Supabase 邮箱 OTP 登录并同步云端档案。
-- **Cowork / 企业内网**：只接受 Cowork SSO，档案写入 Cowork PostgreSQL，AI 走 Runway。没有邮箱登录、匿名身份或本地存储回退。
-- **数据边界**：两端不共享用户表和学习数据；用户需要迁移时，使用不含身份与令牌的学习档案 JSON。
-- **开源边界**：原始 PDF 不随仓库分发。可通过 `VITE_SOURCE_DOCUMENT_URL` 配置一个已获许可的公开文档地址，才会显示可点击的来源链接。
+- **12 节完整课程**：覆盖 Agent 基础认知、上下文、知识与 RAG、记忆、工具、ReAct、评估和多 Agent 协作。
+- **连续互动学习**：每课包含情境导入、对话讲解、互动实验、情境测验、本课小结与自由提问。
+- **有依据的 AI 助教**：服务端只向模型提供当前课程审核来源包，回答附带引用，不在浏览器暴露模型密钥。
+- **学习档案**：记录课程进度、前后测、错题、收藏和复习状态，支持 JSON 备份与恢复。
+- **访客优先**：不登录也能完整学习、保存进度并使用 AI 问答；Supabase 登录是可选增强能力。
+- **双主题与响应式界面**：适配亮色、深色及桌面/移动端布局，并覆盖基础无障碍交互。
+- **同仓双部署**：共享课程内核与视觉界面，同时支持公网 Internet 模式和企业 Cowork SSO 模式。
 
-完整的需求、兼容策略和验收矩阵见 [`docs/project/dual-deployment-refactor-plan.md`](docs/project/dual-deployment-refactor-plan.md)。
+## 一份代码，两种部署模式
 
-### Vercel 配置
+应用采用“一个开源仓库、两种隔离部署”的架构。课程内容、学习引擎、档案格式和 UI 共享；身份、数据库与 AI 运行时按目标平台切换。
 
-在 Vercel 项目的 **Environment Variables** 中配置（Production / Preview / Development 均按需要勾选）。AI 问答：
+| 能力 | Internet / Vercel | Cowork / 企业内网 |
+|---|---|---|
+| 默认身份 | 访客，可选邮箱 OTP | 企业 SSO 自动识别 |
+| 学习档案 | localStorage，可选 Supabase | 企业 PostgreSQL |
+| AI 运行时 | 服务端模型网关 | 企业内部 Runway |
+| 未登录体验 | 完整学习 + AI 自由问答 | 不适用 |
+| 数据边界 | 公网账号与访客本地数据 | 企业账号内部数据 |
+
+两端不会共享用户表和学习数据。需要迁移时，可以导出不含身份与令牌的学习档案 JSON。完整兼容策略见 [双部署改造计划](docs/project/dual-deployment-refactor-plan.md)。
+
+## 快速开始
+
+### 环境要求
+
+- Node.js 20+
+- npm 10+
+
+### 本地运行
+
+```bash
+git clone https://github.com/Songhonglei/ai-agent-learning.git
+cd ai-agent-learning
+npm install
+npm run dev
+```
+
+浏览器打开 `http://localhost:5173`。默认启动 Internet 模式；即使没有配置 Supabase 或模型服务，课程、练习和本地学习档案仍可使用。
+
+也可以显式选择运行目标：
+
+```bash
+npm run dev:internet
+npm run dev:cowork
+```
+
+### 启用本地 AI 自由问答
+
+复制示例配置，并填写兼容 OpenAI Chat Completions 协议的服务器端模型网关：
+
+```bash
+cp config/ai.env.example config/ai.env
+npm run serve:ai
+```
+
+`config/ai.env`：
 
 ```text
 AI_BASE_URL=https://your-gateway.example/v1
@@ -32,9 +110,18 @@ AI_MODEL=your-model-name
 AI_TIMEOUT_MS=20000
 ```
 
-上述变量只由服务器函数读取；不要使用 `VITE_` 前缀存放密钥。
+密钥只由 Node 服务读取。不要给 `AI_API_KEY` 添加 `VITE_` 前缀，也不要把真实配置提交到仓库。
 
-云端学习档案使用 Supabase Auth + Postgres。在 Vercel Marketplace 安装 Supabase 后，执行 `infrastructure/supabase/migrations/202608190001_learning_profiles.sql`，并添加：
+## Vercel 部署
+
+Fork 仓库并导入 Vercel 后，基础课程应用无需额外配置即可构建。若要启用 AI 助教，请添加上面的 `AI_*` 服务器环境变量。
+
+若要启用邮箱 OTP 登录与云端学习档案：
+
+1. 创建 Supabase 项目。
+2. 执行 `infrastructure/supabase/migrations/` 中的两份迁移。
+3. 在 Supabase Authentication 中配置 Site URL、Redirect URLs 与生产 SMTP。
+4. 在 Vercel 添加：
 
 ```text
 VITE_SUPABASE_URL=https://your-project.supabase.co
@@ -43,9 +130,9 @@ SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 ```
 
-两个 `VITE_` 值用于浏览器发起邮箱登录，属于公开项目配置；其余两个变量仅供 `/api/profile` 的服务器函数使用。学习档案表启用了按用户 ID 隔离的 RLS 策略，服务器函数会先验证邮箱登录令牌，再以该令牌读写对应用户的档案。还需在 Supabase Authentication 的 URL Configuration 中设置 Site URL 与允许的 Vercel 回调地址，并为生产邮件配置 SMTP。
+两个 `VITE_` 值用于浏览器发起邮箱登录，属于公开项目配置；其余变量只供 `/api/profile` 服务器函数使用。档案表通过 RLS 按用户 ID 隔离。
 
-部署前执行：
+部署前建议执行：
 
 ```bash
 npm ci
@@ -54,9 +141,9 @@ npm run test:run
 npm run build:internet
 ```
 
-Vercel 会自动识别 `vercel.json` 中的 SPA 回退，以及 `api/course-answer.mjs` 与 `api/profile.mjs` 函数。
+## Cowork / 企业内网部署
 
-### Cowork 构建
+Cowork 构建复用同一课程代码，但将身份、存储和模型运行时切换到企业能力：
 
 ```bash
 npm ci
@@ -65,121 +152,69 @@ npm run build:cowork
 COURSE_SOURCE_PDF=/absolute/path/to/licensed-source.pdf npm run prepare:cowork
 ```
 
-`prepare:cowork` 只把 Cowork 运行所需的静态资源、Node 服务、审计来源包和最小 `pg` 依赖写入 `.artifacts/cowork/`。该 staging 不包含 Supabase、Vercel Functions 或任何密钥，应交给 Cowork 发布工具对原 `workId` 执行原位升级。
+`prepare:cowork` 会在 `.artifacts/cowork/` 生成最小部署包，不包含 Supabase、Vercel Functions 或任何密钥。企业 SSO 地址、数据库连接和模型网关应通过部署平台安全注入。
 
----
+## 常用命令
+
+| 命令 | 用途 |
+|---|---|
+| `npm run dev` | 启动 Internet 本地开发环境 |
+| `npm run dev:cowork` | 启动 Cowork 构建入口 |
+| `npm run test:run` | 运行 React / TypeScript 单元测试 |
+| `npm run test:server` | 运行服务器与 API 测试 |
+| `npm run test:e2e` | 运行 Playwright 端到端测试 |
+| `npm run build:internet` | 构建 Vercel / Internet 版本 |
+| `npm run build:cowork` | 构建 Cowork 版本 |
+| `npm run prepare:cowork` | 生成 Cowork 最小部署包 |
 
 ## 项目结构
 
-| 目录/文件 | 说明 |
-|---|---|
-| `README.md` | 项目说明、运行方式与部署约定 |
-| `src/` | React 应用源码；`src/assets/brand/` 存放运行时品牌资源 |
-| `api/`、`server/` | Vercel Serverless API、Cowork Node 服务与共享 AI 问答逻辑 |
-| `src/platform/` | Internet / Cowork 构建入口与能力契约 |
-| `deploy/cowork/` | Cowork 最小运行依赖；staging 由脚本生成，不作为第二份源码 |
-| `infrastructure/supabase/` | 云端学习档案的数据库迁移脚本 |
-| `tests/` | 单元测试、来源审计与端到端测试（`tests/e2e/`） |
-| `docs/project/` | PRD、课程大纲、视觉规范、交互方案、技术架构、开发计划与决策记录 |
-| `docs/visuals/prototypes/` | 设计过程中的视觉稿与静态原型，不参与应用构建 |
-| `config/` | 本地与平台配置；示例位于 `config/examples/`，真实密钥保持忽略 |
-| `reference/` | 受控来源包、审计产物与原书分析；运行时 AI 问答会读取其中的逐课来源包 |
-| 根目录运行入口 | `package.json`、`vite.config.ts`、`vercel.json`、`server.cjs`、`install.sh`、`start.sh` 保持在根目录，供构建和部署平台识别 |
-
----
-
-## 产品定位
-
-> 面向非技术白领的AI Agent互动学习网站，通过学习地图、对话导师、互动实验和情境测验，让用户在约4小时内理解Agent的工作原理、能力边界和实际应用。
-
----
-
-## 课程内容参考
-
-本项目课程内容参考李博杰《深入理解 AI Agent》电子书 **V1.3（2026-07-27）**，并在此基础上进行了课程化编排、互动练习设计、来源审计与页面呈现。
-
-该电子书及其原始图文资料不随本开源仓库分发；相关权利仍归原权利人所有。仓库仅保留经审核后用于课程问答与来源追溯的必要文字化来源包。
-
----
-
-## 核心公式
-
-**Agent = LLM + 上下文 + 工具**  
-对应：**大脑 + 眼睛 + 手脚**
-
----
-
-## v0.1 基线
-
-| 项 | 状态 | 说明 |
-|---|---|---|
-| 目标用户 | ✅ 已确认 | 技术背景不高的普通白领 |
-| 12课课程结构 | ✅ 已确认 | 见 `docs/project/02-课程大纲.md` |
-| 学习地图与对话导师 | 已确认 | v0.1 核心学习流程 |
-| Light / Dark 主题 | 已确认 | 提供完整主题切换体验 |
-| 红叔角色设定 | ✅ 已确认 | 见 `docs/project/04-交互与AI方案.md` |
-| 视觉基线 | 已冻结 | 色彩、字体、布局及导师形象资源已统一定义 |
-| 技术架构 | 已冻结 | React + Vite + TypeScript、服务器端 AI 调用与本地学习档案降级方案 |
-| 部署形态 | 已支持 | 同仓支持 Vercel Internet 模式与 Cowork SSO 内网模式 |
-| AI 自由问答 | 已支持 | 仅使用服务端密钥，并依据逐课审核来源包回答 |
-| 质量门槛 | 已定义 | 来源完整性、进度恢复、人工审核与关键无障碍为核心验收项 |
-
----
-
-## 当前实现状态
-
-课程引擎已完成 12 节课程的全局学习档案、进度恢复、错题与收藏、复习掌握、本地 JSON 备份恢复和跨标签同步。
-
-全部课程均已配备课稿、情境测验、互动练习、FAQ 与逐课来源包；核心关系图使用可访问的 HTML/CSS 图示实现。项目已完成多断点界面与本地学习档案恢复链路的验证。相关验收材料见 `docs/superpowers/evidence/`。
-
-## 本地运行
-
-```bash
-npm install
-npm run dev
+```text
+ai-agent-learning/
+├── api/                       # Vercel Serverless API
+├── server/                    # Cowork Node 服务与共享 AI 问答逻辑
+├── src/
+│   ├── app/                   # Internet / Cowork 应用壳
+│   ├── content/               # 12 节课程与学习地图
+│   ├── features/              # 测验、AI 助教、档案、互动实验
+│   ├── platform/              # 双部署能力契约与入口
+│   └── shared/                # 鉴权、存储、运行时与通用类型
+├── infrastructure/supabase/  # 学习档案迁移与 RLS
+├── reference/source-audit/   # 逐课审核来源包
+├── site/                      # GitHub Pages 项目展示页
+├── docs/                      # PRD、设计、架构与验收记录
+└── .github/workflows/         # GitHub Pages 自动部署
 ```
 
-Vite 默认提供 Internet 模式的本地地址 `http://localhost:5173`。也可以显式运行 `npm run dev:internet` 或 `npm run dev:cowork`。另开终端可执行完整验收：
+## 内容来源与开源边界
+
+课程内容参考李博杰《深入理解 AI Agent》电子书 **V1.3（2026-07-27）**，并进行了课程化编排、互动练习设计、来源审计与页面呈现。
+
+原始 PDF 与图文资料不随仓库分发，相关权利归原权利人所有。仓库只保留用于课程回答与来源追溯的必要文字化来源包。只有配置了已获许可的 `VITE_SOURCE_DOCUMENT_URL` 后，应用才会显示可点击的原始文档链接。
+
+## 安全说明
+
+- 不提交原始 PDF、生产密钥、Cookie、数据库连接串或本地环境文件。
+- API 密钥只能存在于服务器端环境变量或被 Git 忽略的本地配置中。
+- Internet 访客 AI 接口已有课程白名单、输入长度限制和轻量限流；正式大流量前仍应接入共享存储限流或平台防火墙。
+- Cowork 档案只接受企业 SSO 身份，不回退到浏览器匿名存储。
+- 自由提问会发送到站点服务器；静态 FAQ、课程与互动练习可在没有模型服务时独立运行。
+
+如果你发现安全问题，请不要在公开 Issue 中附带密钥、用户数据或内部地址。
+
+## 参与贡献
+
+欢迎提交 Issue、课程反馈与 Pull Request。建议在提交前运行：
 
 ```bash
+npm run test:server
 npm run test:run
 npm run build:internet
 npm run build:cowork
-npm run test:e2e
 ```
 
-如需在本机启用自由提问，在 `config/ai.env` 中设置与上方相同的 `AI_*` 变量，再运行：
+课程内容变更请同时维护来源引用与相关测试；运行时能力变更需要同时考虑 Internet 和 Cowork 两种部署契约。
 
-```bash
-npm run serve:ai
-```
+## License
 
-## 备份与恢复
-
-1. 从学习地图或课程页进入“学习档案”。
-2. 点击“导出学习档案”，保存只含学习记录的本地 JSON；导出不包含课程正文。
-3. 恢复时选择该 JSON，先查看逐课程取舍及收藏、错题合并预览。
-4. 点击“确认导入”才会写入；“取消导入”、无效文件和未来版本文件均不会改动当前档案。
-
-完成邮箱验证后，学习档案会同步到该账号；未登录时，用户可明确选择仅保存到当前浏览器。导出备份默认只在本机生成，不会自动上传。
-
-## 安全与数据边界
-
-- 原始 PDF 与任何生产密钥均不随开源仓库分发。
-- API 密钥只能配置在服务器端环境变量或受忽略的本地配置文件中，不得使用 `VITE_` 前缀或提交到仓库。
-- Internet 云端档案需要邮箱验证；访客始终可以使用 localStorage。Cowork 档案只接受 SSO 身份且不降级到浏览器存储。
-- Internet 访客 AI 接口受课程白名单、长度限制和轻量限流保护；生产环境仍应配置平台级或共享存储限流。
-- 课程互动与 FAQ 可离线运行；自由提问仅在服务端 AI 配置完整时可用。
-
----
-
-## 文档导航
-
-1. **产品经理/设计师**：先看 `docs/project/01-项目概述与PRD.md` 和 `docs/project/03-视觉设计规范.md`
-2. **研发工程师**：先看 `docs/project/05-技术架构建议.md` 和 `docs/project/06-开发计划与验收标准.md`
-3. **内容/教研**：重点看 `docs/project/02-课程大纲.md`
-4. **测试/QA**：参考 `docs/project/06-开发计划与验收标准.md` 中的验收标准
-
----
-
-本仓库统一管理项目代码、课程规范、来源审计与验收材料。受控原始资料及运行环境密钥不包含在开源版本中。
+[MIT](LICENSE) © 2026 Song Honglei

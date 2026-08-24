@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="一门面向非技术学习者的开源 AI Agent 互动课程：12 节课、情境练习、AI 助教与完整学习档案。" />
+    <meta name="theme-color" content="#f4f7fb" />
+    <meta property="og:title" content="Agent 入门课 · 开源互动学习项目" />
+    <meta property="og:description" content="从日常任务出发，用 12 节互动课程理解 Agent 的上下文、知识、工具与协作。" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="./assets/screenshots/home.png" />
+    <title>Agent 入门课 · 开源互动学习项目</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到主要内容</a>
+
+    <header class="site-header" data-header>
+      <a class="brand" href="#top" aria-label="Agent 入门课首页">
+        <span class="brand-mark" aria-hidden="true">A<sup>•</sup></span>
+        <span>Agent 入门课</span>
+      </a>
+      <nav aria-label="页面导航">
+        <a href="#features">核心功能</a>
+        <a href="#gallery">产品截图</a>
+        <a href="#deploy">部署方式</a>
+      </nav>
+      <a class="header-github" href="https://github.com/Songhonglei/ai-agent-learning" target="_blank" rel="noreferrer">
+        GitHub <span aria-hidden="true">↗</span>
+      </a>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top">
+        <div class="hero-copy">
+          <p class="eyebrow"><span aria-hidden="true">●</span> OPEN SOURCE · AI LEARNING</p>
+          <h1>把 AI Agent<br /><em>真正学明白</em></h1>
+          <p class="hero-lead">
+            从真实工作情境出发，用一张学习地图串起上下文、知识、工具与多 Agent 协作。
+            不只读概念，还要做判断、看依据、问助教。
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="https://my-agent-learning.vercel.app" target="_blank" rel="noreferrer">
+              立即在线体验 <span aria-hidden="true">→</span>
+            </a>
+            <a class="button button-secondary" href="https://github.com/Songhonglei/ai-agent-learning" target="_blank" rel="noreferrer">
+              查看开源代码
+            </a>
+          </div>
+          <ul class="hero-facts" aria-label="项目数据">
+            <li><strong>12</strong><span>节完整课程</span></li>
+            <li><strong>6</strong><span>个学习模块</span></li>
+            <li><strong>2</strong><span>种部署模式</span></li>
+          </ul>
+        </div>
+
+        <div class="hero-visual" aria-label="学习地图界面预览">
+          <div class="hero-window-bar">
+            <span></span><span></span><span></span>
+            <p>你的学习地图</p>
+          </div>
+          <img src="./assets/screenshots/home.png" alt="Agent 入门课学习地图：首页展示 12 节结构化课程" />
+          <aside class="hero-note">
+            <span>课程主线</span>
+            <strong>LLM + 上下文 + 工具</strong>
+          </aside>
+        </div>
+      </section>
+
+      <section class="value-strip" aria-label="项目价值">
+        <p>为<strong>非技术学习者</strong>设计</p>
+        <span aria-hidden="true">×</span>
+        <p>课程内容<strong>来源可追溯</strong></p>
+        <span aria-hidden="true">×</span>
+        <p>访客也能<strong>完整体验</strong></p>
+      </section>
+
+      <section class="section features" id="features">
+        <div class="section-heading">
+          <p class="eyebrow">WHY IT WORKS</p>
+          <h2>不是文档站，<br />是一套能完成的学习体验</h2>
+          <p>把“看懂、判断、练习、追问、复习”放进同一条连续路径里。</p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card feature-card-large">
+            <span class="feature-index">01</span>
+            <div>
+              <p class="feature-kicker">PATH</p>
+              <h3>一张地图，建立完整认知框架</h3>
+              <p>12 节课按认知、上下文、知识、工具、评估与多 Agent 协作逐步展开，进度随时恢复。</p>
+            </div>
+            <div class="mini-map" aria-hidden="true">
+              <span class="is-active">1</span><i></i><span>2</span><i></i><span>3</span><i></i><span>4</span><i></i><span>5</span><i></i><span>6</span>
+            </div>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-index">02</span>
+            <p class="feature-kicker">PRACTICE</p>
+            <h3>每个概念，都要动手判断</h3>
+            <p>课前测验、情境辨析、互动实验和课后回顾，让理解不止停在“我好像看懂了”。</p>
+          </article>
+
+          <article class="feature-card feature-card-dark">
+            <span class="feature-index">03</span>
+            <p class="feature-kicker">AI TUTOR</p>
+            <h3>自由追问，也不离开课程依据</h3>
+            <p>AI 助教只读取逐课审核来源包，并把引用页码一并返回；访客无需注册也能提问。</p>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-index">04</span>
+            <p class="feature-kicker">PROFILE</p>
+            <h3>进度、错题与收藏，自然沉淀</h3>
+            <p>本地档案开箱即用；登录后可同步云端，还能用 JSON 自主备份和迁移学习记录。</p>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-index">05</span>
+            <p class="feature-kicker">DUAL MODE</p>
+            <h3>同一份代码，服务公网与企业内网</h3>
+            <p>Internet 模式支持访客与 Supabase；Cowork 模式接入企业 SSO、PostgreSQL 与内部模型网关。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section gallery" id="gallery">
+        <div class="section-heading section-heading-inline">
+          <div>
+            <p class="eyebrow">PRODUCT TOUR</p>
+            <h2>从第一眼，到真正学会</h2>
+          </div>
+          <p>四个关键界面，串起一段完整学习旅程。</p>
+        </div>
+
+        <div class="gallery-grid">
+          <figure class="gallery-item gallery-item-wide">
+            <div class="screenshot-frame">
+              <img src="./assets/screenshots/home.png" alt="首页：十二节课程组成的学习地图" loading="lazy" />
+            </div>
+            <figcaption><span>01 · 首页</span><strong>先看全局，再走好每一步</strong></figcaption>
+          </figure>
+
+          <figure class="gallery-item">
+            <div class="screenshot-frame screenshot-frame-tall">
+              <img src="./assets/screenshots/quiz.png" alt="做题：情境测验和带来源依据的解析" loading="lazy" />
+            </div>
+            <figcaption><span>02 · 做题</span><strong>选完立刻知道为什么</strong></figcaption>
+          </figure>
+
+          <figure class="gallery-item">
+            <div class="screenshot-frame screenshot-frame-tall">
+              <img src="./assets/screenshots/ai-tutor.png" alt="AI 助教：基于课程来源包回答自由提问" loading="lazy" />
+            </div>
+            <figcaption><span>03 · AI 助教</span><strong>带着问题继续深挖</strong></figcaption>
+          </figure>
+
+          <figure class="gallery-item gallery-item-wide">
+            <div class="screenshot-frame">
+              <img src="./assets/screenshots/profile.png" alt="学习档案：课程进度、测验、错题和收藏汇总" loading="lazy" />
+            </div>
+            <figcaption><span>04 · 档案</span><strong>把学过的，变成可持续的记录</strong></figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section deploy" id="deploy">
+        <div class="section-heading section-heading-inline">
+          <div>
+            <p class="eyebrow">ONE REPO, TWO MODES</p>
+            <h2>开源不等于只有一种部署</h2>
+          </div>
+          <p>共享课程内核与界面，身份、存储和 AI 运行时保持边界清晰。</p>
+        </div>
+
+        <div class="deploy-grid">
+          <article>
+            <div class="deploy-heading"><span>01</span><p>Internet / Vercel</p></div>
+            <h3>让任何人打开就能学</h3>
+            <ul>
+              <li>访客无需注册，本地保存学习进度</li>
+              <li>支持 AI 自由问答与来源引用</li>
+              <li>可选 Supabase OTP 登录与云端档案</li>
+            </ul>
+          </article>
+          <article>
+            <div class="deploy-heading"><span>02</span><p>Cowork / 企业内网</p></div>
+            <h3>让组织内部安全复用</h3>
+            <ul>
+              <li>自动识别企业 SSO，无需重复注册</li>
+              <li>档案写入企业 PostgreSQL</li>
+              <li>AI 请求走内部模型网关</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section stack" aria-labelledby="stack-title">
+        <div>
+          <p class="eyebrow">BUILT FOR EXTENSION</p>
+          <h2 id="stack-title">拿走、运行，继续改造成你的课程</h2>
+        </div>
+        <div class="stack-list" aria-label="技术栈">
+          <span>React 19</span><span>TypeScript</span><span>Vite</span><span>Vitest</span><span>Playwright</span><span>Supabase</span>
+        </div>
+        <pre aria-label="本地启动命令"><code><span>$</span> git clone https://github.com/Songhonglei/ai-agent-learning.git
+<span>$</span> cd ai-agent-learning
+<span>$</span> npm install && npm run dev</code></pre>
+      </section>
+
+      <section class="final-cta">
+        <p class="eyebrow">READY TO LEARN?</p>
+        <h2>下一步，不妨亲手走完第一课。</h2>
+        <p>项目遵循 MIT License。欢迎使用、改造、提交 Issue 或贡献新的课程体验。</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="https://my-agent-learning.vercel.app" target="_blank" rel="noreferrer">开始学习 <span aria-hidden="true">→</span></a>
+          <a class="button button-secondary" href="https://github.com/Songhonglei/ai-agent-learning" target="_blank" rel="noreferrer">在 GitHub 上 Star</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">A<sup>•</sup></span><span>Agent 入门课</span></a>
+      <p>Made for curious minds · MIT License · 2026</p>
+      <a href="https://github.com/Songhonglei/ai-agent-learning" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </footer>
+  </body>
+</html>
