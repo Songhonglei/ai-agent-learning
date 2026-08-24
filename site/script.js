@@ -1,5 +1,66 @@
 const header = document.querySelector('[data-header]')
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+const languageButtons = document.querySelectorAll('[data-language]')
+
+function getSavedLanguage() {
+  try {
+    return window.localStorage.getItem('agent-learning-site-language')
+  } catch {
+    return null
+  }
+}
+
+function saveLanguage(language) {
+  try {
+    window.localStorage.setItem('agent-learning-site-language', language)
+  } catch {
+    // Language switching still works when storage is unavailable.
+  }
+}
+
+function setLanguage(language, { persist = false } = {}) {
+  const nextLanguage = language === 'en' ? 'en' : 'zh'
+  const languageKey = nextLanguage === 'en' ? 'en' : 'zh'
+  const attributeKey = nextLanguage === 'en' ? 'en' : 'zh'
+
+  document.documentElement.lang = nextLanguage === 'en' ? 'en' : 'zh-CN'
+  document.documentElement.dataset.language = nextLanguage
+
+  document.querySelectorAll('[data-zh][data-en]').forEach((element) => {
+    element.textContent = element.dataset[languageKey]
+  })
+
+  document.querySelectorAll('[data-zh-content][data-en-content]').forEach((element) => {
+    element.setAttribute('content', element.dataset[`${attributeKey}Content`])
+  })
+
+  document.querySelectorAll('[data-zh-alt][data-en-alt]').forEach((element) => {
+    element.setAttribute('alt', element.dataset[`${attributeKey}Alt`])
+  })
+
+  document.querySelectorAll('[data-zh-aria-label][data-en-aria-label]').forEach((element) => {
+    element.setAttribute('aria-label', element.dataset[`${attributeKey}AriaLabel`])
+  })
+
+  languageButtons.forEach((button) => {
+    const isActive = button.dataset.language === nextLanguage
+    button.setAttribute('aria-pressed', String(isActive))
+    button.setAttribute(
+      'aria-label',
+      button.dataset.language === 'zh'
+        ? (nextLanguage === 'en' ? 'Switch to Chinese' : '当前语言：中文')
+        : (nextLanguage === 'en' ? 'Current language: English' : '切换到英文'),
+    )
+  })
+
+  if (persist) saveLanguage(nextLanguage)
+}
+
+languageButtons.forEach((button) => {
+  button.addEventListener('click', () => setLanguage(button.dataset.language, { persist: true }))
+})
+
+setLanguage(getSavedLanguage() === 'en' ? 'en' : 'zh')
 
 function updateHeader() {
   header?.classList.toggle('is-scrolled', window.scrollY > 24)
