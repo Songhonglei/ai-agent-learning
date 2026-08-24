@@ -23,6 +23,7 @@ import {
   type WrongAnswer,
 } from '../shared/types/profile'
 import { StatusPanel } from '../shared/ui/StatusPanel'
+import { ProjectFooter } from '../shared/ui/ProjectFooter'
 import { ThemeToggle } from './theme'
 import agentLearningLogo from '../assets/brand/agent-learning-logo.svg'
 
@@ -644,6 +645,7 @@ export function VisitorApp() {
             <Route path="*" element={<StatusPanel status="unknown-route" />} />
           </Routes>
         </div>
+        <ProjectFooter />
       </div>
     </BrowserRouter>
   )

@@ -972,6 +972,29 @@ h1 {
   box-shadow: var(--shadow);
 }
 
+.project-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 12px 8px 2px;
+  color: color-mix(in srgb, var(--muted) 76%, transparent);
+  font-size: 0.6875rem;
+  letter-spacing: 0.025em;
+}
+
+.project-footer a {
+  color: inherit;
+  text-underline-offset: 3px;
+  transition: color 150ms ease;
+}
+
+.project-footer a:hover,
+.project-footer a:focus-visible {
+  color: var(--muted);
+}
+
 .map-panel {
   padding: 42px 40px 52px;
   background:

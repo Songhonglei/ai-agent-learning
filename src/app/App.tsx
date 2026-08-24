@@ -31,6 +31,7 @@ import {
   type LearningProfile,
 } from '../shared/types/profile'
 import { StatusPanel } from '../shared/ui/StatusPanel'
+import { ProjectFooter } from '../shared/ui/ProjectFooter'
 import { StorageModeMenu } from '../features/account/StorageModeMenu'
 import { LocalProgressSync } from '../features/account/LocalProgressSync'
 import { appPath, deploymentBasePath } from '../shared/runtime/app-path'
@@ -477,6 +478,7 @@ function InternetAccountApp() {
             <Route path="*" element={<StatusPanel status="unknown-route" />} />
           </Routes>
         </div>
+        <ProjectFooter />
       </div>
     </BrowserRouter>
   )
