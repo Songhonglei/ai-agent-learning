@@ -83,6 +83,44 @@ describe('Assessment', () => {
     expect(onComplete).not.toHaveBeenCalled()
   })
 
+  it.each([
+    ['pretest', lessonOne.pretest ?? []],
+    ['posttest', lessonOne.posttest ?? []],
+  ] as const)('keeps %s choices neutral while feedback carries the result state', async (kind, questions) => {
+    const user = userEvent.setup()
+    render(<Assessment kind={kind} questions={[...questions]} onComplete={vi.fn()} />)
+
+    const assessment = screen.getByRole('region', {
+      name: kind === 'pretest' ? '课前测验' : '课后测验',
+    })
+    const questionGroups = within(assessment).getAllByRole('group')
+    const correctQuestion = questions[0]
+    const correctOption = correctQuestion.options.find(
+      (option) => option.id === correctQuestion.correctOptionId,
+    )
+    const wrongQuestion = questions[1]
+    const wrongOption = wrongQuestion.options.find(
+      (option) => option.id !== wrongQuestion.correctOptionId,
+    )
+
+    expect(correctOption).toBeDefined()
+    expect(wrongOption).toBeDefined()
+
+    const correctRadio = within(questionGroups[0]).getByRole('radio', {
+      name: correctOption?.label,
+    })
+    await user.click(correctRadio)
+    expect(correctRadio.closest('label')).not.toHaveClass('is-correct', 'is-wrong')
+    expect(within(questionGroups[0]).getByRole('status')).toHaveClass('is-correct')
+
+    const wrongRadio = within(questionGroups[1]).getByRole('radio', {
+      name: wrongOption?.label,
+    })
+    await user.click(wrongRadio)
+    expect(wrongRadio.closest('label')).not.toHaveClass('is-correct', 'is-wrong')
+    expect(within(questionGroups[1]).getByRole('status')).toHaveClass('is-wrong')
+  })
+
   it('uses three distinct posttest prompts without reusing pretest wording', () => {
     const pretestPrompts = new Set((lessonOne.pretest ?? []).map((question) => question.prompt))
     const posttestPrompts = (lessonOne.posttest ?? []).map((question) => question.prompt)

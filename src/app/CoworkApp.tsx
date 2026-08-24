@@ -171,7 +171,7 @@ export function CoworkApp() {
             <img className="brand-mark" src={agentLearningLogo} alt="" />
             <span>Agent 入门课</span>
           </a>
-          <CoworkIdentityMenu identity={identity} state={identityState} onRetry={() => { void refreshIdentity() }} />
+          <CoworkIdentityMenu identity={identity} state={identityState} />
           <a className="header-icon-button profile-link" href={appPath('/profile')} aria-label="学习档案" data-tooltip="学习档案">
             <span aria-hidden="true">▣</span>
           </a>

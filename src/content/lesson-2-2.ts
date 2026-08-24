@@ -14,7 +14,7 @@ export const lessonTwoTwo: Lesson = {
     { id: 'experiment-retrieval', type: 'experiment', content: '为三个办公问题选择最相关的虚构公司资料，体验“先找对资料，再组织回答”的第一步。', experimentId: 'knowledge-retrieval', experimentKind: 'knowledge-retrieval' },
     { id: 'quiz-rag', type: 'quiz', content: '用三个情境判断 RAG 的角色和适用边界。' },
     { id: 'summary-rag', type: 'summary', content: 'RAG 的价值在于让当前回答有机会基于相关、受维护的资料；能否可信，还取决于资料质量、检索相关性和使用方式。' },
-    { id: 'faq-rag', type: 'free-question', content: '自由提问目前只提供本课审核过的 FAQ；模型服务尚未启用。' },
+    { id: 'faq-rag', type: 'free-question', content: '先从本课审核 FAQ 快速核对，也可以继续向 AI 助教自由提问；回答会依据本课来源包并标注引用。' },
   ],
   quiz: [
     { id: 'order', prompt: 'RAG 的基本工作顺序最接近哪项？', options: [{ id: 'rag', label: '先检索相关资料，组织进上下文，再生成回答。' }, { id: 'all', label: '先生成答案，再寻找能支持它的资料。' }, { id: 'training', label: '把每份公司文档都重新训练进模型参数。' }], correctOptionId: 'rag', immediateFeedback: '对。RAG 是检索、增强、生成的过程。', explanation: '检索到的相关资料被带入当前问题的上下文。', sourceRefIds: ['page-089'] },

@@ -14,7 +14,7 @@ export const lessonTwoOne: Lesson = {
     { id: 'experiment-freshness', type: 'experiment', content: '判断三类问题：哪些可以主要依靠通用知识，哪些必须先连接可信、已维护的资料。', experimentId: 'knowledge-freshness', experimentKind: 'knowledge-freshness' },
     { id: 'quiz-freshness', type: 'quiz', content: '用三个情境判断何时需要检索支持。' },
     { id: 'summary-freshness', type: 'summary', content: '不是所有问题都要检索；但实时变化、组织特有或需要精确出处的问题，不能把模型已有知识当作当前事实。' },
-    { id: 'faq-freshness', type: 'free-question', content: '自由提问目前只提供本课审核过的 FAQ；模型服务尚未启用。' },
+    { id: 'faq-freshness', type: 'free-question', content: '先从本课审核 FAQ 快速核对，也可以继续向 AI 助教自由提问；回答会依据本课来源包并标注引用。' },
   ],
   quiz: [
     { id: 'current-policy', prompt: '要回答“本周生效的报销规则”，最稳妥的第一步是什么？', options: [{ id: 'retrieve', label: '先查阅已维护的公司规则资料。' }, { id: 'guess', label: '直接把通用印象当作当前规则。' }, { id: 'old', label: '只凭模型训练时期的知识作答。' }], correctOptionId: 'retrieve', immediateFeedback: '对。时效性和组织特有信息需要可信资料支撑。', explanation: '模型已有知识不等于当前、组织内的真实版本。', sourceRefIds: ['page-088', 'outline-100-085'] },

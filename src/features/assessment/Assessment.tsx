@@ -109,7 +109,11 @@ export function Assessment({ kind, questions, existing, onComplete }: Assessment
                     ))}
                   </div>
                   {selectedOptionId && (
-                    <p className="assessment-feedback" role="status" aria-live="polite">
+                    <p
+                      className={`assessment-feedback ${isCorrect ? 'is-correct' : 'is-wrong'}`}
+                      role="status"
+                      aria-live="polite"
+                    >
                       <strong>{teacherFeedback(`${kind}:${question.id}`, isCorrect)}</strong>
                       {question.explanation} 可以继续作答或进入课程。
                     </p>

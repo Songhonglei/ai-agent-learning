@@ -8,9 +8,14 @@ describe('Cowork SSO identity client', () => {
     const fetchMock = vi.fn(async () => ({
       ok: true,
       json: async () => ({
-        userId: 'u-123',
-        email: 'learner@xiaohongshu.com',
-        displayName: '学习者',
+        data: {
+          internalUser: {
+            userId: 'u-123',
+            email: 'learner@xiaohongshu.com',
+            displayName: '学习者(learner_name)',
+            thumbAvatar: 'https://avatar.example.com/learner.png',
+          },
+        },
       }),
     }))
     vi.stubGlobal('fetch', fetchMock)
@@ -19,9 +24,12 @@ describe('Cowork SSO identity client', () => {
       userId: 'u-123',
       email: 'learner@xiaohongshu.com',
       displayName: '学习者',
+      avatarUrl: 'https://avatar.example.com/learner.png',
     })
-    expect(fetchMock).toHaveBeenCalledWith('/api/session/me', {
-      headers: { Accept: 'application/json' },
+    expect(fetchMock).toHaveBeenCalledWith('https://edith.xiaohongshu.com/sso/user_info', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
     })
   })
 

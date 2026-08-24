@@ -110,6 +110,25 @@ describe('Quiz', () => {
     expect(screen.getByRole('heading', { name: '本课小结' })).toBeInTheDocument()
   })
 
+  it('keeps selected options neutral while feedback carries the result state', async () => {
+    const user = userEvent.setup()
+    render(<QuizLessonHarness />)
+
+    const wrongRadio = screen.getByRole('radio', {
+      name: '只要模型足够强，就能补齐全部任务背景。',
+    })
+    await user.click(wrongRadio)
+    expect(wrongRadio.closest('label')).not.toHaveClass('is-correct', 'is-wrong')
+    expect(screen.getByRole('status', { name: '第 1 题反馈' })).toHaveClass('quiz-feedback-wrong')
+
+    const correctRadio = screen.getByRole('radio', {
+      name: '缺少任务背景，可能给出不符合当前约束的回答。',
+    })
+    await user.click(correctRadio)
+    expect(correctRadio.closest('label')).not.toHaveClass('is-correct', 'is-wrong')
+    expect(screen.getByRole('status', { name: '第 1 题反馈' })).toHaveClass('quiz-feedback-correct')
+  })
+
   it('favorites a question with a stable lesson and question identifier', async () => {
     const user = userEvent.setup()
     let latestProfile = quizProfile()

@@ -294,8 +294,8 @@ async function verifyReviewExportAndImports(page: Page) {
     mimeType: 'application/json',
     buffer: Buffer.from(JSON.stringify(cancelCandidate)),
   })
-  await expect(page.getByRole('heading', { name: '确认导入前，请检查这些取舍' })).toBeVisible()
-  await expect(page.getByText(/收藏去重后 2 项/)).toBeVisible()
+  await expect(page.getByRole('heading', { name: '导入影响' })).toBeVisible()
+  await expect(page.getByText(/将写入.*学习记录/)).toBeVisible()
   await page.getByRole('button', { name: '取消导入' }).click()
   await expect(page.getByText('1 项收藏')).toBeVisible()
   expect(await page.evaluate((key) => localStorage.getItem(key), learningProfileKey))
@@ -311,8 +311,8 @@ async function verifyReviewExportAndImports(page: Page) {
     mimeType: 'application/json',
     buffer: Buffer.from(JSON.stringify(confirmCandidate)),
   })
-  await expect(page.getByRole('heading', { name: '确认导入前，请检查这些取舍' })).toBeVisible()
-  await expect(page.getByText(/收藏去重后 2 项/)).toBeVisible()
+  await expect(page.getByRole('heading', { name: '导入影响' })).toBeVisible()
+  await expect(page.getByText(/将写入.*学习记录/)).toBeVisible()
   await page.getByRole('button', { name: '确认导入' }).click()
   await expect(page.getByText('2 项收藏')).toBeVisible()
 

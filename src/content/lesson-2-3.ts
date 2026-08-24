@@ -14,7 +14,7 @@ export const lessonTwoThree: Lesson = {
     { id: 'experiment-memory', type: 'experiment', content: '把三条本地练习信息放到当前会话、用户长期偏好或业务任务状态中。', experimentId: 'memory-layers', experimentKind: 'memory-layers' },
     { id: 'quiz-memory', type: 'quiz', content: '用三个场景判断合适的记忆层和更新原则。' },
     { id: 'summary-memory', type: 'summary', content: '好的 Agent 记忆是选择性、可审查且按用途组织的。不是保存越多越好，也不能让过期或矛盾信息一直并存。' },
-    { id: 'faq-memory', type: 'free-question', content: '自由提问目前只提供本课审核过的 FAQ；模型服务尚未启用。' },
+    { id: 'faq-memory', type: 'free-question', content: '先从本课审核 FAQ 快速核对，也可以继续向 AI 助教自由提问；回答会依据本课来源包并标注引用。' },
   ],
   quiz: [
     { id: 'preference', prompt: '“用户长期偏好先给结论”最适合放在哪里？', options: [{ id: 'long', label: '用户长期记忆。' }, { id: 'current', label: '仅本次会话的临时线索。' }, { id: 'status', label: '当前采购审批阶段。' }], correctOptionId: 'long', immediateFeedback: '对。稳定、可复用的偏好可服务未来会话。', explanation: '长期记忆用于跨会话的个性化与连续性。', sourceRefIds: ['page-078', 'page-080'] },

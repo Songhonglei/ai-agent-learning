@@ -1,34 +1,37 @@
 import { cleanup, render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom/vitest'
-import userEvent from '@testing-library/user-event'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
 import { CoworkIdentityMenu } from './CoworkIdentityMenu'
 
 describe('CoworkIdentityMenu', () => {
   afterEach(cleanup)
 
-  it('shows SSO identity without registration or a storage switch', async () => {
-    render(
+  it('shows the SSO avatar without opening an account menu', () => {
+    const { container } = render(
       <CoworkIdentityMenu
-        identity={{ userId: 'u-1', email: 'learner@xiaohongshu.com', displayName: '小红' }}
+        identity={{
+          userId: 'u-1',
+          email: 'learner@xiaohongshu.com',
+          displayName: '小红',
+          avatarUrl: 'https://avatar.example.com/xiaohong.png',
+        }}
         state="ready"
-        onRetry={vi.fn()}
       />,
     )
-    await userEvent.click(screen.getByRole('button', { name: 'Cowork SSO 账户' }))
-    expect(screen.getByText('小红')).toBeInTheDocument()
-    expect(screen.getByText('learner@xiaohongshu.com')).toBeInTheDocument()
-    expect(screen.getByText(/学习进度自动同步/)).toBeInTheDocument()
-    expect(screen.queryByText('云端档案')).not.toBeInTheDocument()
-    expect(screen.queryByText('本地档案')).not.toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: /验证码/ })).not.toBeInTheDocument()
+    const identityIcon = screen.getByRole('img', { name: 'Cowork SSO 已登录 · 小红' })
+    expect(identityIcon).not.toHaveAttribute('aria-expanded')
+    expect(container.querySelector('.identity-avatar-image')).toHaveAttribute(
+      'src',
+      'https://avatar.example.com/xiaohong.png',
+    )
+    expect(container.querySelector('.identity-panel')).not.toBeInTheDocument()
+    expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })
 
-  it('offers an explicit identity retry', async () => {
-    const onRetry = vi.fn()
-    render(<CoworkIdentityMenu identity={null} state="error" onRetry={onRetry} />)
-    await userEvent.click(screen.getByRole('button', { name: 'Cowork SSO 账户' }))
-    await userEvent.click(screen.getByRole('button', { name: '重新识别' }))
-    expect(onRetry).toHaveBeenCalledOnce()
+  it('uses a quiet fallback without exposing retry or logout controls', () => {
+    render(<CoworkIdentityMenu identity={null} state="error" />)
+    expect(screen.getByRole('img', { name: 'Cowork SSO 身份暂不可用' })).toBeInTheDocument()
+    expect(screen.getByText('我')).toBeInTheDocument()
+    expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })
 })

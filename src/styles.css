@@ -13,7 +13,12 @@
   --primary-action: #087f7b;
   --indigo: #3c65d4;
   --indigo-text: #294dad;
+  --choice-selected-bg: #edf3fb;
+  --choice-selected-border: #a8bfe4;
+  --choice-accent: #5578bd;
   --soft: #edf5ff;
+  --correct: #2d8b57;
+  --incorrect: #b56b25;
   --warning: #c97835;
   --shadow: 0 18px 55px rgba(27, 58, 97, 0.1);
   font-family: "Avenir Next", "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -34,7 +39,12 @@
   --primary-action: #087f7b;
   --indigo: #4564c8;
   --indigo-text: #b7c6ff;
+  --choice-selected-bg: #172b42;
+  --choice-selected-border: #496684;
+  --choice-accent: #8eafe0;
   --soft: #152d43;
+  --correct: #75d89e;
+  --incorrect: #efad68;
   --warning: #efad68;
   --shadow: 0 18px 55px rgba(0, 0, 0, 0.3);
 }
@@ -203,7 +213,10 @@ h1 {
 
 .identity-menu {
   position: relative;
+  display: flex;
+  align-items: center;
   margin-left: auto;
+  line-height: 0;
 }
 
 .identity-menu + .profile-link {
@@ -211,22 +224,41 @@ h1 {
 }
 
 .identity-trigger {
-  overflow: hidden;
   color: var(--muted);
   background: color-mix(in srgb, var(--soft) 76%, var(--panel));
   border-style: dashed;
-  border-radius: 50%;
+  border-radius: 12px;
   font-size: 0.86rem;
 }
 
 .identity-trigger.is-ready {
+  padding: 2px;
   color: var(--primary-text);
+  background: color-mix(in srgb, var(--primary) 12%, var(--panel));
+  border-color: color-mix(in srgb, var(--primary) 62%, var(--line));
+  border-style: solid;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--panel) 72%, transparent);
+}
+
+.identity-avatar-image,
+.identity-avatar-fallback {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 9px;
+}
+
+.identity-avatar-image {
+  object-fit: cover;
+}
+
+.identity-avatar-fallback {
+  display: grid;
+  place-items: center;
   background:
     radial-gradient(circle at 30% 25%, color-mix(in srgb, var(--primary) 28%, transparent), transparent 46%),
     color-mix(in srgb, var(--primary) 10%, var(--panel));
-  border-color: color-mix(in srgb, var(--primary) 62%, var(--line));
-  border-style: solid;
-  box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--panel) 76%, transparent);
+  font-weight: 850;
 }
 
 .identity-panel {
@@ -1868,12 +1900,12 @@ h1 {
 
 .agent-identifier-feedback.is-correct,
 .formula-builder-feedback.is-correct {
-  background: color-mix(in srgb, #2d8b57 14%, var(--surface));
+  background: color-mix(in srgb, var(--correct) 14%, var(--surface));
 }
 
 .agent-identifier-feedback.is-wrong,
 .formula-builder-feedback.is-wrong {
-  background: color-mix(in srgb, #b56b25 14%, var(--surface));
+  background: color-mix(in srgb, var(--incorrect) 14%, var(--surface));
 }
 
 .prompt-compare,
@@ -1900,10 +1932,19 @@ h1 {
 .prompt-compare legend,
 .prompt-safety legend { padding: 0 4px; font-weight: 800; }
 .prompt-compare label { display: flex; gap: 10px; margin-top: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; cursor: pointer; }
-.prompt-compare label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
 .prompt-compare label small { display: block; margin-top: 5px; color: var(--muted); line-height: 1.55; }
 .prompt-safety fieldset > p { line-height: 1.6; }
-.prompt-safety label { display: block; margin: 8px 0; }
+.prompt-safety label {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+  padding: 8px 10px;
+  margin: 7px 0;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+}
 
 .knowledge-practice {
   padding: 18px;
@@ -1918,7 +1959,18 @@ h1 {
 .knowledge-practice > div span { color: var(--indigo-text); font-size: 0.82rem; font-weight: 800; }
 .knowledge-practice fieldset { margin: 13px 0 0; padding: 13px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
 .knowledge-practice legend { padding: 0 4px; color: var(--text); font-weight: 800; }
-.knowledge-practice label { display: block; margin: 8px 0; color: var(--text); }
+.knowledge-practice label {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+  padding: 8px 10px;
+  margin: 7px 0;
+  color: var(--text);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+}
 
 .memory-layers-figure { margin: 24px 0 0; padding: 22px; border: 1px solid color-mix(in srgb, var(--primary) 30%, var(--line)); border-radius: 18px; background: color-mix(in srgb, var(--surface) 82%, var(--soft)); }
 .memory-layers-figure ol,
@@ -2069,8 +2121,8 @@ h1 {
 }
 .prompt-result { margin: 14px 0 0; padding: 10px 12px; border-radius: 10px; line-height: 1.55; }
 .prompt-result strong { display: block; }
-.prompt-result.is-correct { background: color-mix(in srgb, #2d8b57 14%, var(--surface)); }
-.prompt-result.is-wrong { background: color-mix(in srgb, #b56b25 14%, var(--surface)); }
+.prompt-result.is-correct { background: color-mix(in srgb, var(--correct) 14%, var(--surface)); }
+.prompt-result.is-wrong { background: color-mix(in srgb, var(--incorrect) 14%, var(--surface)); }
 
 .quiz-panel,
 .faq-panel {
@@ -2178,8 +2230,8 @@ h1 {
 }
 
 .assessment-options label:has(input:checked) {
-  background: var(--soft);
-  border-color: var(--indigo);
+  background: color-mix(in srgb, var(--indigo) 8%, var(--panel));
+  border-color: color-mix(in srgb, var(--indigo) 34%, var(--line));
 }
 
 .assessment-options label:has(input:focus-visible) {
@@ -2209,6 +2261,16 @@ h1 {
 .assessment-result span,
 .review-empty strong {
   display: block;
+}
+
+.assessment-feedback.is-correct {
+  background: color-mix(in srgb, var(--correct) 12%, var(--panel));
+  border-left-color: var(--correct);
+}
+
+.assessment-feedback.is-wrong {
+  background: color-mix(in srgb, var(--incorrect) 12%, var(--panel));
+  border-left-color: var(--incorrect);
 }
 
 .assessment-result span,
@@ -2458,8 +2520,8 @@ h1 {
 }
 
 .quiz-option:has(input:checked) {
-  background: var(--soft);
-  border-color: var(--indigo);
+  background: color-mix(in srgb, var(--indigo) 8%, var(--panel));
+  border-color: color-mix(in srgb, var(--indigo) 34%, var(--line));
 }
 
 .quiz-option:has(input:focus-visible) {
@@ -2483,7 +2545,13 @@ h1 {
 }
 
 .quiz-feedback-wrong {
-  border-left-color: var(--warning);
+  background: color-mix(in srgb, var(--incorrect) 12%, var(--panel));
+  border-left-color: var(--incorrect);
+}
+
+.quiz-feedback-correct {
+  background: color-mix(in srgb, var(--correct) 12%, var(--panel));
+  border-left-color: var(--correct);
 }
 
 .quiz-feedback h4 {
@@ -2493,7 +2561,11 @@ h1 {
 }
 
 .quiz-feedback-wrong > div:first-child h4 {
-  color: var(--warning);
+  color: var(--incorrect);
+}
+
+.quiz-feedback-correct > div:first-child h4 {
+  color: var(--correct);
 }
 
 .quiz-feedback p,
@@ -3370,6 +3442,54 @@ h1 {
   background: var(--soft);
   border-radius: 12px;
   font-size: 0.8125rem;
+}
+
+/* Keep every learning exercise neutral before revealing correctness below it. */
+.agent-identifier-options label:has(input:checked),
+.formula-builder-options label:has(input:checked),
+.prompt-compare label:has(input:checked),
+.prompt-safety label:has(input:checked),
+.knowledge-practice label:has(input:checked),
+.assessment-options label:has(input:checked),
+.quiz-option:has(input:checked),
+.context-block:has(input:checked) {
+  background: var(--choice-selected-bg);
+  border-color: var(--choice-selected-border);
+  box-shadow: none;
+}
+
+.agent-identifier-options input,
+.formula-builder-options input,
+.prompt-compare input,
+.prompt-safety input,
+.knowledge-practice input,
+.assessment-options input,
+.quiz-option input,
+.context-block input {
+  accent-color: var(--choice-accent);
+}
+
+.prompt-safety input,
+.knowledge-practice input {
+  margin-top: 0.32em;
+}
+
+.agent-identifier-options label:has(input:focus-visible),
+.formula-builder-options label:has(input:focus-visible),
+.prompt-compare label:has(input:focus-visible),
+.prompt-safety label:has(input:focus-visible),
+.knowledge-practice label:has(input:focus-visible),
+.assessment-options label:has(input:focus-visible),
+.quiz-option:has(input:focus-visible),
+.context-block:has(input:focus-visible) {
+  outline: 3px solid var(--choice-accent);
+  outline-offset: 3px;
+}
+
+.context-block:has(input:checked) .context-block-check {
+  color: var(--text);
+  background: var(--choice-selected-border);
+  border-color: var(--choice-selected-border);
 }
 
 @media (max-width: 1024px) {

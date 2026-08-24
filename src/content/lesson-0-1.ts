@@ -64,7 +64,7 @@ export const lessonZeroOne: Lesson = {
     {
       id: 'free-question-faq',
       type: 'free-question',
-      content: '自由提问目前只提供本课审核过的 FAQ；模型服务尚未启用。',
+      content: '先从本课审核 FAQ 快速核对，也可以继续向 AI 助教自由提问；回答会依据本课来源包并标注引用。',
     },
   ],
   quiz: [

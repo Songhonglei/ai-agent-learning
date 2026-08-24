@@ -27,6 +27,7 @@ describe('Cowork deployment shell', () => {
       userId: 'u-1',
       email: 'learner@xiaohongshu.com',
       displayName: '学习者',
+      avatarUrl: 'https://avatar.example.com/learner.png',
     })
     mocks.loadCloudProfile.mockResolvedValue(createEmptyProfile())
     mocks.saveCloudProfile.mockImplementation(async (profile: LearningProfile) => profile)
@@ -42,8 +43,9 @@ describe('Cowork deployment shell', () => {
     render(<CoworkApp />)
     expect(screen.getByText('课程加载中')).toBeInTheDocument()
     expect(await screen.findByRole('heading', { name: '你的学习地图' })).toBeInTheDocument()
-    await userEvent.click(screen.getByRole('button', { name: 'Cowork SSO 账户' }))
-    expect(await screen.findByText('学习者')).toBeInTheDocument()
+    expect(await screen.findByRole('img', { name: 'Cowork SSO 已登录 · 学习者' })).toBeInTheDocument()
+    expect(document.querySelector('.identity-avatar-image')).toHaveAttribute('src', 'https://avatar.example.com/learner.png')
+    expect(document.querySelector('.identity-panel')).not.toBeInTheDocument()
     expect(screen.queryByText('发送验证码')).not.toBeInTheDocument()
     expect(screen.queryByText('本地档案')).not.toBeInTheDocument()
     expect(mocks.loadCloudProfile).toHaveBeenCalledOnce()
