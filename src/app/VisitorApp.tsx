@@ -25,7 +25,7 @@ import {
 import { StatusPanel } from '../shared/ui/StatusPanel'
 import { ProjectFooter } from '../shared/ui/ProjectFooter'
 import { ThemeToggle } from './theme'
-import agentLearningLogo from '../assets/brand/agent-learning-logo.svg'
+import agentLearningLogo from '../assets/brand/agent-learning-logo-v2.svg'
 
 type ProfileLoadStatus = ProfileLoadResult['status']
 type ProfileLoadIssue = Exclude<ProfileLoadStatus, 'loaded' | 'empty'>
@@ -568,7 +568,10 @@ export function VisitorApp() {
       <div className="shell">
         <header className={headerCollapsed ? 'app-header is-collapsed' : 'app-header'}>
           <a className="brand" href="/">
-            <img className="brand-mark" src={agentLearningLogo} alt="" />
+            <span className="brand-mark-wrap" aria-hidden="true">
+              <img className="brand-mark" src={agentLearningLogo} alt="" />
+              <span className="brand-breath-light" />
+            </span>
             <span>Agent 入门课</span>
           </a>
           <StorageModeMenu

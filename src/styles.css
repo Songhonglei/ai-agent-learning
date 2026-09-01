@@ -148,10 +148,91 @@ h1 {
   text-decoration: none;
 }
 
-.brand-mark {
+.brand-mark-wrap {
+  position: relative;
   width: 34px;
   height: 34px;
   flex: 0 0 auto;
+  overflow: hidden;
+  border-radius: 9px;
+  isolation: isolate;
+}
+
+.brand-mark {
+  display: block;
+  width: 34px;
+  height: 34px;
+}
+
+.brand-breath-light {
+  position: absolute;
+  z-index: 2;
+  top: 5.5px;
+  left: 22.85px;
+  width: 6px;
+  height: 6px;
+  pointer-events: none;
+  background: #f5fffd;
+  border-radius: 50%;
+  box-shadow: 0 0 2px rgba(245, 255, 253, 0.84), 0 0 5px rgba(157, 244, 232, 0.48);
+  animation: agent-light-core 2.8s ease-in-out infinite;
+}
+
+.brand-breath-light::before,
+.brand-breath-light::after {
+  position: absolute;
+  border-radius: 50%;
+  content: "";
+}
+
+.brand-breath-light::before {
+  inset: -2px;
+  border: 1px solid rgba(184, 255, 244, 0.56);
+  animation: agent-light-ring 2.8s ease-out infinite;
+}
+
+.brand-breath-light::after {
+  z-index: -1;
+  inset: -4px;
+  background: radial-gradient(circle, rgba(184, 255, 244, 0.34) 0, rgba(126, 234, 224, 0.12) 44%, transparent 72%);
+  animation: agent-light-halo 2.8s ease-in-out infinite;
+}
+
+@keyframes agent-light-core {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(0.94);
+  }
+
+  50% {
+    opacity: 0.98;
+    transform: scale(1.05);
+    box-shadow: 0 0 3px rgba(245, 255, 253, 0.96), 0 0 7px rgba(157, 244, 232, 0.62);
+  }
+}
+
+@keyframes agent-light-ring {
+  0% {
+    opacity: 0.34;
+    transform: scale(0.86);
+  }
+
+  72%, 100% {
+    opacity: 0;
+    transform: scale(1.25);
+  }
+}
+
+@keyframes agent-light-halo {
+  0%, 100% {
+    opacity: 0.18;
+    transform: scale(0.9);
+  }
+
+  50% {
+    opacity: 0.42;
+    transform: scale(1.04);
+  }
 }
 
 .header-icon-button {

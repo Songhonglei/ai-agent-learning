@@ -36,7 +36,7 @@ import { StorageModeMenu } from '../features/account/StorageModeMenu'
 import { LocalProgressSync } from '../features/account/LocalProgressSync'
 import { appPath, deploymentBasePath } from '../shared/runtime/app-path'
 import { ThemeToggle } from './theme'
-import agentLearningLogo from '../assets/brand/agent-learning-logo.svg'
+import agentLearningLogo from '../assets/brand/agent-learning-logo-v2.svg'
 import { VisitorApp } from './VisitorApp'
 
 function LearningMapPage({ profile }: { profile: LearningProfile }) {
@@ -388,7 +388,10 @@ function InternetAccountApp() {
       <div className="shell">
         <header className={headerCollapsed ? 'app-header is-collapsed' : 'app-header'}>
           <a className="brand" href={appPath('/')}>
-            <img className="brand-mark" src={agentLearningLogo} alt="" />
+            <span className="brand-mark-wrap" aria-hidden="true">
+              <img className="brand-mark" src={agentLearningLogo} alt="" />
+              <span className="brand-breath-light" />
+            </span>
             <span>Agent 入门课</span>
           </a>
           <StorageModeMenu

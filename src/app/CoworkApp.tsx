@@ -12,7 +12,7 @@ import { createEmptyProfile, type LearningProfile } from '../shared/types/profil
 import { StatusPanel } from '../shared/ui/StatusPanel'
 import { appPath, deploymentBasePath } from '../shared/runtime/app-path'
 import { ThemeToggle } from './theme'
-import agentLearningLogo from '../assets/brand/agent-learning-logo.svg'
+import agentLearningLogo from '../assets/brand/agent-learning-logo-v2.svg'
 
 function LearningMapPage({ profile }: { profile: LearningProfile }) {
   if (learningMapNodes.length === 0) return <StatusPanel status="empty" />
@@ -168,7 +168,10 @@ export function CoworkApp() {
       <div className="shell">
         <header className={headerCollapsed ? 'app-header is-collapsed' : 'app-header'}>
           <a className="brand" href={appPath('/')}>
-            <img className="brand-mark" src={agentLearningLogo} alt="" />
+            <span className="brand-mark-wrap" aria-hidden="true">
+              <img className="brand-mark" src={agentLearningLogo} alt="" />
+              <span className="brand-breath-light" />
+            </span>
             <span>Agent 入门课</span>
           </a>
           <CoworkIdentityMenu identity={identity} state={identityState} />
