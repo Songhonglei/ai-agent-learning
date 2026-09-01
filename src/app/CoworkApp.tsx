@@ -12,7 +12,7 @@ import { createEmptyProfile, type LearningProfile } from '../shared/types/profil
 import { StatusPanel } from '../shared/ui/StatusPanel'
 import { appPath, deploymentBasePath } from '../shared/runtime/app-path'
 import { ThemeToggle } from './theme'
-import agentLearningLogo from '../assets/brand/agent-learning-logo.svg'
+import hongshuAiLogo from '../assets/brand/hongshu-ai-logo.png'
 
 function LearningMapPage({ profile }: { profile: LearningProfile }) {
   if (learningMapNodes.length === 0) return <StatusPanel status="empty" />
@@ -167,9 +167,8 @@ export function CoworkApp() {
     <BrowserRouter basename={deploymentBasePath() || undefined} future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
       <div className="shell">
         <header className={headerCollapsed ? 'app-header is-collapsed' : 'app-header'}>
-          <a className="brand" href={appPath('/')}>
-            <img className="brand-mark" src={agentLearningLogo} alt="" />
-            <span>Agent 入门课</span>
+          <a className="brand brand-logo-link" href={appPath('/')} aria-label="红叔讲 AI · Agent 入门课">
+            <img className="brand-logo" src={hongshuAiLogo} alt="红叔讲 AI" />
           </a>
           <CoworkIdentityMenu identity={identity} state={identityState} />
           <a className="header-icon-button profile-link" href={appPath('/profile')} aria-label="学习档案" data-tooltip="学习档案">
