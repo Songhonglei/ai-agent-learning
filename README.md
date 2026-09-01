@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="site/assets/brand/hongshu-ai-logo-readme.png" alt="红叔讲 AI" width="280" />
-
 # Agent 入门课
 
 一门面向非技术学习者的开源 AI Agent 互动课程。

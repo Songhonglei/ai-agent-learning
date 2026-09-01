@@ -79,8 +79,11 @@ button { color: inherit; font: inherit; }
 .site-header::after { right: -1px; bottom: -1px; border-right: 1px solid; border-bottom: 1px solid; }
 .site-header.is-scrolled { background: rgba(5, 11, 18, 0.94); border-color: rgba(88, 247, 223, 0.34); }
 .brand { display: inline-flex; align-items: center; gap: 11px; width: fit-content; }
-.brand-logo { display: block; width: auto; height: 46px; max-width: 150px; padding: 4px 9px; object-fit: contain; background: rgba(255, 255, 255, 0.97); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 9px; }
-footer .brand-logo { height: 40px; opacity: 0.9; }
+.brand-sigil { position: relative; display: grid; width: 42px; height: 42px; place-items: center; overflow: hidden; color: var(--void); background: var(--cyan); font-family: var(--display); font-size: 1.55rem; font-weight: 950; transform: skew(-5deg); }
+.brand-sigil i { position: absolute; top: 5px; right: 5px; width: 5px; height: 5px; background: var(--void); border-radius: 50%; }
+.brand-copy { display: grid; gap: 1px; }
+.brand-copy strong { font-family: var(--display); font-size: 1.15rem; letter-spacing: 0.08em; }
+.brand-copy small { color: var(--muted); font-family: var(--mono); font-size: 0.52rem; letter-spacing: 0.12em; }
 .site-header nav { display: flex; gap: 34px; }
 .site-header nav a { position: relative; color: #afbfcb; font-family: var(--mono); font-size: 0.71rem; letter-spacing: 0.04em; }
 .site-header nav a span { margin-right: 6px; color: var(--cyan); }
@@ -336,7 +339,7 @@ footer > div a { color: var(--text); }
 @media (max-width: 780px) {
   .site-header { top: 10px; right: 12px; left: 12px; grid-template-columns: 1fr auto; width: calc(100% - 24px); min-height: 60px; padding-left: 12px; }
   .site-header nav { display: none; }
-  .brand-logo { height: 40px; max-width: 126px; padding: 3px 7px; }
+  .brand-sigil { width: 36px; height: 36px; }
   .github-link { min-height: 38px; padding: 0 11px; }
   .github-link span { display: none; }
   .header-actions { gap: 6px; }
@@ -388,7 +391,7 @@ footer > div a { color: var(--text); }
 }
 
 @media (max-width: 420px) {
-  .brand-logo { max-width: 112px; }
+  .brand-copy small { display: none; }
   .hero h1 { font-size: clamp(3.8rem, 20vw, 5rem); }
   html[lang="en"] .hero h1 { font-size: clamp(3.35rem, 17.5vw, 4.5rem); }
   .system-label { font-size: 0.58rem; letter-spacing: 0.08em; }

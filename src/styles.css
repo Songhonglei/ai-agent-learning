@@ -148,21 +148,10 @@ h1 {
   text-decoration: none;
 }
 
-.brand-logo-link {
-  min-width: 0;
-  gap: 0;
-}
-
-.brand-logo {
-  display: block;
-  width: auto;
-  height: 42px;
-  max-width: min(138px, 34vw);
-  padding: 4px 8px;
-  object-fit: contain;
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
-  border-radius: 11px;
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
 }
 
 .header-icon-button {
