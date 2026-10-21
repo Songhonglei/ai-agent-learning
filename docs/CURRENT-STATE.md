@@ -4,6 +4,8 @@
 
 ## 独立知识映射与模型配置
 
+最新确认：用户已明确密钥来自Kimi Code订阅（不是其他网关），并说明以前可以使用。应匹配官方OpenAI兼容Base URL=https://api.kimi.com/coding/v1、model=kimi-for-coding；官方模型页支持thinking关闭，现有disabled无需为此修改。已尝试在Vercel编辑非密钥BASE_URL，页面弹出“Verify to reveal this value”，要求验证器验证码或Passkey；没有读取密钥、没有保存修改，也没有绕过验证。浏览器已交还用户，等待完成登录验证后继续改BASE_URL/MODEL、创建新预览并做真实课程问答。当前实际配置仍是Moonshot地址/kimi-k2.6，不能声称修复完成。依据：https://www.kimi.com/code/docs/en/ 与 https://www.kimi.com/code/docs/en/kimi-code/models.html （2026-10-21）。
+
 2026-10-21接入验收：10份白名单资料及1份资料规则完成首次入库，11/11 canonical原文逐份读回一致。全新STDIO MCP会话验证只读工具、双项目路由、code/workspace不匹配与跨scope拒绝、Cowork未注册；本项目6/6问题前三条检索后原文回读符合事实。课坊6题中5题前三条命中，剩余1题按流程扩大至8条，在第5条找到并回读完整依据。未创建新的Codex UI聊天；本聊天已实际调用原生MCP完成resolve/find/read。共享身份只有路由范围限制，不声称原生账号隔离。回执：~/.openviking-pilot/projects/ai-agent-learning-open-source/evidence/course-projects-mcp-check.json。
 
 本次main已到2119b75并推送，新增仅记录primary/fallback角色及HTTP状态码的安全诊断，51项服务端测试通过；不记录密钥、请求正文或供应商响应内容。c8cc4a7预览dpl_ZeiDWywieWHsBP5hgzMApek48zaM已READY，浏览器/assessment可用，但真实课程问答仍502 AI_UPSTREAM_ERROR；Vercel网页运行日志确认该错误，MCP日志接口403不能视为空日志。2119b75诊断预览dpl_AVAFcNdQqgbBNmk2Y6TcDyX6NKPH也已READY，尚未对其发起真实问答，不重复调用已知可能错配的凭据。正式域名未切换。

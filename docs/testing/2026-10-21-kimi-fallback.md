@@ -2,6 +2,12 @@
 
 日期：2026-10-21。范围：独立开源课程站，不修改 Cowork。
 
+最新状态：用户已确认AI_FALLBACK_API_KEY来自Kimi Code订阅，Production/Preview两条Secret存在；未读取密钥。原先下表按Moonshot开放平台填写，和此次确认的凭据来源不匹配。正确待改项为BASE_URL=https://api.kimi.com/coding/v1、MODEL=kimi-for-coding，仍使用OpenAI兼容协议及disabled思考（官方模型文档支持）。尝试编辑地址时Vercel要求“Verify to reveal this value”的验证码/Passkey验证，已交还浏览器，未保存改动。不能把下表视为已改好的Code配置。
+
+c8cc4a7预览dpl_ZeiDWywieWHsBP5hgzMApek48zaM实际浏览器问答502 AI_UPSTREAM_ERROR；2119b75诊断预览dpl_AVAFcNdQqgbBNmk2Y6TcDyX6NKPH已READY，未重复发起错配模型调用。安全诊断仅记录主/备角色及HTTP状态码，新增测试后51项服务端测试通过。正式域名未切换，需完成验证、更新配置并创建新预览后再验收。
+
+官方依据（2026-10-21）：[Kimi Code接口及产品区分](https://www.kimi.com/code/docs/en/)、[Code模型与思考参数](https://www.kimi.com/code/docs/en/kimi-code/models.html)。不伪装工具身份；若正常请求受到上游用途或账号限制，保留真实错误并明确说明。
+
 ## 实现与验证
 
 - `server/course-answer.mjs` 读取 AI_FALLBACK_*，缺密钥时不启用。主模型正常或给出有效的资料未覆盖回复时不增加调用；主模型超时、繁忙、连接/响应异常、空答案或引用校验失败后只尝试一次备用。
