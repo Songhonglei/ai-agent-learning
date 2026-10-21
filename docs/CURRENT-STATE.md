@@ -2,6 +2,10 @@
 
 日期：2026-10-21。
 
+## 默认英文与中文README（2026-10-21）
+
+按用户要求，README.md改为完整英文默认入口；原中文正文完整移至README.zh-CN.md，仅在标题下增加语言切换。两个文件顶部互相链接，GitHub Pages介绍页与Vercel课程站、前后测、模型无关主备配置及数据边界均保留。章节数量、代码块、环境变量集合、业务链接逐项一致，所有本地Markdown链接存在；diff检查通过。仅文档变更，不改变课程界面语言、代码、模型配置或部署；后续功能说明需同步维护两个README。
+
 ## 仓库入口与可替换模型说明（2026-10-21）
 
 用户纠正入口定位：GitHub Pages是项目亮点/产品介绍页，Vercel是实际课程学习站，两者同时保留。已恢复GitHub About homepage为https://songhonglei.github.io/ai-agent-learning/，About描述保留课程前后测/结果对照，AI助教改称可配置主模型与fallback备用模型，不绑定具体provider；GitHub API读回确认。README顶部并列两个入口并解释分工，仍保留Vercel测评深链。
