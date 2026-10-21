@@ -2,18 +2,30 @@
 
 证据日期：2026-10-21。用户已指定更新现有 Vercel 站点；Cowork 独立演进，本次不发布 Cowork。
 
+## 2026-10-21 正式验收结果
+
+- [x] 3600410（同既有已验证业务树）的新Preview真实课程回答、引用与超范围降级通过。
+- [x] 使用Production变量暂存dpl_HUPzHez4E72JtRSfLmxo4zfmn6ZS，真实问答、前测草稿刷新、访客401/非法课程400通过；原生产域名此时仍指向旧部署。
+- [x] 手动提升同一生产构建；my-agent-learning.vercel.app alias completed，域名ID为HUP，READY。
+- [x] 正式域名1-1真实UI回答带figure-2-1/page-035；课程测评、前后测/对照入口、深链、JS/CSS 200，390px无横向溢出。
+- [x] 当前日志3次真实问答200，无对外5xx；主403由备用接替，预期测试401/400不作生产故障。
+- [ ] 真实目标学员试学、效果采集与真实登录云同步仍待独立验证；4-2一次相关问法安全降级保留为模型质量待优化。
+- [x] 本轮不变更部署保护、自动分配域名设置、SQL或业务数据；密钥仅由用户保存。
+
+完整证据：[正式发布验收](../testing/2026-10-21-production-release.md)。当前兼容v2的生产恢复基线为HUP；不能直接将旧Fg/v1当作安全的数据兼容回滚。下方各阶段旧候选、勾选状态和分支名为当时回执，当前结果以上方为准。
+
 ## 当前 main 合并验收
 
 - [x] PR #1（开源拆分与AI保护）已merge到main：0986902；PR #2（全课程测评与Kimi备用）随后重定向main并merge：f8aa8c2。
 - [x] 最新组合dc3659a的npm run verify：203单元、50服务端、25 E2E、构建全部通过。
 - [x] f8aa8c2的完整文件树与dc3659a一致；当前main后续仅追加本轮验收/导航文档。
 - [x] 本地main跟踪origin/main；仅删除本轮已合并的两个开发分支，保留完整提交历史。
-- [ ] 真实模型及正式站发布验收；用户是否保存Kimi密钥、合并后Vercel自动部署结果本轮未核验。合并通过不代替线上验收。
+- [x] 后续已完成真实备用模型与正式站发布验收，见上方HUP回执；合并通过与线上验收分别记录。
 - 明细见 docs/testing/2026-10-21-main-integration.md。以下旧候选、分支名与测试数量保留为分阶段历史回执；当前功能基线以main为准。
 
 ## 固定目标与来源
 
-- 工作区：ai-agent-learning-open-source，分支 codex/release-hardening-2026-10-21。
+- 当前工作区：/Users/songhonglei/space/ai-agent-learning-open，分支main；下方发布硬化分支仅为历史。
 - GitHub：Songhonglei/ai-agent-learning；基于线上对应的 c31068b19d7725d942636a2235a2f2b017cd0e2a，保留访客学习、可选 Supabase 登录和档案同步。
 - 生产域名：https://my-agent-learning.vercel.app/。
 - Vercel：项目 ai-agent-learning / prj_ucgcGOonfoe5R3TeyJQsuIMXeZKg；账户 evansong / team_oLkYAq7dxp7LQY1L9Q5MqYa9。

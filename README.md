@@ -42,16 +42,16 @@ verify 依次运行单元测试、服务端测试、构建和 E2E。测试使用
 
 Vercel 的 Production 与 Preview 可按下表配置。除 API Key 设为 Secret 外，其余为 Config；不要加 VITE_ 前缀。
 
-| 变量 | Kimi 中国站配置 |
-| --- | --- |
-| AI_FALLBACK_BASE_URL | https://api.moonshot.cn/v1 |
-| AI_FALLBACK_API_STYLE | openai-chat-completions |
-| AI_FALLBACK_MODEL | kimi-k2.6 |
-| AI_FALLBACK_TIMEOUT_MS | 30000 |
-| AI_FALLBACK_THINKING | disabled |
-| AI_FALLBACK_API_KEY | 维护者在 Vercel 填写开放平台 API Key |
+| 变量 | Kimi 中国站开放平台 | Kimi Code 中国站 |
+| --- | --- | --- |
+| AI_FALLBACK_BASE_URL | https://api.moonshot.cn/v1 | https://api.kimi.com/coding/v1 |
+| AI_FALLBACK_API_STYLE | openai-chat-completions | openai-chat-completions |
+| AI_FALLBACK_MODEL | kimi-k2.6 | kimi-for-coding |
+| AI_FALLBACK_TIMEOUT_MS | 30000 | 30000 |
+| AI_FALLBACK_THINKING | disabled | disabled |
+| AI_FALLBACK_API_KEY | 维护者填写开放平台 API Key | 维护者填写 Code API Key |
 
-以上是 Moonshot/Kimi 中国站开放平台密钥，非 Kimi Code 订阅密钥；其他区域需一起调整地址与对应密钥。参数依据 [Kimi K2.6 官方文档](https://platform.kimi.com/docs/guide/kimi-k2-6-quickstart)（核对日期2026-10-21）。未填备用密钥时保持原主模型行为，缺主模型但备用配置完整时也可独立使用备用。环境变量保存后还需部署包含备用逻辑的新版本，现有部署不会自动生效。
+两平台的密钥和地址不通用；其他区域需一起调整地址与对应密钥，能力以账号权限为准。参数依据 [Kimi K2.6文档](https://platform.kimi.com/docs/guide/kimi-k2-6-quickstart)及[Code接口](https://www.kimi.com/code/docs/en/)（核对日期2026-10-21）。本站当前使用Code备用，2026-10-21真实发布回执见[正式验收](docs/testing/2026-10-21-production-release.md)。未填备用密钥时保持原主模型行为，缺主模型但备用配置完整时也可独立使用备用。环境变量保存后还需部署包含备用逻辑的新版本，现有部署不会自动生效。
 
 ## 发布与数据边界
 

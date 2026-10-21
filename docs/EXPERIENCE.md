@@ -21,3 +21,8 @@ v1读取投影为v2，旧局部成绩不冒充全课程基线；新版API拒绝v
 ## 2026-10-21：从Vercel请求日志定位主备失败
 
 Code配置保存并新建预览后，真实UI问答仍失败。Vercel日志列表将3条warning聚合成一行，需打开请求行并等待日志详情，再核对primary HTTP_403、fallback HTTP_401及External APIs中的实际Code路径；不能把仅列表末条AI_UPSTREAM_ERROR当作没有主备状态。官方401可能对应认证或能力权限，不能仅凭状态断言无额度、Key错误或编程用途限制。控制台生效Key元数据也不能证明Vercel Secret填写一致；由用户核对密钥并保存后再创建新部署，不反复调用相同失败凭据。
+
+
+## 2026-10-21：分别验收Preview与Production密钥及实际调用链
+
+用户更新两环境密钥后，先在Preview验证跨课回答/引用/超范围降级，再检查项目原有自动生产域名分配Disabled，用Production变量创建暂存；暂存问答及前测草稿刷新通过后才手动promote同一构建。正式域名ID与alias completed、真实UI回答、资源及390px布局再核对。HTTP200也可能是安全拒答，或主供应商在HTTP200载荷中报错后才切备用，需结合回答引用及External APIs/主403日志确认，不把HTTP200泛化为回答质量通过。相关问法的一次安全降级作为待优化项保留。

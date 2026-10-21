@@ -2,6 +2,12 @@
 
 日期：2026-10-21。
 
+## 最新正式基线
+
+用户重新保存Code密钥后，3600410的新Preview真实问答、审核引用和超范围拒答通过；Production配置暂存后真实问答200，日志primary HTTP_403而对外200，确认Kimi备用接替成功。dpl_HUPzHez4E72JtRSfLmxo4zfmn6ZS已READY并手动提升，正式https://my-agent-learning.vercel.app/解析到该部署；12课全课程前后测、结果对照、档案v2和Kimi备用已上线。正式域名1-1真实UI回答与引用通过，测评、课程深链及JS/CSS均200，390px无横向溢出。没有改变项目原有禁用自动分配生产域名的设置、部署保护或主模型配置。
+
+真实登录账号云同步与目标学员真人试学尚未新验收；正式4-2一次相关问法被无引用安全降级，已保留为回答质量待优化项，不能将所有200称为正确回答。阿里云主模型仍出现403；Kimi备用已可用。详细证据、部署ID、测试边界与截图见docs/testing/2026-10-21-production-release.md。下方“未上线”“401”“待更新密钥”等均为此前阶段的状态，以上方正式回执为准。
+
 ## 本地目录更名
 
 用户要求将space下ai-agent-learning-open-source目录改为ai-agent-learning-open，已原位移动至/Users/songhonglei/space/ai-agent-learning-open。OpenViking注册工作区及资料策略已更新，project_code和scope继续使用ai-agent-learning-open-source，避免重建既有索引；GitHub Songhonglei/ai-agent-learning、Vercel项目和站点不变。移动前后HEAD b118e2a、Git状态及270个已跟踪文件散列一致；依赖、构建和本机配置随目录保留。预览从新目录重启，仍使用127.0.0.1:4182；首页、/assessment及JS/CSS均200，不影响同源浏览器档案。无业务源码改动或线上发布。导航/维护资料随后更新，不将这些文档差异混同为移动损坏。

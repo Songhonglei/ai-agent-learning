@@ -2,6 +2,8 @@
 
 日期：2026-10-21。范围：独立开源课程站，不修改 Cowork。
 
+最终状态：用户再次保存Code密钥后，3600410的新Preview及Production暂存真实问答均成功并显示审核引用；生产日志显示主模型403后对外200，确认备用接替。Production dpl_HUPzHez4E72JtRSfLmxo4zfmn6ZS已提升至https://my-agent-learning.vercel.app/。完整结果与已知边界见[正式发布验收](2026-10-21-production-release.md)。下方401和待更新密钥属于此前失败阶段，不代表最终部署。
+
 最新状态（2026-10-21）：用户确认Kimi Code订阅密钥后，已在同一Ego任务页完成Vercel验证。BASE_URL和MODEL分别改为https://api.kimi.com/coding/v1、kimi-for-coding，均返回Updated Environment Variable successfully，范围Production + Preview；其余协议、预算、思考项不变。API_KEY仅由用户填写，未读取值。
 
 真实浏览器验收：新预览[dpl_EhySM543JmXCYkLiCZgoAx5UdofE](https://ai-agent-learning-igif96795-evansong.vercel.app/assessment)已READY，提交b118e2ace7fc770e94b3c5028956910e9c5e2306，target=preview；/assessment展示覆盖12课的前后测与结果对照。进入1-1并通过下一步到自由提问，提交“Agent为什么会忘记前面说过的重要约束”后，页面显示安全错误“AI助教暂时无法回答，请稍后重试”。Vercel网页展开的3条日志显示primary HTTP_403、fallback HTTP_401、AI_UPSTREAM_ERROR；External APIs记录确认备用真实请求api.kimi.com/coding/v1/chat/completions。这证明已走备用接口，不能声称模型可用。
