@@ -1,0 +1,29 @@
+# 开源课程站 当前状态
+
+日期：2026-10-21。
+
+- 基线来源：ai-agent-learning-unified；核心 API 文件 SHA1 与现有 Vercel 部署一致。旧目录未移动或覆盖。
+- 访客可学习与问答，Supabase 登录和同步可选；发布到既有 Vercel 项目 ai-agent-learning。已分离 Cowork 构建入口、SSO App、PG 后端和部署脚本，已完成 AI 修复和本地验收，线上验收受既有模型故障阻塞。
+- 两项目独立仓库、独立 package-lock、独立 src/server 和测试。没有跨项目源文件导入或自动同步。
+- 固定12课，整体学习时长约3小时；整课程测评方案尚未实施。
+- 本项目尚未单独登记 OpenViking；原 ai-agent-learning 索引只作为旧工作区历史，不能证明本项目运行状态。
+- 验证结果与当前提交后续记录在本文件及 docs/release/。
+
+## 独立基线验证
+
+2026-10-21：npm run verify 全通过：188 单元测试、34 服务端测试、13 E2E 与构建；Node dist 生产预览冒烟通过。
+拆分基线 cd84e01 已提交并推送独立发布分支。
+
+移动端首页标题窄列问题已修复，新增 360/390px 可读性及首课可见性 E2E 通过；两版人工移植该 CSS 修复后分别构建通过。原有13项 E2E 全量通过，加新增1项定向通过（未重复执行全量）。
+
+预览 dpl_4V1tjsgy9jcR9Yp5iYWZy4jDdjVm 已 READY，浏览器可打开课程深链，未登录档案 API 返回401；真实问答返回502 AI_CONNECTION_ERROR。旧正式域名真实问答同样502，属于既有故障，尚未确定是模型配置、上游或网络问题；Vercel 将相关配置标记为 sensitive，未读取密钥或改写配置。正式域名未切换，待用户确认模型服务与模型名。
+
+浏览器代查完成0-1互动/测验/完成后刷新恢复、无模型时FAQ与安全提示、12课360px深链及来源卡片；不是目标学员真人试学，不能证明实际学习耗时或效果。
+
+## 交付回执
+
+- 实现候选：1bb852ba308b8a7212e6eb8953dcc4e3eda727e5。草稿 PR：https://github.com/Songhonglei/ai-agent-learning/pull/1。
+- 最终预览：https://ai-agent-learning-4rlfpvy9n-evansong.vercel.app/；dpl_6MSnStGu57xkZXrQH1EPPpJAy1De，READY。
+- 浏览器确认该预览在360px标题宽294px、高37px，首课入口位于约565px；4-2深链及4个来源卡片正常，无横向溢出；伪造课程编号被400 INVALID_QUESTION拦截，没有调用模型。
+- 真实问答故障仍待恢复：此前同一服务代码的预览和旧正式站均502。正式域名没有切换，PR未合并。该回执为文档补记，不改变已测试的实现候选。
+- 原历史项目的拆分决策与经验已同步 OpenViking，13/13来源读回一致；本项目仍未单独注册。临时预览服务与浏览器任务已关闭。

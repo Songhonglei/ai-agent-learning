@@ -1,61 +1,43 @@
-# 发布前准备与本机验证
+# 开源版发布验收清单
 
-> 本文件只定义本地发布前准备；不构成远程发布授权。
+证据日期：2026-10-21。用户已指定更新现有 Vercel 站点；Cowork 独立演进，本次不发布 Cowork。
 
-## 当前候选基线
+## 固定目标与来源
 
-- 分支：本地 `main`
-- 本地验收：阶段0至阶段4（本地范围）已完成，证据见 `docs/superpowers/evidence/`
-- 服务边界：React 前端可静态托管；自由提问启用后需 Node/Serverless 服务端代理，不接前端密钥或远程学习档案写入
-- 发布状态：未推送、未部署、未发布
+- 工作区：ai-agent-learning-open-source，分支 codex/release-hardening-2026-10-21。
+- GitHub：Songhonglei/ai-agent-learning；基于线上对应的 c31068b19d7725d942636a2235a2f2b017cd0e2a，保留访客学习、可选 Supabase 登录和档案同步。
+- 生产域名：https://my-agent-learning.vercel.app/。
+- Vercel：项目 ai-agent-learning / prj_ucgcGOonfoe5R3TeyJQsuIMXeZKg；账户 evansong / team_oLkYAq7dxp7LQY1L9Q5MqYa9。
+- 回滚基准：dpl_FgNvtZuAJuygE8C3bEKeQ8VDKc7H（ai-agent-learning-8zmcgdffz-evansong.vercel.app）。
 
-## 发布前检查单
+## 本地已验证
 
-- [x] 在候选工作树上运行 `npm run test:run`（29 文件 / 136 项通过）
-- [x] 运行 `npm run test:e2e`（12 项通过）与 `npm run build`，保留 `dist/` 作为待发布静态构建物
-- [x] 使用 `npm run preview -- --host 127.0.0.1 --port 4173` 验证生产构建物
-- [x] 运行 `npm run verify:preview`，确认首页、课程直达路由与浏览器控制台正常
-- [x] 复核 12 课来源包、版权边界和本地 FAQ；确认无真实模型或网络依赖
-- [x] 运行 `git diff --check`
-- [ ] 记录候选提交、构建时间、构建物校验值和测试结果
-- [ ] 取得远程发布授权后，才可选择发布目标并上传构建物
+- [x] 独立 npm ci、package-lock；移除 Cowork 构建切换、SSO 和 PG 部署载荷。
+- [x] npm run verify：41 文件 / 188 单元测试、34 服务端测试、构建、13 E2E 全部通过。
+- [x] 12 课来源编号按当前课审核表白名单校验；伪造、跨课和无效编号阻断；无引用回答降级到固定提示。编号合规不代表语义事实已由人工核实。
+- [x] 超时覆盖连接与响应体、上游错误安全提示、空响应、取消与离开页面、并发和访客限流均有回归。
+- [x] Vercel 每实例每访客每分钟12次、同时1条、实例总并发4；浏览器55秒，服务端默认20秒、最多50秒，函数预算60秒。
+- [x] Node 提供 dist 的生产预览冒烟通过；档案导入导出、迁移、跨标签同步与 360/768/1024/1440px 由 E2E 覆盖。
+- [x] 无原书整本 PDF、企业数据库或实际凭据进入发布树；服务端环境变量沿用 Vercel，前端只使用允许公开的 Supabase 配置。
+- [x] git diff --check 通过。
+- 本地 dist 清单 SHA256：78beca30d77e22a3c037dc91309049ba1cf86d20f70301906d1581b99c643bc6（按文件路径及内容摘要排序生成；Vercel 构建包含其环境变量，摘要可不同）。
 
-## 本机验证方案
+## 试学与发布记录
 
-优先验证 `vite preview`，而非开发服务器：它实际提供 `dist/` 目录，最接近未来静态托管结果。
+- [x] 浏览器代查：0-1互动/测验/完成后刷新恢复、来源、FAQ、错误降级、12课360px深链及无横向溢出。发现并修复移动首页窄列，新增360/390px定向E2E通过。
+- [x] 首个候选 cd84e01 预览 dpl_4V1tjsgy9jcR9Yp5iYWZy4jDdjVm READY；课程深链和未登录档案401正常。
+- [ ] 真实服务端问答成功：预览返回502 AI_CONNECTION_ERROR，旧正式站同样502；保持原站，待模型配置/上游恢复后复验。
+- [ ] 相同候选源码的生产部署 READY；正式域名、静态资源、API 与错误日志复核。
+- [ ] 真实目标学习者试学：约3小时仅为产品预期；尚未采集真人学习耗时或效果证据。浏览器代查不能替代真人试学。
 
-```bash
-npm run build
-npm run preview -- --host 127.0.0.1 --port 4173
-# 在另一终端执行：
-npm run verify:preview
-```
+## 保留边界
 
-默认仅监听 `127.0.0.1`，不向局域网暴露服务。自动化验证会检查页面标题、学习地图、0-1 路由及浏览器控制台错误；完整课程与断点回归继续由 `npm run test:e2e` 覆盖。
+内存限流仅保护单个温实例，不是跨实例配额或账单硬上限。整课程前后测尚未开发；现有单课前后测和练习不能证明整体学习效果。默认公开站只展示来源编号，不提供未授权整本 PDF 下载；只有明确可公开的文档才可配置 VITE_SOURCE_DOCUMENT_URL。
 
-## 线上回滚原则（待发布授权后执行）
+## 回滚
 
-1. 发布前保留当前线上构建物、版本标识和访问地址，作为可恢复版本。
-2. 新构建物以候选提交和校验值登记；出现 P0/P1、无法学习或档案恢复风险时停止发布。
-3. 发布后发现阻断问题时，优先将静态托管指向上一份已验证构建物；不修改用户浏览器内的 localStorage。
-4. 回滚后保存故障时间、受影响版本、恢复版本和复验结果，再决定是否重新发布。
+若生产出现无法学习、档案恢复损坏、API 大面积失败，使用 Vercel 已有生产部署回滚到上述基准，复核域名、课程深链和问答；保留失败部署与日志。不得修改或清空学习者 localStorage，不执行 Supabase 数据迁移或写入来配合此次发布。
 
-具体托管平台、线上地址、负责人及切换操作必须在获得发布授权后补全，不能在本地准备阶段假设或执行。
+## 最终候选回执（仅预览）
 
-## AI 自由提问服务（待配置）
-
-自由提问改为服务器端调用 Runway Bedrock InvokeModel：浏览器仅向 `/api/course-answer` 发送课程编号与问题，服务器读取对应课程的审核来源包后调用模型。API Key 只能放入服务器 `ai.properties`，不能使用 `VITE_` 前缀，不能提交到仓库。
-
-```bash
-# 在项目根目录或 server/ 目录创建 ai.properties，填入：
-# ai.base_url=https://runway.devops.rednote.life/openai
-# ai.api_key=<Runway 平台申请的 API Key>
-npm run build
-npm run serve:ai
-```
-
-`ai.base_url` 应为 Runway 网关根地址（已含 `/openai`），服务端会调用其 `/bedrock_runtime/model/invoke`。启用该能力后，部署目标必须支持 Node 服务或等价 Serverless Function；纯静态托管不能安全提供该接口。
-
-## 静态托管必备配置
-
-应用使用浏览器路由；未来托管平台必须把未知应用路径（例如 `/lesson/0-1` 与 `/profile`）重写到 `index.html`，再由前端路由渲染页面。发布前必须在候选线上环境直接打开至少一个课程深链，不能只验证从首页点击进入。
+实现提交 1bb852ba308b8a7212e6eb8953dcc4e3eda727e5；预览 dpl_6MSnStGu57xkZXrQH1EPPpJAy1De READY，地址 https://ai-agent-learning-4rlfpvy9n-evansong.vercel.app/。浏览器验证移动首页可读、首课可见、4-2深链与来源卡片正常，非法课程请求400。草稿 PR：https://github.com/Songhonglei/ai-agent-learning/pull/1。未合并、未切换正式域名；模型故障与真人试学仍待完成。后续文档提交不改此实现提交。

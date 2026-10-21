@@ -509,11 +509,12 @@ describe('App routes and global learning profile', () => {
       'scene-intro', 'dialogue-context', 'experiment-context-builder',
     ]
     const serializedNewerProfile = JSON.stringify(newerProfile)
+    localStorage.setItem(LEARNING_PROFILE_STORAGE_KEY, JSON.stringify(staleProfile))
     window.history.pushState({}, '', '/lesson/1-1')
     render(<App />)
 
     localStorage.setItem(LEARNING_PROFILE_STORAGE_KEY, serializedNewerProfile)
-    act(() => dispatchProfileEvent(null, serializedNewerProfile))
+    act(() => dispatchProfileEvent(JSON.stringify(staleProfile), serializedNewerProfile))
     act(() => dispatchProfileEvent(null, JSON.stringify(staleProfile)))
 
     expect(screen.getByText('步骤 4 / 6')).toBeInTheDocument()

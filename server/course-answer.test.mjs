@@ -131,10 +131,10 @@ test('throws on upstream business error wrapped in 200 OK', async () => {
       Code: 'ValidationException',
       Error: 'temperature is not supported',
     }), { status: 200 }),
-  }), /upstream business error/)
+  }), (error) => error.code === 'AI_UPSTREAM_ERROR')
 })
 
-test('includes the provider error code for a failed OpenAI-compatible request', async () => {
+test('redacts provider error details from a failed OpenAI-compatible request', async () => {
   await assert.rejects(async () => answerCourseQuestion({
     courseId: '1-1',
     config: {
@@ -147,5 +147,5 @@ test('includes the provider error code for a failed OpenAI-compatible request', 
     request: async () => new Response(JSON.stringify({
       error: { code: 'invalid_api_key', message: 'redacted provider detail' },
     }), { status: 401 }),
-  }), /模型服务返回 401 \(invalid_api_key\)/)
+  }), (error) => error.code === 'AI_UPSTREAM_ERROR' && !error.message.includes('invalid_api_key'))
 })

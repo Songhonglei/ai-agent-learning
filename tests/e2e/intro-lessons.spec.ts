@@ -153,3 +153,17 @@ test('keeps global navigation sticky while allowing it to collapse and reopen', 
   await page.getByRole('button', { name: '展开顶部导航' }).click()
   await expect(header).not.toHaveClass(/is-collapsed/)
 })
+
+
+test('mobile map keeps the introduction readable and the first lesson in reach', async ({ page }) => {
+  for (const width of [360, 390]) {
+    await page.setViewportSize({ width, height: 900 })
+    await page.goto('/')
+    const title = page.getByRole('heading', { name: '你的学习地图' })
+    const titleBox = await title.boundingBox()
+    expect(titleBox?.width).toBeGreaterThanOrEqual(width - 110)
+    expect(titleBox?.height).toBeLessThan(100)
+    const firstLesson = await page.getByRole('link', { name: '开始学习：0-1 你已经在用Agent了' }).boundingBox()
+    expect(firstLesson?.y).toBeLessThan(900)
+  }
+})
