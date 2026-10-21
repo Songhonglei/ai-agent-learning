@@ -59,7 +59,7 @@ test('Internet visitors can ask AI questions without an Authorization header', a
   const response = responseRecorder()
   await courseAnswer({
     method: 'POST',
-    headers: { 'x-forwarded-for': '203.0.113.8' },
+    headers: { 'x-forwarded-for': '203.0.113.8', 'content-type': 'application/json' },
     body: { courseId: '1-1', question: '什么是上下文窗口？' },
   }, response)
 

@@ -1,27 +1,22 @@
 {
-  "name": "ai-agent-learning",
+  "name": "agent-learning-open-source",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:internet": "vite --mode internet",
-    "dev:cowork": "vite --mode cowork",
-    "build": "npm run build:internet",
-    "build:internet": "tsc -b && vite build --mode internet",
-    "build:cowork": "tsc -b && vite build --mode cowork && node scripts/make-vite-assets-relative.mjs",
-    "prepare:cowork": "npm run build:cowork && node scripts/prepare-cowork-deploy.mjs",
+    "build": "tsc -b && vite build",
     "preview": "vite preview",
     "serve:ai": "node --env-file-if-exists=config/ai.env server/index.mjs",
     "test": "vitest",
     "test:run": "vitest run",
     "test:e2e": "playwright test",
     "test:server": "node --test server/*.test.mjs",
-    "verify:preview": "python3 scripts/verify-production-preview.py"
+    "verify:preview": "python3 scripts/verify-production-preview.py",
+    "verify": "npm run test:run && npm run test:server && npm run build && npm run test:e2e"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.112.3",
-    "pg": "^8.16.3"
+    "@supabase/supabase-js": "^2.112.3"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
