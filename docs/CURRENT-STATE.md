@@ -2,6 +2,14 @@
 
 日期：2026-10-21。
 
+## 引用区分优化正式基线
+
+按用户“代价不高直接更新”要求，完成两个服务端模块的低侵入优化，不改前端、依赖、数据库或客户端answer/citations接口。模型输出改为status/answer/citations JSON并兼容旧格式；只有明确拒答才视为资料未覆盖，漏引用返回AI_SOURCE_MISSING、坏结构返回AI_RESPONSE_INVALID，可沿用已有一次备用，不新增重试，来源白名单不变。各课提示词使用本课来源ID，不再复用1-1示例。
+
+59项服务端测试和本地HTTP/浏览器缺引用、明确拒答、重试恢复通过。首个仅加强提示的c17候选真实复验仍漏引，正确显示新错误；最终JSON候选c3cbea2真实4-2原问法和超范围拒答通过。PR #3已merge到main 5fd6a03，tree与验证候选完全一致；生产dpl_jDquErNeX6pfhKtoZYKAvsYRDNxF已READY并成为正式https://my-agent-learning.vercel.app/当前部署，生产配置及正式域名原问法均带outline-280-258/page-280/page-312回答，超范围问题固定拒答。
+
+本轮生产创建后被Vercel自动设为current，手动提升返回already current 409，不重复操作；重新发现Auto-assign Enabled并恢复已知原始false，网页确认今后需手动提升。没有改变当前正式部署或保护规则。原HUP作为兼容v2恢复点保留。语义范围仍由模型判断，不能据此保证所有误拒答消失。回执与截图见docs/testing/2026-10-21-citation-clarity.md；下方之前的4-2问题和HUP正式基线保留为历史记录。
+
 2026-10-21仓库展示更新：按用户要求，GitHub Songhonglei/ai-agent-learning的About描述已补充课程前后测/结果对照、来源引用AI助教和Kimi备用；homepage已由GitHub Pages改为https://my-agent-learning.vercel.app/，GitHub API读回确认。README顶部显式标注Vercel在线体验，并增加前测/后测/对照直达链接和五项功能概览；GitHub Pages仅保留为项目介绍。仅维护资料和仓库元信息变更，没有业务源码、部署或学习数据改动；文档检查后推送main。
 
 ## 最新正式基线
