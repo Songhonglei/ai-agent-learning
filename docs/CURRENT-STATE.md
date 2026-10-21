@@ -2,6 +2,8 @@
 
 日期：2026-10-21。
 
+2026-10-21仓库展示更新：按用户要求，GitHub Songhonglei/ai-agent-learning的About描述已补充课程前后测/结果对照、来源引用AI助教和Kimi备用；homepage已由GitHub Pages改为https://my-agent-learning.vercel.app/，GitHub API读回确认。README顶部显式标注Vercel在线体验，并增加前测/后测/对照直达链接和五项功能概览；GitHub Pages仅保留为项目介绍。仅维护资料和仓库元信息变更，没有业务源码、部署或学习数据改动；文档检查后推送main。
+
 ## 最新正式基线
 
 用户重新保存Code密钥后，3600410的新Preview真实问答、审核引用和超范围拒答通过；Production配置暂存后真实问答200，日志primary HTTP_403而对外200，确认Kimi备用接替成功。dpl_HUPzHez4E72JtRSfLmxo4zfmn6ZS已READY并手动提升，正式https://my-agent-learning.vercel.app/解析到该部署；12课全课程前后测、结果对照、档案v2和Kimi备用已上线。正式域名1-1真实UI回答与引用通过，测评、课程深链及JS/CSS均200，390px无横向溢出。没有改变项目原有禁用自动分配生产域名的设置、部署保护或主模型配置。

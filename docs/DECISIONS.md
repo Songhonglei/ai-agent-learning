@@ -25,3 +25,8 @@ Kimi一次备用逻辑已通过测试并随PR #2合入main，5项非密钥配置
 ## 2026-10-21：按已确认的Kimi Code凭据对齐接口
 
 用户明确密钥来自Kimi Code订阅，并在同一Ego任务页完成Vercel验证。非密钥配置已保存为https://api.kimi.com/coding/v1、kimi-for-coding，适用于Production与Preview；密钥继续由用户自行维护。新预览真实问答备用返回401，正式站不据此发布；先核对Code凭据，再新部署验收。保持客户端真实身份，不通过伪装工具标识解决供应商权限问题。
+
+
+## 2026-10-21：仓库入口明确指向Vercel正式课程站
+
+用户要求GitHub仓库描述反映新增功能，README显式标注Vercel站点。About描述增加全课程前后测/结果对照、引用AI助教及Kimi备用，homepage设为https://my-agent-learning.vercel.app/；README顶部展示同一在线体验地址和测评直达链接。原GitHub Pages链接作为项目介绍保留，不再作为About主站地址。

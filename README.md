@@ -1,12 +1,22 @@
 # Agent 入门课 · 开源版
 
-面向非技术学习者的 12 课互动课程，整体约 3 小时。保留学习地图、情境练习、AI 助教、错题与收藏、JSON 备份和可选账号同步。
+面向非技术学习者的 12 课 AI Agent 互动课程，整体约 3 小时。通过学习地图、情境练习、AI 助教和课程前后测，理解 Agent 的工作方式、能力边界及办公应用。
 
-- 在线课程：https://my-agent-learning.vercel.app/
-- 开源仓库：https://github.com/Songhonglei/ai-agent-learning
-- 项目主页：https://songhonglei.github.io/ai-agent-learning/
-- 本项目仅维护开源版，使用 Vercel；Cowork 已拆为独立本地项目，不再通过 mode 切换。
-- 本地项目知识入口：[当前状态](docs/CURRENT-STATE.md)、[OpenViking使用说明](OPENVIKING.md)。本项目与课坊分别索引，Cowork不接入。
+**在线体验（Vercel）：[my-agent-learning.vercel.app](https://my-agent-learning.vercel.app/)**
+
+[课程前测](https://my-agent-learning.vercel.app/assessment/pretest) · [结课后测](https://my-agent-learning.vercel.app/assessment/posttest) · [结果对照](https://my-agent-learning.vercel.app/assessment) · [开源仓库](https://github.com/Songhonglei/ai-agent-learning) · [项目介绍（GitHub Pages）](https://songhonglei.github.io/ai-agent-learning/)
+
+## 主要功能
+
+- **12 课互动学习**：学习地图、情境练习、预置 FAQ，保留原有课内练习和局部自测。
+- **全课程前后测**：前后卷各 24 题，覆盖全部 12 课；支持草稿续答、刷新恢复和首次提交锁定，完成课程后开放后测。
+- **结果对照与复习**：展示总分、正确率、六个主题及逐课变化，并提供后测复习入口；缺少有效前测时不计算提升。
+- **有来源的 AI 问答**：按本课审核来源校验引用，提供超时、取消、限流和异常保护；主模型异常时可切换 Kimi 备用。
+- **学习档案与备份**：进度、错题、收藏和测评记录保存在浏览器，支持 JSON 导入导出、跨标签同步和可选 Supabase 账号同步。
+
+测评用于个人学习复盘，题卷尚未做统计难度校准，不作为能力认证或课程因果效果证明。
+
+本项目仅维护开源版，使用 Vercel；Cowork 已拆为独立本地项目，不再通过 mode 切换。项目维护入口：[当前状态](docs/CURRENT-STATE.md)、[OpenViking 使用说明](OPENVIKING.md)。本项目与课坊分别索引，Cowork 不接入。
 
 ## 本地运行
 
