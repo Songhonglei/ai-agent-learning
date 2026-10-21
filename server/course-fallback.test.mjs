@@ -28,7 +28,7 @@ test('supports fallback as the only configured model and rejects incomplete conf
 })
 
 test('does not call or expose fallback when the primary succeeds or returns a valid refusal', async () => {
-  for (const content of ['确认当前窗口。<sources>page-035</sources>', '本课审核资料未覆盖这个问题。<sources></sources>']) {
+  for (const content of ['确认当前窗口。<sources>page-035</sources>', '本课审核资料未覆盖这个问题。<sources></sources>', JSON.stringify({ status: 'out_of_scope', answer: '', citations: [] })]) {
     let calls = 0
     await ask(async (url, options) => {
       calls++
@@ -51,6 +51,7 @@ test('falls back once after upstream, network, JSON, empty and invalid citation 
     empty: () => answer(''),
     citation: () => answer('伪造内容<sources>page-999</sources>'),
     missingCitation: () => answer('确认当前窗口，但漏写引用。<sources></sources>'),
+    malformedAnswer: () => answer('{bad model JSON}'),
   }
   for (const [name, fail] of Object.entries(failures)) await t.test(name, async () => {
     let calls = 0

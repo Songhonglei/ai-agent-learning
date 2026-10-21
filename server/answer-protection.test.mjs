@@ -65,12 +65,33 @@ test('4-2 prompt uses its own approved source IDs and keeps the reported collabo
   const result = await answerCourseQuestion({ courseId: '4-2', question, config, request: async (_url, options) => {
     const { messages } = JSON.parse(options.body)
     assert.match(messages[0].content, /当前课允许的来源 ID：figure-10-1,outline-280-258,page-280,page-312/)
-    assert.match(messages[0].content, /漏写引用是输出格式错误/)
+    assert.match(messages[0].content, /漏写引用属于输出格式错误/)
     assert.doesNotMatch(messages[0].content, /page-035|figure-2-1/)
     assert.ok(messages[1].content.includes(question))
-    return (modelResponse('在引入新信息、任务可拆分、需要并行或隔离时更有价值。<sources>outline-280-258,page-312</sources>'))()
+    return (modelResponse(JSON.stringify({ status: 'answered', answer: '在引入新信息、任务可拆分、需要并行或隔离时更有价值。', citations: ['outline-280-258', 'page-312'] })))()
   } })
   assert.deepEqual(result.citations, ['outline-280-258', 'page-312'])
+})
+
+test('validates structured answers, including fenced JSON, without inventing citations', async () => {
+  const raw = JSON.stringify({ status: 'answered', answer: '协作应引入新信息。', citations: ['page-312', 'page-312'] })
+  for (const content of [raw, `\x60\x60\x60json\n${raw}\n\x60\x60\x60`]) {
+    const result = await answerCourseQuestion({ courseId: '4-2', config, request: modelResponse(content) })
+    assert.deepEqual(result, { answer: '协作应引入新信息。', citations: ['page-312'] })
+  }
+  for (const id of ['page-035', 'page-999', 'not-a-source']) {
+    await assert.rejects(() => answerCourseQuestion({ courseId: '4-2', config, request: modelResponse(JSON.stringify({ status: 'answered', answer: '未经核验正文。', citations: [id] })) }), (error) => error.code === 'AI_SOURCE_INVALID')
+  }
+})
+
+test('structured refusal, missing citations and malformed output remain distinct', async () => {
+  const refusal = await answerCourseQuestion({ courseId: '4-2', config, request: modelResponse(JSON.stringify({ status: 'out_of_scope', answer: '', citations: [] })) })
+  assert.match(refusal.answer, /^本课审核资料未覆盖/)
+  assert.deepEqual(refusal.citations, [])
+  await assert.rejects(() => answerCourseQuestion({ courseId: '4-2', config, request: modelResponse(JSON.stringify({ status: 'answered', answer: '正文漏写来源。', citations: [] })) }), (error) => error.code === 'AI_SOURCE_MISSING')
+  for (const content of ['{bad JSON}', JSON.stringify({ status: 'answered', answer: '正文。', citations: 'page-312' }), JSON.stringify({ status: 'unknown', answer: '', citations: [] }), JSON.stringify({ status: 'out_of_scope', answer: '资料支持的实际回答，但状态错误。', citations: [] })]) {
+    await assert.rejects(() => answerCourseQuestion({ courseId: '4-2', config, request: modelResponse(content) }), (error) => error.code === 'AI_RESPONSE_INVALID')
+  }
 })
 
 test('supports valid legacy inline citations and rejects prototype property course IDs', async () => {
