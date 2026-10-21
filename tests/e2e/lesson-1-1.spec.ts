@@ -165,7 +165,7 @@ async function expectSafeLegacyMigration(page: Page) {
 
   expect(migration).toMatchObject({
     legacyValue: null,
-    schemaVersion: 1,
+    schemaVersion: 2,
     courseCount: 12,
     currentStepId: 'dialogue-context',
     completedStepIds: ['scene-intro'],
@@ -270,6 +270,7 @@ async function verifyReviewExportAndImports(page: Page) {
   }
   expect(Object.keys(exported).sort()).toEqual([
     'assessments',
+    'courseAssessments',
     'courses',
     'currentLessonId',
     'favoriteContentIds',
@@ -278,7 +279,7 @@ async function verifyReviewExportAndImports(page: Page) {
     'updatedAt',
     'wrongAnswers',
   ])
-  expect(exported.schemaVersion).toBe(1)
+  expect(exported.schemaVersion).toBe(2)
   expect(JSON.stringify(exported)).not.toContain('情境导入')
   expect(exported.wrongAnswers).toContainEqual(expect.objectContaining({ mastered: true }))
 

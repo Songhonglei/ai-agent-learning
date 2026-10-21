@@ -114,7 +114,7 @@ describe('learning profile storage', () => {
     localStorage.setItem(LEARNING_PROFILE_STORAGE_KEY, '{not-json')
     expect(loadLearningProfile()).toEqual({ status: 'malformed' })
 
-    localStorage.setItem(LEARNING_PROFILE_STORAGE_KEY, JSON.stringify({ schemaVersion: 2 }))
+    localStorage.setItem(LEARNING_PROFILE_STORAGE_KEY, JSON.stringify({ schemaVersion: 3 }))
     expect(loadLearningProfile()).toEqual({ status: 'future-version' })
   })
 
@@ -156,7 +156,7 @@ describe('learning profile storage', () => {
     expect(result).toMatchObject({
       status: 'loaded',
       profile: {
-        schemaVersion: 1,
+        schemaVersion: 2,
         theme: 'dark',
         currentLessonId: '1-1',
         courses: {
@@ -218,7 +218,7 @@ describe('learning profile storage', () => {
   })
 
   it('does not fall back to the legacy key when a future-version global profile exists', () => {
-    const futureProfile = JSON.stringify({ schemaVersion: 2, futureField: true })
+    const futureProfile = JSON.stringify({ schemaVersion: 3, futureField: true })
     localStorage.setItem(LEARNING_PROFILE_STORAGE_KEY, futureProfile)
     localStorage.setItem(LESSON_PROGRESS_STORAGE_KEY, JSON.stringify(legacyProgress))
 
@@ -327,7 +327,7 @@ describe('learning profile storage', () => {
       current,
     )).toBeNull()
     expect(reconcileProfileStorageEvent(
-      event(LEARNING_PROFILE_STORAGE_KEY, JSON.stringify({ schemaVersion: 2 })),
+      event(LEARNING_PROFILE_STORAGE_KEY, JSON.stringify({ schemaVersion: 3 })),
       current,
     )).toBeNull()
     expect(reconcileProfileStorageEvent(

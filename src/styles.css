@@ -1131,6 +1131,62 @@ h1 {
   flex: 0 0 calc((100% - 70px) / 6);
 }
 
+.course-test-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 24px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--soft);
+}
+
+.course-test-entry p { margin: 4px 0 0; color: var(--muted); font-size: .8125rem; }
+.course-test-entry nav, .course-test-hero nav, .course-test-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.course-test-entry a, .course-test-hero nav a { font-size: .875rem; }
+.course-test-page { padding: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: 24px; }
+.course-test-hero { margin-bottom: 24px; }
+.course-test-hero h1 { margin-bottom: 12px; }
+.course-test-hero p { color: var(--muted); line-height: 1.7; }
+.course-test-hero nav { margin-top: 14px; }
+.course-test-scorecards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 16px 0; }
+.course-test-scorecards article { display: grid; gap: 8px; padding: 18px; background: var(--soft); border: 1px solid var(--line); border-radius: 16px; }
+.course-test-scorecards strong { font-size: 1.3rem; }
+.course-test-note, .course-test-scorecards small { color: var(--muted); line-height: 1.7; }
+.course-test-comparison { width: 100%; border-collapse: collapse; margin: 16px 0 24px; font-size: .9rem; }
+.course-test-comparison th, .course-test-comparison td { padding: 12px 10px; border-bottom: 1px solid var(--line); text-align: left; }
+.course-test-comparison td { white-space: nowrap; }
+.course-test-topic-row { background: var(--soft); }
+.course-test-results { margin: 24px 0; }
+.course-test-results > p { line-height: 1.7; }
+.course-test-start, .course-test-completed, .course-test-confirm { padding: 20px; margin: 20px 0; border: 1px solid var(--line); background: var(--soft); border-radius: 16px; }
+.course-test-start p, .course-test-confirm p { margin: 12px 0; line-height: 1.7; }
+.course-test-progress { display: flex; justify-content: space-between; gap: 12px; }
+.course-test-runner progress { display: block; width: 100%; height: 12px; margin: 12px 0; accent-color: var(--choice-accent); }
+.course-test-question-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 8px; margin: 20px 0; }
+.course-test-question-grid button { min-height: 40px; padding: 8px 0; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--text); }
+.course-test-question-grid button.is-answered { background: var(--choice-selected-bg); border-color: var(--choice-selected-border); }
+.course-test-question-grid button[aria-current] { outline: 2px solid var(--choice-accent); outline-offset: 2px; }
+.course-test-question { border: 0; padding: 0; margin: 24px 0; min-width: 0; }
+.course-test-question h2 { font-size: 1.25rem; line-height: 1.6; margin-bottom: 16px; scroll-margin-top: 110px; }
+.course-test-actions button { min-height: 44px; }
+.course-test-review details { padding: 16px 0; border-bottom: 1px solid var(--line); }
+.course-test-review summary { cursor: pointer; font-weight: 700; padding: 8px 0; }
+.course-test-review h3, .course-test-review p { margin: 12px 0; line-height: 1.7; }
+.course-test-recommendations li { margin: 10px 0; }
+
+@media (max-width: 767px) {
+  .course-test-entry { flex-direction: column; align-items: stretch; gap: 10px; }
+  .course-test-page { padding: 20px 16px; }
+  .course-test-scorecards { grid-template-columns: 1fr; }
+  .course-test-scorecards article { padding: 14px; }
+  .course-test-question-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .course-test-comparison th, .course-test-comparison td { padding: 10px 4px; font-size: .8125rem; }
+  .course-test-comparison th:first-child { width: 47%; overflow-wrap: anywhere; }
+}
+
 .learning-path,
 .lesson-intros,
 .lesson-outline ol {

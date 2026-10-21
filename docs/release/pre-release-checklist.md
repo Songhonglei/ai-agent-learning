@@ -41,3 +41,7 @@
 ## 最终候选回执（仅预览）
 
 实现提交 1bb852ba308b8a7212e6eb8953dcc4e3eda727e5；预览 dpl_6MSnStGu57xkZXrQH1EPPpJAy1De READY，地址 https://ai-agent-learning-4rlfpvy9n-evansong.vercel.app/。浏览器验证移动首页可读、首课可见、4-2深链与来源卡片正常，非法课程请求400。草稿 PR：https://github.com/Songhonglei/ai-agent-learning/pull/1。未合并、未切换正式域名；模型故障与真人试学仍待完成。后续文档提交不改此实现提交。
+
+## 新增测评发布约束（2026-10-21）
+
+全课程测评候选在 codex/course-assessments-2026-10-21，尚未部署。验收见 docs/testing/2026-10-21-course-assessment.md。档案schema v2须与api/profile同批发布；新API拒绝旧v1写入。上线后回滚应保留v2读写兼容与数据保护，不能直接切回会丢弃测评字段的旧客户端/接口。本轮没有数据库迁移，也没有修改模型配置。

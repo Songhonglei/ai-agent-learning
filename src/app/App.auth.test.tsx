@@ -1,5 +1,6 @@
 import { cleanup, render, screen, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/vitest'
+import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { LEARNING_PROFILE_STORAGE_KEY } from '../shared/storage/learningProfile'
 import { STORAGE_MODE_PREFERENCE_KEY } from '../shared/storage/storageMode'
@@ -24,6 +25,7 @@ vi.mock('../shared/profile-api', () => ({
 }))
 
 import { App } from './App'
+import { saveCloudProfile } from '../shared/profile-api'
 
 describe('App authenticated storage mode', () => {
   afterEach(() => {
@@ -84,5 +86,26 @@ describe('App authenticated storage mode', () => {
     expect(screen.getByRole('link', { name: /再次学习：0-1/ })).toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: '要合并到这个学习档案吗？' }))
       .not.toBeInTheDocument()
+  })
+
+  it('queues assessment saves, keeps newer answers visible, and warns until the final write is saved', async () => {
+    const user = userEvent.setup()
+    const pending: Array<{ profile: LearningProfile; resolve(profile: LearningProfile): void }> = []
+    vi.mocked(saveCloudProfile).mockImplementation((profile) => new Promise((resolve) => pending.push({ profile, resolve })))
+    window.history.pushState({}, '', '/assessment/pretest')
+    render(<App />)
+    await user.click(await screen.findByRole('button', { name: '开始作答课程前测' }))
+    await waitFor(() => expect(pending).toHaveLength(1))
+    await user.click(screen.getAllByRole('radio')[1])
+    expect(screen.getAllByRole('radio')[1]).toBeChecked()
+    expect(pending).toHaveLength(1)
+    expect(screen.getByText('正在保存学习档案，请稍候再刷新或离开。')).toBeInTheDocument()
+    pending[0].resolve(pending[0].profile)
+    await waitFor(() => expect(pending).toHaveLength(2))
+    expect(screen.getAllByRole('radio')[1]).toBeChecked()
+    expect(Object.keys(pending[1].profile.courseAssessments.pretest!.answers)).toHaveLength(1)
+    pending[1].resolve(pending[1].profile)
+    await waitFor(() => expect(screen.queryByText('正在保存学习档案，请稍候再刷新或离开。')).not.toBeInTheDocument())
+    vi.mocked(saveCloudProfile).mockImplementation(async (profile) => profile)
   })
 })

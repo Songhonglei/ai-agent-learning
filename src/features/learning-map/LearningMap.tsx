@@ -5,6 +5,7 @@ import type {
 import { fullyAuthoredLessonIds } from '../../content/learning-map'
 import type { LearningProfile } from '../../shared/types/profile'
 import { appPath } from '../../shared/runtime/app-path'
+import { CourseAssessmentEntry } from '../course-assessment/CourseAssessment'
 
 interface LearningMapProps {
   modules: LearningMapModule[]
@@ -33,6 +34,8 @@ export function LearningMap({ modules, nodes, profile }: LearningMapProps) {
           <p className="map-count"><strong>{fullyAuthoredLessonIds.length}/12</strong></p>
         </div>
       </div>
+
+      <CourseAssessmentEntry profile={profile} />
 
       <ol className="learning-path" aria-label="学习路径">
         {nodes.map((node, nodeIndex) => (

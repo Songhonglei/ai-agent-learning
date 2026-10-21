@@ -31,7 +31,7 @@ describe('profile transfer', () => {
     const exported = JSON.parse(exportProfile(profileWithBodies as LearningProfile))
 
     expect(exported).toMatchObject({
-      schemaVersion: 1,
+      schemaVersion: 2,
       updatedAt: '2026-08-05T10:00:00.000Z',
       courses: {
         '1-1': {
@@ -68,7 +68,7 @@ describe('profile transfer', () => {
       status: 'invalid',
       message: '无法读取备份：档案结构不完整或字段类型不正确。',
     })
-    expect(previewProfileImport(JSON.stringify({ schemaVersion: 2 }), current)).toEqual({
+    expect(previewProfileImport(JSON.stringify({ schemaVersion: 3 }), current)).toEqual({
       status: 'future-version',
       message: '这个备份来自更新版本，当前版本暂时无法导入。',
     })

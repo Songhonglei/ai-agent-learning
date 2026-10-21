@@ -69,7 +69,7 @@ describe('ProfileTransfer', () => {
     expect(screen.queryByRole('button', { name: '确认导入' })).not.toBeInTheDocument()
 
     await user.upload(input, new File(
-      [JSON.stringify({ schemaVersion: 2 })],
+      [JSON.stringify({ schemaVersion: 3 })],
       'future.json',
       { type: 'application/json' },
     ))

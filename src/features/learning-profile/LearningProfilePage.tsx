@@ -2,6 +2,7 @@ import { fullyAuthoredLessonIds, learningMapModules } from '../../content/learni
 import { authoredLessons, lessonById } from '../../content/lessons'
 import { lessonOne } from '../../content/lesson-1-1'
 import type { AssessmentKind, LearningProfile } from '../../shared/types/profile'
+import { CourseAssessmentEntry, CourseAssessmentResults } from '../course-assessment/CourseAssessment'
 import { ProfileTransfer } from '../profile-transfer/ProfileTransfer'
 import { appPath } from '../../shared/runtime/app-path'
 import {
@@ -126,10 +127,13 @@ export function LearningProfilePage({
         </ol>
       </section>
 
+      <CourseAssessmentEntry profile={profile} />
+      <CourseAssessmentResults profile={profile} />
+
       <section className="profile-assessments" aria-labelledby="profile-assessments-title">
         <div className="profile-section-heading">
           <div>
-            <p className="profile-section-kicker">只做前后对照 · 不生成能力标签</p>
+            <p className="profile-section-kicker">1-1 单课自测 · 与全课程测评分开保留</p>
             <h2 id="profile-assessments-title">前后测结果</h2>
           </div>
         </div>

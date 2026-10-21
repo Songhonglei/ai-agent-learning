@@ -10,6 +10,7 @@ import type {
   WrongAnswer,
 } from '../types/profile'
 import { isValidUtcIsoTimestamp } from '../types/profile'
+import { mergeCourseTestRecords } from '../courseAssessment'
 
 export type ImportPreview =
   | {
@@ -165,6 +166,7 @@ export function hasSavableLearningData(profile: LearningProfile): boolean {
     profile.wrongAnswers.length > 0
     || profile.favoriteContentIds.length > 0
     || Object.keys(profile.assessments).length > 0
+    || Object.keys(profile.courseAssessments).length > 0
   ) {
     return true
   }
@@ -227,6 +229,7 @@ export function mergeLearningProfiles(
       incoming.favoriteContentIds,
     ),
     assessments: mergeAssessments(current.assessments, incoming.assessments),
+    courseAssessments: mergeCourseTestRecords(current.courseAssessments, incoming.courseAssessments),
     updatedAt: chooseProfileValue(
       current.updatedAt,
       incoming.updatedAt,
@@ -245,6 +248,9 @@ function countImportConflicts(
   candidate: LearningProfile,
 ): number {
   let conflicts = 0
+  for (const kind of ['pretest', 'posttest'] as const) {
+    if (current.courseAssessments[kind] && recordsDiffer(current.courseAssessments[kind], candidate.courseAssessments[kind])) conflicts += 1
+  }
 
   for (const [lessonId, currentCourse] of Object.entries(current.courses)) {
     if (!courseHasSavableLearningData(currentCourse)) continue
@@ -280,6 +286,9 @@ function countImportChanges(
   candidate: LearningProfile,
 ): number {
   let changes = 0
+  for (const kind of ['pretest', 'posttest'] as const) {
+    if (candidate.courseAssessments[kind] && recordsDiffer(current.courseAssessments[kind], candidate.courseAssessments[kind])) changes += 1
+  }
 
   for (const [lessonId, candidateCourse] of Object.entries(candidate.courses)) {
     if (!courseHasSavableLearningData(candidateCourse)) continue

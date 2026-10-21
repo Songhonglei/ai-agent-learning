@@ -5,6 +5,7 @@ import { lessonById } from '../content/lessons'
 import { LearningMap } from '../features/learning-map/LearningMap'
 import { LearningProfilePage } from '../features/learning-profile/LearningProfilePage'
 import { LessonPlayer } from '../features/lesson-player/LessonPlayer'
+import { CourseAssessmentPage } from '../features/course-assessment/CourseAssessment'
 import { loadCloudProfile, saveCloudProfile } from '../shared/profile-api'
 import {
   getLearnerIdentity,
@@ -93,6 +94,11 @@ function InternetAccountApp() {
   const storageModeRef = useRef<'cloud' | 'local'>('local')
   const [cloudState, setCloudState] = useState<'loading' | 'ready' | 'error'>('loading')
   const [identity, setIdentity] = useState<LearnerIdentity | null>(null)
+  const identityRef = useRef(identity)
+  identityRef.current = identity
+  const cloudWriteQueue = useRef<Promise<void>>(Promise.resolve())
+  const cloudWriteSequence = useRef(0)
+  const [cloudSaving, setCloudSaving] = useState(false)
   const [authState, setAuthState] = useState<'checking' | 'anonymous' | 'authenticated' | 'unconfigured'>('checking')
   const [hasWriteError, setHasWriteError] = useState(false)
   const [storageMode, setStorageMode] = useState<'cloud' | 'local'>('local')
@@ -216,14 +222,36 @@ function InternetAccountApp() {
       return
     }
 
-    try {
-      applyProfile(await saveCloudProfile(next, identity?.accessToken))
-      setCloudState('ready')
-      setHasWriteError(false)
-    } catch {
-      setHasWriteError(true)
-    }
+    const accessToken = identity?.accessToken
+    const sequence = ++cloudWriteSequence.current
+    setCloudSaving(true)
+    // Keep server writes ordered; an earlier response must not replace newer edits.
+    const operation = cloudWriteQueue.current.catch(() => {}).then(async () => {
+      if (storageModeRef.current !== 'cloud' || identityRef.current?.accessToken !== accessToken) return
+      try {
+        const saved = await saveCloudProfile(next, accessToken)
+        if (storageModeRef.current !== 'cloud' || identityRef.current?.accessToken !== accessToken) return
+        if (profileRef.current === next) applyProfile(saved)
+        if (sequence === cloudWriteSequence.current) {
+          setCloudState('ready')
+          setHasWriteError(false)
+        }
+      } catch {
+        if (sequence === cloudWriteSequence.current && storageModeRef.current === 'cloud'
+          && identityRef.current?.accessToken === accessToken) setHasWriteError(true)
+      }
+    })
+    cloudWriteQueue.current = operation
+    await operation
+    if (sequence === cloudWriteSequence.current) setCloudSaving(false)
   }
+
+  useEffect(() => {
+    if (!cloudSaving || storageMode !== 'cloud') return
+    const warnBeforeLeaving = (event: BeforeUnloadEvent) => { event.preventDefault(); event.returnValue = '' }
+    window.addEventListener('beforeunload', warnBeforeLeaving)
+    return () => window.removeEventListener('beforeunload', warnBeforeLeaving)
+  }, [cloudSaving, storageMode])
 
   function restoreLocalProfile() {
     const saved = loadLearningProfile()
@@ -272,7 +300,7 @@ function InternetAccountApp() {
   }
 
   function clearLocalProfile() {
-    if (!window.confirm('确定清空这台设备中的学习进度、收藏与错题吗？此操作无法撤销。')) return
+    if (!window.confirm('确定清空这台设备中的学习进度、测评、收藏与错题吗？此操作无法撤销。')) return
     const emptyProfile = {
       ...createEmptyProfile(),
       theme: profileRef.current.theme,
@@ -456,6 +484,7 @@ function InternetAccountApp() {
           />
         )}
 
+        {cloudSaving && storageMode === 'cloud' && <p role="status">正在保存学习档案，请稍候再刷新或离开。</p>}
         <div className="app-frame">
           <Routes>
             <Route path="/" element={<LearningMapPage profile={profile} />} />
@@ -478,6 +507,8 @@ function InternetAccountApp() {
                 />
               )}
             />
+            <Route path="/assessment" element={cloudState === 'loading' ? <p role="status">正在读取学习档案…</p> : <CourseAssessmentPage profile={profile} onProfileChange={updateProfile} />} />
+            <Route path="/assessment/:kind" element={cloudState === 'loading' ? <p role="status">正在读取学习档案…</p> : <CourseAssessmentPage profile={profile} onProfileChange={updateProfile} />} />
             <Route path="*" element={<StatusPanel status="unknown-route" />} />
           </Routes>
         </div>

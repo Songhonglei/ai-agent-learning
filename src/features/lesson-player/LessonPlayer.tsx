@@ -330,7 +330,10 @@ export function LessonPlayer({
                   <strong>恭喜你，完成 Agent 入门课！</strong>
                   <p>从这里出发，把学到的判断带回真实任务。</p>
                 </div>
-                <a className="primary-link" href={appPath('/')}>回到学习地图</a>
+                <a className="primary-link" href={appPath('/assessment/posttest')}>
+                  {profile.courseAssessments.posttest?.completedAt ? '查看结课后测与对照' : '开始结课后测'}
+                </a>
+                <a href={appPath('/')}>回到学习地图</a>
               </nav>
             ) : (
               <nav className="lesson-end-actions" aria-label="课程完成后导航">

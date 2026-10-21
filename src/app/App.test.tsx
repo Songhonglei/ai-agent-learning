@@ -349,7 +349,7 @@ describe('App routes and global learning profile', () => {
 
     expect(screen.queryByText('学习档案已损坏')).not.toBeInTheDocument()
     expect(JSON.parse(localStorage.getItem(LEARNING_PROFILE_STORAGE_KEY) ?? '')).toMatchObject({
-      schemaVersion: 1,
+      schemaVersion: 2,
       favoriteContentIds: [],
       wrongAnswers: [],
     })
@@ -373,14 +373,14 @@ describe('App routes and global learning profile', () => {
 
     expect(screen.queryByText('学习档案已损坏')).not.toBeInTheDocument()
     expect(JSON.parse(localStorage.getItem(LEARNING_PROFILE_STORAGE_KEY) ?? '')).toMatchObject({
-      schemaVersion: 1,
+      schemaVersion: 2,
       favoriteContentIds: ['lesson-1-1'],
     })
   })
 
   it('does not reset malformed data when a future version becomes canonical before confirmation', async () => {
     const malformed = '{not-json'
-    const futureProfile = JSON.stringify({ schemaVersion: 2, futureField: 'keep-reset-race' })
+    const futureProfile = JSON.stringify({ schemaVersion: 3, futureField: 'keep-reset-race' })
     localStorage.setItem(LEARNING_PROFILE_STORAGE_KEY, malformed)
     window.history.pushState({}, '', '/')
     render(<App />)
@@ -396,7 +396,7 @@ describe('App routes and global learning profile', () => {
 
   it('does not import over a future version that becomes canonical during backup preview', async () => {
     const user = userEvent.setup()
-    const futureProfile = JSON.stringify({ schemaVersion: 2, futureField: 'keep-import-race' })
+    const futureProfile = JSON.stringify({ schemaVersion: 3, futureField: 'keep-import-race' })
     localStorage.setItem(LEARNING_PROFILE_STORAGE_KEY, '{not-json')
     const backup = profileAt('2026-08-05T11:00:00.000Z')
     backup.favoriteContentIds = ['lesson-1-1']
@@ -419,7 +419,7 @@ describe('App routes and global learning profile', () => {
 
   it('rechecks canonical storage before retrying a failed malformed recovery write', async () => {
     const malformed = '{not-json'
-    const futureProfile = JSON.stringify({ schemaVersion: 2, futureField: 'keep-retry-race' })
+    const futureProfile = JSON.stringify({ schemaVersion: 3, futureField: 'keep-retry-race' })
     localStorage.setItem(LEARNING_PROFILE_STORAGE_KEY, malformed)
     window.history.pushState({}, '', '/')
     render(<App />)
@@ -441,7 +441,7 @@ describe('App routes and global learning profile', () => {
 
   it('enters future-version protection when a canonical future storage event arrives', () => {
     const malformed = '{not-json'
-    const futureProfile = JSON.stringify({ schemaVersion: 2, futureField: 'keep-event-race' })
+    const futureProfile = JSON.stringify({ schemaVersion: 3, futureField: 'keep-event-race' })
     localStorage.setItem(LEARNING_PROFILE_STORAGE_KEY, malformed)
     window.history.pushState({}, '', '/')
     render(<App />)
@@ -455,7 +455,7 @@ describe('App routes and global learning profile', () => {
   })
 
   it('does not overwrite a future profile or its legacy fallback while learning in memory', async () => {
-    const futureProfile = JSON.stringify({ schemaVersion: 2, futureField: true })
+    const futureProfile = JSON.stringify({ schemaVersion: 3, futureField: true })
     const legacyProgress = JSON.stringify({
       currentStepId: 'dialogue-context',
       completedStepIds: ['scene-intro'],

@@ -80,6 +80,8 @@ export default async function handler(request, response) {
     if (rawBody.length > maxProfileBytes) return sendJson(response, 413, { error: '学习档案内容过大。' })
     const profile = typeof request.body === 'string' ? JSON.parse(request.body) : request.body
     if (!isProfilePayload(profile)) return sendJson(response, 400, { error: '学习档案格式不正确。' })
+    // Old clients may read v1, but must refresh before writing so v2 test records survive.
+    if (profile.schemaVersion !== 2) return sendJson(response, 409, { error: '学习档案版本已升级，请刷新页面后再保存，避免覆盖课程测评记录。' })
     const result = await rest(config, accessToken, 'learning_profiles?on_conflict=user_id', {
       method: 'POST',
       headers: { Prefer: 'resolution=merge-duplicates,return=representation' },
