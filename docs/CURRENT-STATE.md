@@ -4,6 +4,12 @@
 
 ## 独立知识映射与模型配置
 
+2026-10-21接入验收：10份白名单资料及1份资料规则完成首次入库，11/11 canonical原文逐份读回一致。全新STDIO MCP会话验证只读工具、双项目路由、code/workspace不匹配与跨scope拒绝、Cowork未注册；本项目6/6问题前三条检索后原文回读符合事实。课坊6题中5题前三条命中，剩余1题按流程扩大至8条，在第5条找到并回读完整依据。未创建新的Codex UI聊天；本聊天已实际调用原生MCP完成resolve/find/read。共享身份只有路由范围限制，不声称原生账号隔离。回执：~/.openviking-pilot/projects/ai-agent-learning-open-source/evidence/course-projects-mcp-check.json。
+
+本次main已到2119b75并推送，新增仅记录primary/fallback角色及HTTP状态码的安全诊断，51项服务端测试通过；不记录密钥、请求正文或供应商响应内容。c8cc4a7预览dpl_ZeiDWywieWHsBP5hgzMApek48zaM已READY，浏览器/assessment可用，但真实课程问答仍502 AI_UPSTREAM_ERROR；Vercel网页运行日志确认该错误，MCP日志接口403不能视为空日志。2119b75诊断预览dpl_AVAFcNdQqgbBNmk2Y6TcDyX6NKPH也已READY，尚未对其发起真实问答，不重复调用已知可能错配的凭据。正式域名未切换。
+
+Kimi凭据来源待精确确认：用户选择“Kimi Code订阅或其他模型网关”；已追问具体类别（若网关，只需Base URL和模型名，不要密钥）。2026-10-21官方Kimi Code文档明确其订阅密钥与开放平台不通用，Code权益面向编程场景，自有产品模型集成应使用开放平台；当前Moonshot配置不能据此视为匹配。未擅改密钥或伪装客户端身份。依据：https://www.kimi.com/code/docs/en/ 。真实Kimi及正式发布验收仍未通过。
+
 2026-10-21用户要求把本项目与“课坊”custom-course-platform分别接入OpenViking，Cowork不接入。已登记project_code=ai-agent-learning-open-source，workspace_path=/Users/songhonglei/space/ai-agent-learning-open-source，独立scope=viking://resources/pilot/ai-agent-learning-open-source/current；复用全局openviking、本机服务和local-development身份，不另建MCP、不加入定时调度。精选维护资料10份，另附资料使用规则；导入/检索验收结果以项目外evidence为准。旧ai-agent-learning索引继续保存历史资料。
 
 用户已确认Kimi API Key保存完成，浏览器核对AI_FALLBACK_API_KEY在Production和Preview均存在且为Secret，未读取密钥值。后续真实模型/部署验收记录单独追加；不能把变量存在视为问答成功。维护索引不接入网站课程助教的审核来源链路。使用说明见OPENVIKING.md。
@@ -14,7 +20,7 @@
 
 合并前对最新组合dc3659a实际执行npm run verify：43文件/203单元、50服务端、25 E2E、TypeScript/Vite构建全部通过。合并提交f8aa8c2与该候选的完整Git文件树一致，后续仅补本文、发布清单和验收记录。详情见 [main合并验收](testing/2026-10-21-main-integration.md)。
 
-当前main已包含独立开源版、AI引用/异常保护、全课程前后测与对照、Kimi一次备用逻辑。真实Kimi调用、真实Supabase账号数据链路、目标学员试学和正式站发布验收仍待完成；本轮未手动触发Vercel发布，未核验合并后自动部署状态，也未读取或核对用户是否已保存密钥。Cowork保持独立，不同步这些变更。
+当前main已包含独立开源版、AI引用/异常保护、全课程前后测与对照、Kimi一次备用逻辑。真实Kimi调用、真实Supabase账号数据链路、目标学员试学和正式站发布验收仍待完成；本轮已创建预览并核对密钥变量存在，结果见上节；正式站仍未更新。Cowork保持独立，不同步这些变更。
 
 下方按阶段保留历史记录，其中“草稿PR”“未合并”“尚未实现fallback”等描述仅代表当时状态；当前代码与合并状态以本节和GitHub main为准。
 
