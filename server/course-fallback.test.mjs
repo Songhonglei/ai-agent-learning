@@ -28,7 +28,7 @@ test('supports fallback as the only configured model and rejects incomplete conf
 })
 
 test('does not call or expose fallback when the primary succeeds or returns a valid refusal', async () => {
-  for (const content of ['确认当前窗口。<sources>page-035</sources>', '资料未覆盖。<sources></sources>']) {
+  for (const content of ['确认当前窗口。<sources>page-035</sources>', '本课审核资料未覆盖这个问题。<sources></sources>']) {
     let calls = 0
     await ask(async (url, options) => {
       calls++
@@ -50,6 +50,7 @@ test('falls back once after upstream, network, JSON, empty and invalid citation 
     json: () => new Response('invalid JSON'),
     empty: () => answer(''),
     citation: () => answer('伪造内容<sources>page-999</sources>'),
+    missingCitation: () => answer('确认当前窗口，但漏写引用。<sources></sources>'),
   }
   for (const [name, fail] of Object.entries(failures)) await t.test(name, async () => {
     let calls = 0
@@ -95,10 +96,10 @@ test('never falls back after cancellation, including already cancelled requests'
 })
 
 test('fallback uses the same citation guard and returns safe failure without a third attempt', async () => {
-  for (const failure of [() => answer('编造内容<sources>page-999</sources>'), () => { throw new Error('private-error-fallback-test-key') }, () => new Promise(() => {})]) {
+  for (const failure of [() => answer('编造内容<sources>page-999</sources>'), () => answer('未提供任何来源的回答。'), () => { throw new Error('private-error-fallback-test-key') }, () => new Promise(() => {})]) {
     let calls = 0
     await assert.rejects(ask(async () => ++calls === 1 ? new Response('', { status: 500 }) : failure()), (error) => {
-      assert.ok(['AI_SOURCE_INVALID', 'AI_CONNECTION_ERROR', 'AI_TIMEOUT'].includes(error.code))
+      assert.ok(['AI_SOURCE_INVALID', 'AI_SOURCE_MISSING', 'AI_CONNECTION_ERROR', 'AI_TIMEOUT'].includes(error.code))
       assert.ok(!error.message.includes('private-error'))
       assert.ok(!error.message.includes(fallback.apiKey))
       return true
