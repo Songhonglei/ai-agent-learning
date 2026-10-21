@@ -37,10 +37,11 @@ test('HTTP returns safe timeout, busy, connection and citation failures, then al
     if (scenario === 'timeout') return new Promise(() => {})
     if (scenario === 'busy') return new Response('private detail', { status: 429 })
     if (scenario === 'offline') throw new Error('private key')
+    if (scenario === 'missing') return new Response(JSON.stringify({ choices: [{ message: { content: 'private unverified answer without sources' } }] }))
     return new Response(JSON.stringify({ choices: [{ message: { content: `回答。<sources>${scenario === 'invalid' ? 'page-999' : 'page-035'}</sources>` } }] }), { status: 200 })
   } })
   const { post } = await listen(t, createLearningServer({ getConfig: () => config, answer }))
-  for (const [name, status, code] of [['timeout', 504, 'AI_TIMEOUT'], ['busy', 503, 'AI_BUSY'], ['offline', 502, 'AI_CONNECTION_ERROR'], ['invalid', 502, 'AI_SOURCE_INVALID']]) {
+  for (const [name, status, code] of [['timeout', 504, 'AI_TIMEOUT'], ['busy', 503, 'AI_BUSY'], ['offline', 502, 'AI_CONNECTION_ERROR'], ['invalid', 502, 'AI_SOURCE_INVALID'], ['missing', 502, 'AI_SOURCE_MISSING']]) {
     scenario = name
     const response = await post()
     assert.equal(response.status, status)
