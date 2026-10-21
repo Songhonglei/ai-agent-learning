@@ -2,7 +2,11 @@
 
 面向非技术学习者的 12 课 AI Agent 互动课程，整体约 3 小时。通过学习地图、情境练习、AI 助教和课程前后测，理解 Agent 的工作方式、能力边界及办公应用。
 
-**在线体验（Vercel）：[my-agent-learning.vercel.app](https://my-agent-learning.vercel.app/)**
+**项目亮点介绍（GitHub Pages）：[songhonglei.github.io/ai-agent-learning](https://songhonglei.github.io/ai-agent-learning/)**
+
+**在线学习站（Vercel）：[my-agent-learning.vercel.app](https://my-agent-learning.vercel.app/)**
+
+介绍页展示项目亮点与产品实景；在线学习站提供完整课程、测评与 AI 助教。
 
 [课程前测](https://my-agent-learning.vercel.app/assessment/pretest) · [结课后测](https://my-agent-learning.vercel.app/assessment/posttest) · [结果对照](https://my-agent-learning.vercel.app/assessment) · [开源仓库](https://github.com/Songhonglei/ai-agent-learning) · [项目介绍（GitHub Pages）](https://songhonglei.github.io/ai-agent-learning/)
 
@@ -11,7 +15,7 @@
 - **12 课互动学习**：学习地图、情境练习、预置 FAQ，保留原有课内练习和局部自测。
 - **全课程前后测**：前后卷各 24 题，覆盖全部 12 课；支持草稿续答、刷新恢复和首次提交锁定，完成课程后开放后测。
 - **结果对照与复习**：展示总分、正确率、六个主题及逐课变化，并提供后测复习入口；缺少有效前测时不计算提升。
-- **有来源的 AI 问答**：按本课审核来源校验引用，提供超时、取消、限流和异常保护；主模型异常时可切换 Kimi 备用。
+- **有来源的 AI 助教**：按本课审核来源校验引用，提供超时、取消、限流和异常保护；支持分别配置主模型与 fallback 备用模型，可替换兼容接口的模型服务。
 - **学习档案与备份**：进度、错题、收藏和测评记录保存在浏览器，支持 JSON 导入导出、跨标签同步和可选 Supabase 账号同步。
 
 测评用于个人学习复盘，题卷尚未做统计难度校准，不作为能力认证或课程因果效果证明。
@@ -48,20 +52,27 @@ verify 依次运行单元测试、服务端测试、构建和 E2E。测试使用
 - 服务端默认等待 20 秒，上限 50 秒；浏览器等待 55 秒，可随时取消。超时、繁忙、断网和异常响应不影响本课 FAQ。
 - 上述限流是实例内保护，不是跨实例的总配额或计费上限；需要统一用量控制时应另配平台防火墙或共享限流服务。
 
-可选 Kimi 备用模型只从服务端环境变量读取；主模型正常时不调用备用。主模型超时、繁忙、连接/响应异常、空答案或引用校验失败后只尝试一次备用，同样执行本课引用校验；取消提问后不切换，有效的资料未覆盖提示也不切换。配置备用后主模型最多等待20秒、整条链最多50秒。
+## 主模型与 fallback 配置
+
+AI 助教不绑定特定模型或供应商。主模型与可选 fallback 备用模型的地址、密钥、模型名和接口协议可分别配置；使用与实现兼容的服务即可。当前支持 `openai-chat-completions` 和 `runway-bedrock` 两种接口协议，其他协议需先增加适配。
+
+主模型正常时不调用备用。主模型超时、繁忙、连接/响应异常、空答案或引用校验失败后只尝试一次备用，同样执行本课引用校验；取消提问后不切换，有效的资料未覆盖提示也不切换。配置备用后主模型最多等待20秒、整条链最多50秒。
 
 Vercel 的 Production 与 Preview 可按下表配置。除 API Key 设为 Secret 外，其余为 Config；不要加 VITE_ 前缀。
 
-| 变量 | Kimi 中国站开放平台 | Kimi Code 中国站 |
+| 配置项 | 主模型 | fallback 备用模型 |
 | --- | --- | --- |
-| AI_FALLBACK_BASE_URL | https://api.moonshot.cn/v1 | https://api.kimi.com/coding/v1 |
-| AI_FALLBACK_API_STYLE | openai-chat-completions | openai-chat-completions |
-| AI_FALLBACK_MODEL | kimi-k2.6 | kimi-for-coding |
-| AI_FALLBACK_TIMEOUT_MS | 30000 | 30000 |
-| AI_FALLBACK_THINKING | disabled | disabled |
-| AI_FALLBACK_API_KEY | 维护者填写开放平台 API Key | 维护者填写 Code API Key |
+| 服务地址 | `AI_BASE_URL` | `AI_FALLBACK_BASE_URL` |
+| 服务端密钥 | `AI_API_KEY` | `AI_FALLBACK_API_KEY` |
+| 模型名 | `AI_MODEL` | `AI_FALLBACK_MODEL` |
+| 接口协议 | `AI_API_STYLE` | `AI_FALLBACK_API_STYLE` |
+| 超时毫秒 | `AI_TIMEOUT_MS`，默认 `20000` | `AI_FALLBACK_TIMEOUT_MS`，默认 `30000` |
 
-两平台的密钥和地址不通用；其他区域需一起调整地址与对应密钥，能力以账号权限为准。参数依据 [Kimi K2.6文档](https://platform.kimi.com/docs/guide/kimi-k2-6-quickstart)及[Code接口](https://www.kimi.com/code/docs/en/)（核对日期2026-10-21）。本站当前使用Code备用，2026-10-21真实发布回执见[正式验收](docs/testing/2026-10-21-production-release.md)。未填备用密钥时保持原主模型行为，缺主模型但备用配置完整时也可独立使用备用。环境变量保存后还需部署包含备用逻辑的新版本，现有部署不会自动生效。
+可复制 [配置示例](config/ai.env.example)，将占位地址、密钥和模型名替换为自己的配置。使用 OpenAI 兼容接口时，两组 `API_STYLE` 均显式设置为 `openai-chat-completions`。主备可使用不同服务，分别确认接口协议、模型权限与参数兼容性。
+
+`AI_FALLBACK_THINKING` 为可选扩展参数：仅在备用服务支持 `thinking.type` 且使用 `openai-chat-completions` 时设置 `enabled` 或 `disabled`，否则留空，不发送该字段。
+
+未填备用密钥时保持原主模型行为，缺主模型但备用配置完整时也可独立使用备用。模型配置只在服务端读取，不写入前端代码；环境变量更新后需重新部署，才能让新配置生效。
 
 ## 发布与数据边界
 

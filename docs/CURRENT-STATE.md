@@ -2,6 +2,12 @@
 
 日期：2026-10-21。
 
+## 仓库入口与可替换模型说明（2026-10-21）
+
+用户纠正入口定位：GitHub Pages是项目亮点/产品介绍页，Vercel是实际课程学习站，两者同时保留。已恢复GitHub About homepage为https://songhonglei.github.io/ai-agent-learning/，About描述保留课程前后测/结果对照，AI助教改称可配置主模型与fallback备用模型，不绑定具体provider；GitHub API读回确认。README顶部并列两个入口并解释分工，仍保留Vercel测评深链。
+
+README与config/ai.env.example改为供应商无关的地址/模型占位、主备配置表与可选thinking说明；以当前代码支持的openai-chat-completions和runway-bedrock为兼容边界，不宣称任意协议自动可用。使用虚拟密钥的纯本地配置解析与双入口检查通过、diff检查通过；未调用模型。历史发布/验收记录中的实际模型名称保留作证据；本轮没有业务代码、正式模型配置、Vercel部署或GitHub Pages内容变更。下方之前“homepage改为Vercel”的记录已被本次入口决定取代。
+
 ## 引用区分优化正式基线
 
 按用户“代价不高直接更新”要求，完成两个服务端模块的低侵入优化，不改前端、依赖、数据库或客户端answer/citations接口。模型输出改为status/answer/citations JSON并兼容旧格式；只有明确拒答才视为资料未覆盖，漏引用返回AI_SOURCE_MISSING、坏结构返回AI_RESPONSE_INVALID，可沿用已有一次备用，不新增重试，来源白名单不变。各课提示词使用本课来源ID，不再复用1-1示例。
