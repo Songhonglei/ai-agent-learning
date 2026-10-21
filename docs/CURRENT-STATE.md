@@ -2,6 +2,11 @@
 
 日期：2026-10-21。
 
+## 本地目录更名
+
+用户要求将space下ai-agent-learning-open-source目录改为ai-agent-learning-open，已原位移动至/Users/songhonglei/space/ai-agent-learning-open。OpenViking注册工作区及资料策略已更新，project_code和scope继续使用ai-agent-learning-open-source，避免重建既有索引；GitHub Songhonglei/ai-agent-learning、Vercel项目和站点不变。移动前后HEAD b118e2a、Git状态及270个已跟踪文件散列一致；依赖、构建和本机配置随目录保留。预览从新目录重启，仍使用127.0.0.1:4182；首页、/assessment及JS/CSS均200，不影响同源浏览器档案。无业务源码改动或线上发布。导航/维护资料随后更新，不将这些文档差异混同为移动损坏。
+
+
 ## 独立知识映射与模型配置
 
 最新确认：用户已明确密钥来自Kimi Code订阅（不是其他网关），并说明以前可以使用。应匹配官方OpenAI兼容Base URL=https://api.kimi.com/coding/v1、model=kimi-for-coding；官方模型页支持thinking关闭，现有disabled无需为此修改。已尝试在Vercel编辑非密钥BASE_URL，页面弹出“Verify to reveal this value”，要求验证器验证码或Passkey；没有读取密钥、没有保存修改，也没有绕过验证。浏览器已交还用户，等待完成登录验证后继续改BASE_URL/MODEL、创建新预览并做真实课程问答。当前实际配置仍是Moonshot地址/kimi-k2.6，不能声称修复完成。依据：https://www.kimi.com/code/docs/en/ 与 https://www.kimi.com/code/docs/en/kimi-code/models.html （2026-10-21）。
@@ -12,7 +17,7 @@
 
 Kimi凭据来源待精确确认：用户选择“Kimi Code订阅或其他模型网关”；已追问具体类别（若网关，只需Base URL和模型名，不要密钥）。2026-10-21官方Kimi Code文档明确其订阅密钥与开放平台不通用，Code权益面向编程场景，自有产品模型集成应使用开放平台；当前Moonshot配置不能据此视为匹配。未擅改密钥或伪装客户端身份。依据：https://www.kimi.com/code/docs/en/ 。真实Kimi及正式发布验收仍未通过。
 
-2026-10-21用户要求把本项目与“课坊”custom-course-platform分别接入OpenViking，Cowork不接入。已登记project_code=ai-agent-learning-open-source，workspace_path=/Users/songhonglei/space/ai-agent-learning-open-source，独立scope=viking://resources/pilot/ai-agent-learning-open-source/current；复用全局openviking、本机服务和local-development身份，不另建MCP、不加入定时调度。精选维护资料10份，另附资料使用规则；导入/检索验收结果以项目外evidence为准。旧ai-agent-learning索引继续保存历史资料。
+2026-10-21用户要求把本项目与“课坊”custom-course-platform分别接入OpenViking，Cowork不接入。已登记project_code=ai-agent-learning-open-source，workspace_path=/Users/songhonglei/space/ai-agent-learning-open，独立scope=viking://resources/pilot/ai-agent-learning-open-source/current；复用全局openviking、本机服务和local-development身份，不另建MCP、不加入定时调度。精选维护资料10份，另附资料使用规则；导入/检索验收结果以项目外evidence为准。旧ai-agent-learning索引继续保存历史资料。
 
 用户已确认Kimi API Key保存完成，浏览器核对AI_FALLBACK_API_KEY在Production和Preview均存在且为Secret，未读取密钥值。后续真实模型/部署验收记录单独追加；不能把变量存在视为问答成功。维护索引不接入网站课程助教的审核来源链路。使用说明见OPENVIKING.md。
 

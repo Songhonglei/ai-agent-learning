@@ -15,3 +15,8 @@ schema v2显式区分全课程测评与旧单课结果；兼容读取v1并迁移
 Kimi一次备用逻辑已通过测试并随PR #2合入main，5项非密钥配置此前保存在Vercel。用户现确认Kimi API Key已保存；浏览器仅确认Production/Preview两条Secret存在，不读取值。真实调用和正式站验收仍需执行，不从配置存在推导为调用成功。
 
 用户明确要求OpenViking分别映射ai-agent-learning-open-source与custom-course-platform；ai-agent-learning-cowork基本完成，本轮不接入。复用既有全局MCP、服务和共享local-development身份，各自使用独立code、scope和白名单；旧课程资料索引保留历史。此维护知识不接入网站问答链路，不自动新增定时任务。
+
+
+## 2026-10-21：本地目录缩短为ai-agent-learning-open
+
+按用户指令，将/Users/songhonglei/space/ai-agent-learning-open-source原位更名为/Users/songhonglei/space/ai-agent-learning-open；只改变本地目录与注册工作区路径，OpenViking project_code/scope沿用ai-agent-learning-open-source，GitHub仓库、Vercel项目及正式域名保持原值。没有保留旧路径软链接或复制出另一套项目。

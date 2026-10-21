@@ -1,6 +1,6 @@
 # 开源课程站项目记忆
 
-项目code：ai-agent-learning-open-source。工作区：/Users/songhonglei/space/ai-agent-learning-open-source。复用全局openviking MCP，独立范围viking://resources/pilot/ai-agent-learning-open-source/current。先读docs/CURRENT-STATE.md，跨资料时resolve_project绝对工作区，每次后续调用携带project_code与workspace_path。
+项目code：ai-agent-learning-open-source。工作区：/Users/songhonglei/space/ai-agent-learning-open。复用全局openviking MCP，独立范围viking://resources/pilot/ai-agent-learning-open-source/current。先读docs/CURRENT-STATE.md，跨资料时resolve_project绝对工作区，每次后续调用携带project_code与workspace_path。
 
 ```bash
 ~/.openviking-pilot/venv/bin/python3 ~/.openviking-pilot/scripts/project.py ai-agent-learning-open-source status
