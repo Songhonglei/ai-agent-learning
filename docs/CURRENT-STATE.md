@@ -2,7 +2,7 @@
 
 日期：2026-10-21。
 
-- 基线来源：ai-agent-learning-unified；核心 API 文件 SHA1 与现有 Vercel 部署一致。旧目录未移动或覆盖。
+- 基线来源：历史 ai-agent-learning-unified/c31068b；拆分时核心 API 文件 SHA1 与当时 Vercel 部署一致。旧目录现已归档至 /Users/songhonglei/space/project-backups/ai-agent-learning/2026-10-21-cleanup，当前项目原路径保留。
 - 访客可学习与问答，Supabase 登录和同步可选；发布到既有 Vercel 项目 ai-agent-learning。已分离 Cowork 构建入口、SSO App、PG 后端和部署脚本，已完成 AI 修复和本地验收，线上验收受既有模型故障阻塞。
 - 两项目独立仓库、独立 package-lock、独立 src/server 和测试。没有跨项目源文件导入或自动同步。
 - 固定12课，整体学习时长约3小时；本轮已实现覆盖12课的全课程前测、后测与对照，见下方新进展。
@@ -41,3 +41,11 @@
 浏览器最终回执：实际前测23/24，逐课完成12课记录后后测24/24，对照+1分/+4.2个百分点；1440px浅色、360px深色表格已查看。导出后导入4182独立空存储，取消不写、确认完整恢复v2结果。截图及详细报告已纳入docs/testing/。旧项目OpenViking资料指针同步完成，13/13原文读回一致；新项目尚未单独登记。
 
 交付：实现提交5cd661b92df990ae490166d73a8813d0156d385f已推送；草稿PR https://github.com/Songhonglei/ai-agent-learning/pull/2 以独立开源基线PR #1为父分支。浏览器任务已结束，开发服务4181已停止，生产构建预览4182保留供本机查看。PR未合并、正式站未更新。
+
+## 2026-10-21 Kimi 备用配置
+
+用户要求通过 ego-browser 配好 Vercel fallback，仅自行填写 Kimi API Key。已补齐服务端备用逻辑：主模型超时、限流、网络/上游/空内容/引用失败后最多尝试一次备用；取消或有效资料未覆盖提示不切换，备用沿用引用校验。备用存在时主模型最多20秒、整链最多50秒；未填备用密钥则保持原主模型行为。
+
+配置采用 Kimi 中国站开放平台 https://api.moonshot.cn/v1、kimi-k2.6、openai-chat-completions、30000ms、thinking=disabled；对应 AI_FALLBACK_BASE_URL/API_STYLE/MODEL/TIMEOUT_MS/THINKING。依据2026-10-21官方文档核对，kimi-k2.5已下线。密钥变量 AI_FALLBACK_API_KEY 由用户在 Vercel 填写为 Secret，不读取或写入本地；主模型及Supabase配置不变。
+
+本轮实际50项服务端测试和构建通过，包含真实本地HTTP链路的主备切换、密钥隔离与引用验证；没有真实Kimi密钥，未执行真实Kimi调用。浏览器保存与交付状态详见 docs/testing/2026-10-21-kimi-fallback.md。代码尚未部署正式站；变量保存与部署生效是两步，不把旧部署的Redeploy当成已包含新备用逻辑。

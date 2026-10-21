@@ -37,6 +37,21 @@ verify 依次运行单元测试、服务端测试、构建和 E2E。测试使用
 - 服务端默认等待 20 秒，上限 50 秒；浏览器等待 55 秒，可随时取消。超时、繁忙、断网和异常响应不影响本课 FAQ。
 - 上述限流是实例内保护，不是跨实例的总配额或计费上限；需要统一用量控制时应另配平台防火墙或共享限流服务。
 
+可选 Kimi 备用模型只从服务端环境变量读取；主模型正常时不调用备用。主模型超时、繁忙、连接/响应异常、空答案或引用校验失败后只尝试一次备用，同样执行本课引用校验；取消提问后不切换，有效的资料未覆盖提示也不切换。配置备用后主模型最多等待20秒、整条链最多50秒。
+
+Vercel 的 Production 与 Preview 可按下表配置。除 API Key 设为 Secret 外，其余为 Config；不要加 VITE_ 前缀。
+
+| 变量 | Kimi 中国站配置 |
+| --- | --- |
+| AI_FALLBACK_BASE_URL | https://api.moonshot.cn/v1 |
+| AI_FALLBACK_API_STYLE | openai-chat-completions |
+| AI_FALLBACK_MODEL | kimi-k2.6 |
+| AI_FALLBACK_TIMEOUT_MS | 30000 |
+| AI_FALLBACK_THINKING | disabled |
+| AI_FALLBACK_API_KEY | 维护者在 Vercel 填写开放平台 API Key |
+
+以上是 Moonshot/Kimi 中国站开放平台密钥，非 Kimi Code 订阅密钥；其他区域需一起调整地址与对应密钥。参数依据 [Kimi K2.6 官方文档](https://platform.kimi.com/docs/guide/kimi-k2-6-quickstart)（核对日期2026-10-21）。未填备用密钥时保持原主模型行为，缺主模型但备用配置完整时也可独立使用备用。环境变量保存后还需部署包含备用逻辑的新版本，现有部署不会自动生效。
+
 ## 发布与数据边界
 
 Vercel 项目保持 ai-agent-learning；生产域名保持 my-agent-learning.vercel.app。构建 npm run build，输出 dist；api/ 中提供课程问答及 Supabase 档案服务。发布操作与验收记录见 docs/release/。
