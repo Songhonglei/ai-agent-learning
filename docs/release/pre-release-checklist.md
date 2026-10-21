@@ -2,6 +2,15 @@
 
 证据日期：2026-10-21。用户已指定更新现有 Vercel 站点；Cowork 独立演进，本次不发布 Cowork。
 
+## 当前 main 合并验收
+
+- [x] PR #1（开源拆分与AI保护）已merge到main：0986902；PR #2（全课程测评与Kimi备用）随后重定向main并merge：f8aa8c2。
+- [x] 最新组合dc3659a的npm run verify：203单元、50服务端、25 E2E、构建全部通过。
+- [x] f8aa8c2的完整文件树与dc3659a一致；当前main后续仅追加本轮验收/导航文档。
+- [x] 本地main跟踪origin/main；仅删除本轮已合并的两个开发分支，保留完整提交历史。
+- [ ] 真实模型及正式站发布验收；用户是否保存Kimi密钥、合并后Vercel自动部署结果本轮未核验。合并通过不代替线上验收。
+- 明细见 docs/testing/2026-10-21-main-integration.md。以下旧候选、分支名与测试数量保留为分阶段历史回执；当前功能基线以main为准。
+
 ## 固定目标与来源
 
 - 工作区：ai-agent-learning-open-source，分支 codex/release-hardening-2026-10-21。

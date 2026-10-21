@@ -2,6 +2,16 @@
 
 日期：2026-10-21。
 
+## 当前 main 基线
+
+2026-10-21按用户要求整理PR并合入main：[#1](https://github.com/Songhonglei/ai-agent-learning/pull/1)合并提交0986902，随后将[#2](https://github.com/Songhonglei/ai-agent-learning/pull/2)从依赖分支改为main并合并为f8aa8c2。保留merge提交与原始功能历史；本地已切换main并跟踪origin/main，两个本轮已合并开发分支已从本地和远端删除。
+
+合并前对最新组合dc3659a实际执行npm run verify：43文件/203单元、50服务端、25 E2E、TypeScript/Vite构建全部通过。合并提交f8aa8c2与该候选的完整Git文件树一致，后续仅补本文、发布清单和验收记录。详情见 [main合并验收](testing/2026-10-21-main-integration.md)。
+
+当前main已包含独立开源版、AI引用/异常保护、全课程前后测与对照、Kimi一次备用逻辑。真实Kimi调用、真实Supabase账号数据链路、目标学员试学和正式站发布验收仍待完成；本轮未手动触发Vercel发布，未核验合并后自动部署状态，也未读取或核对用户是否已保存密钥。Cowork保持独立，不同步这些变更。
+
+下方按阶段保留历史记录，其中“草稿PR”“未合并”“尚未实现fallback”等描述仅代表当时状态；当前代码与合并状态以本节和GitHub main为准。
+
 - 基线来源：历史 ai-agent-learning-unified/c31068b；拆分时核心 API 文件 SHA1 与当时 Vercel 部署一致。旧目录现已归档至 /Users/songhonglei/space/project-backups/ai-agent-learning/2026-10-21-cleanup，当前项目原路径保留。
 - 访客可学习与问答，Supabase 登录和同步可选；发布到既有 Vercel 项目 ai-agent-learning。已分离 Cowork 构建入口、SSO App、PG 后端和部署脚本，已完成 AI 修复和本地验收，线上验收受既有模型故障阻塞。
 - 两项目独立仓库、独立 package-lock、独立 src/server 和测试。没有跨项目源文件导入或自动同步。
