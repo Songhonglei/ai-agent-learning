@@ -2,11 +2,15 @@
 
 日期：2026-10-21。范围：独立开源课程站，不修改 Cowork。
 
-最新状态：用户已确认AI_FALLBACK_API_KEY来自Kimi Code订阅，Production/Preview两条Secret存在；未读取密钥。原先下表按Moonshot开放平台填写，和此次确认的凭据来源不匹配。正确待改项为BASE_URL=https://api.kimi.com/coding/v1、MODEL=kimi-for-coding，仍使用OpenAI兼容协议及disabled思考（官方模型文档支持）。尝试编辑地址时Vercel要求“Verify to reveal this value”的验证码/Passkey验证，已交还浏览器，未保存改动。不能把下表视为已改好的Code配置。
+最新状态（2026-10-21）：用户确认Kimi Code订阅密钥后，已在同一Ego任务页完成Vercel验证。BASE_URL和MODEL分别改为https://api.kimi.com/coding/v1、kimi-for-coding，均返回Updated Environment Variable successfully，范围Production + Preview；其余协议、预算、思考项不变。API_KEY仅由用户填写，未读取值。
 
-c8cc4a7预览dpl_ZeiDWywieWHsBP5hgzMApek48zaM实际浏览器问答502 AI_UPSTREAM_ERROR；2119b75诊断预览dpl_AVAFcNdQqgbBNmk2Y6TcDyX6NKPH已READY，未重复发起错配模型调用。安全诊断仅记录主/备角色及HTTP状态码，新增测试后51项服务端测试通过。正式域名未切换，需完成验证、更新配置并创建新预览后再验收。
+真实浏览器验收：新预览[dpl_EhySM543JmXCYkLiCZgoAx5UdofE](https://ai-agent-learning-igif96795-evansong.vercel.app/assessment)已READY，提交b118e2ace7fc770e94b3c5028956910e9c5e2306，target=preview；/assessment展示覆盖12课的前后测与结果对照。进入1-1并通过下一步到自由提问，提交“Agent为什么会忘记前面说过的重要约束”后，页面显示安全错误“AI助教暂时无法回答，请稍后重试”。Vercel网页展开的3条日志显示primary HTTP_403、fallback HTTP_401、AI_UPSTREAM_ERROR；External APIs记录确认备用真实请求api.kimi.com/coding/v1/chat/completions。这证明已走备用接口，不能声称模型可用。
 
-官方依据（2026-10-21）：[Kimi Code接口及产品区分](https://www.kimi.com/code/docs/en/)、[Code模型与思考参数](https://www.kimi.com/code/docs/en/kimi-code/models.html)。不伪装工具身份；若正常请求受到上游用途或账号限制，保留真实错误并明确说明。
+只读核对Kimi控制台的会员/Key状态，没有读取或创建密钥；控制台状态不能证明Vercel Secret的实际内容相同。官方错误文档将401分别列为认证及能力权限问题；未拿到供应商错误正文，不武断断言具体原因，也不将401解释为已确定的编程客户端用途限制。已交还Vercel AI_FALLBACK_API_KEY列表，用户自行核对并更新Preview、Production后再新建预览验收；没有切换正式域名，不反复重试相同凭据。
+
+此前c8cc4a7预览仍502；2119b75增加安全HTTP诊断并通过51项服务端测试。此次只修改Vercel非密钥配置和维护资料，没有业务代码改动或新增测试；此前203单元/51服务端/25 E2E与构建的验证边界分别见原报告，不能称为本轮重跑。
+
+官方依据（2026-10-21）：[Kimi Code接口](https://www.kimi.com/code/docs/en/)、[模型与思考参数](https://www.kimi.com/code/docs/en/kimi-code/models.html)、[401认证与能力权限错误](https://www.kimi.com/code/docs/en/kimi-code/error-reference.html)。保持真实客户端身份。
 
 ## 实现与验证
 
@@ -22,17 +26,17 @@ c8cc4a7预览dpl_ZeiDWywieWHsBP5hgzMApek48zaM实际浏览器问答502 AI_UPSTREA
 
 | 变量 | 值 | 类型与范围 |
 | --- | --- | --- |
-| AI_FALLBACK_BASE_URL | https://api.moonshot.cn/v1 | Config；Production + Preview |
+| AI_FALLBACK_BASE_URL | https://api.kimi.com/coding/v1 | Config；Production + Preview |
 | AI_FALLBACK_API_STYLE | openai-chat-completions | Config；Production + Preview |
-| AI_FALLBACK_MODEL | kimi-k2.6 | Config；Production + Preview |
+| AI_FALLBACK_MODEL | kimi-for-coding | Config；Production + Preview |
 | AI_FALLBACK_TIMEOUT_MS | 30000 | Config；Production + Preview |
 | AI_FALLBACK_THINKING | disabled | Config；Production + Preview |
 | AI_FALLBACK_API_KEY | 由用户填写 | Secret；Production + Preview |
 
-依据：[Kimi中国站快速开始](https://platform.kimi.com/docs/get-api-key)、[K2.6参数](https://platform.kimi.com/docs/guide/kimi-k2-6-quickstart)、[模型列表](https://platform.kimi.com/docs/models)（2026-10-21读取）。当前模型列表已将kimi-k2.5列为下线，因此配置仍受支持的通用K2.6并关闭思考。不把Kimi Code订阅密钥用于开放平台接口。
+历史选型：首次按Moonshot开放平台配置kimi-k2.6，参考当时开放平台模型列表；用户后来明确密钥来自Code订阅，已按上表修正Code专用地址/模型。Code密钥不与开放平台接口混用；当前依据见本文开头的Code官方文档。
 
 浏览器已提交5项非密钥Config，页面返回“Added Environment Variable successfully. A new deployment is needed for changes to take effect.”。密钥由用户在预填表单中自行输入，不读取现有主模型或Supabase值，不存储真实密钥。
 
-## 尚待生效
+## 后续验收
 
-尚未取得/填写真实Kimi密钥，未调用真实Kimi；没有更改正式部署或点击旧生产部署的Redeploy。需要保存密钥，并部署包含本次备用逻辑的版本，再执行真实问答验收。已有课程测评候选仍未部署，档案v2兼容约束继续有效。
+当前变量已保存并用于上述新预览；真实问答仍未通过。需用户核对并更新有效Code Key后创建新预览，重新验收问答。通过后再执行正式站发布验收；保持档案v2前后端同批发布与兼容约束。下方原有实现/历史Moonshot选型说明属于此前阶段，不替代本次Code配置与401结果。

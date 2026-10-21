@@ -9,13 +9,13 @@
 
 ## 独立知识映射与模型配置
 
-最新确认：用户已明确密钥来自Kimi Code订阅（不是其他网关），并说明以前可以使用。应匹配官方OpenAI兼容Base URL=https://api.kimi.com/coding/v1、model=kimi-for-coding；官方模型页支持thinking关闭，现有disabled无需为此修改。已尝试在Vercel编辑非密钥BASE_URL，页面弹出“Verify to reveal this value”，要求验证器验证码或Passkey；没有读取密钥、没有保存修改，也没有绕过验证。浏览器已交还用户，等待完成登录验证后继续改BASE_URL/MODEL、创建新预览并做真实课程问答。当前实际配置仍是Moonshot地址/kimi-k2.6，不能声称修复完成。依据：https://www.kimi.com/code/docs/en/ 与 https://www.kimi.com/code/docs/en/kimi-code/models.html （2026-10-21）。
+最新Kimi验收（2026-10-21）：用户在同一Ego任务页完成验证后，已成功保存AI_FALLBACK_BASE_URL=https://api.kimi.com/coding/v1与AI_FALLBACK_MODEL=kimi-for-coding，范围均为Production + Preview；其余OpenAI兼容协议、30秒和thinking=disabled保留。两条API_KEY仍为用户填写的Secret，未读取密钥。新预览dpl_EhySM543JmXCYkLiCZgoAx5UdofE（https://ai-agent-learning-igif96795-evansong.vercel.app/，远端b118e2a）已READY，浏览器/assessment正常；1-1真实课程问答失败。Vercel展开运行日志明确显示primary HTTP_403、fallback HTTP_401，External APIs确认备用实际请求api.kimi.com/coding/v1/chat/completions。Kimi控制台只读元数据可见本账号会员权益与生效Key，但不能证明Vercel的Secret内容相同。仅凭401不武断判断具体原因（认证/账号或模型权限均需区分）；没有重复重试或伪装客户端身份。已交还Vercel密钥列表，请用户自行核对并重新保存Preview和Production的有效Code Key，待其确认后创建新预览再验收。正式域名尚未更新，真实问答仍未通过。依据：https://www.kimi.com/code/docs/en/kimi-code/error-reference.html 。本地df9a12b仅追加目录更名说明，业务代码与远端b118e2a一致，本轮没有业务代码改动或重复跑全量测试。
 
 2026-10-21接入验收：10份白名单资料及1份资料规则完成首次入库，11/11 canonical原文逐份读回一致。全新STDIO MCP会话验证只读工具、双项目路由、code/workspace不匹配与跨scope拒绝、Cowork未注册；本项目6/6问题前三条检索后原文回读符合事实。课坊6题中5题前三条命中，剩余1题按流程扩大至8条，在第5条找到并回读完整依据。未创建新的Codex UI聊天；本聊天已实际调用原生MCP完成resolve/find/read。共享身份只有路由范围限制，不声称原生账号隔离。回执：~/.openviking-pilot/projects/ai-agent-learning-open-source/evidence/course-projects-mcp-check.json。
 
 本次main已到2119b75并推送，新增仅记录primary/fallback角色及HTTP状态码的安全诊断，51项服务端测试通过；不记录密钥、请求正文或供应商响应内容。c8cc4a7预览dpl_ZeiDWywieWHsBP5hgzMApek48zaM已READY，浏览器/assessment可用，但真实课程问答仍502 AI_UPSTREAM_ERROR；Vercel网页运行日志确认该错误，MCP日志接口403不能视为空日志。2119b75诊断预览dpl_AVAFcNdQqgbBNmk2Y6TcDyX6NKPH也已READY，尚未对其发起真实问答，不重复调用已知可能错配的凭据。正式域名未切换。
 
-Kimi凭据来源待精确确认：用户选择“Kimi Code订阅或其他模型网关”；已追问具体类别（若网关，只需Base URL和模型名，不要密钥）。2026-10-21官方Kimi Code文档明确其订阅密钥与开放平台不通用，Code权益面向编程场景，自有产品模型集成应使用开放平台；当前Moonshot配置不能据此视为匹配。未擅改密钥或伪装客户端身份。依据：https://www.kimi.com/code/docs/en/ 。真实Kimi及正式发布验收仍未通过。
+前一阶段凭据来源待确认，用户随后已明确为Kimi Code订阅；配置保存和真实验收结果以上方最新记录为准。2026-10-21官方Kimi Code文档明确其订阅密钥与开放平台不通用，Code权益面向编程场景，自有产品模型集成应使用开放平台；当前Moonshot配置不能据此视为匹配。未擅改密钥或伪装客户端身份。依据：https://www.kimi.com/code/docs/en/ 。真实Kimi及正式发布验收仍未通过。
 
 2026-10-21用户要求把本项目与“课坊”custom-course-platform分别接入OpenViking，Cowork不接入。已登记project_code=ai-agent-learning-open-source，workspace_path=/Users/songhonglei/space/ai-agent-learning-open，独立scope=viking://resources/pilot/ai-agent-learning-open-source/current；复用全局openviking、本机服务和local-development身份，不另建MCP、不加入定时调度。精选维护资料10份，另附资料使用规则；导入/检索验收结果以项目外evidence为准。旧ai-agent-learning索引继续保存历史资料。
 

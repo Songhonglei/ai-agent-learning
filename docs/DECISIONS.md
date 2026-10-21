@@ -20,3 +20,8 @@ Kimi一次备用逻辑已通过测试并随PR #2合入main，5项非密钥配置
 ## 2026-10-21：本地目录缩短为ai-agent-learning-open
 
 按用户指令，将/Users/songhonglei/space/ai-agent-learning-open-source原位更名为/Users/songhonglei/space/ai-agent-learning-open；只改变本地目录与注册工作区路径，OpenViking project_code/scope沿用ai-agent-learning-open-source，GitHub仓库、Vercel项目及正式域名保持原值。没有保留旧路径软链接或复制出另一套项目。
+
+
+## 2026-10-21：按已确认的Kimi Code凭据对齐接口
+
+用户明确密钥来自Kimi Code订阅，并在同一Ego任务页完成Vercel验证。非密钥配置已保存为https://api.kimi.com/coding/v1、kimi-for-coding，适用于Production与Preview；密钥继续由用户自行维护。新预览真实问答备用返回401，正式站不据此发布；先核对Code凭据，再新部署验收。保持客户端真实身份，不通过伪装工具标识解决供应商权限问题。

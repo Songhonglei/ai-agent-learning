@@ -16,3 +16,8 @@ v1读取投影为v2，旧局部成绩不冒充全课程基线；新版API拒绝v
 ## 2026-10-21：目录移动与预览服务路径
 
 普通独立Git根目录可原位rename；先核对无目标冲突及无linked worktree。迁移前后HEAD、Git状态和270个已跟踪文件散列一致。Vite预览进程保存旧绝对路径，因此从新目录在相同127.0.0.1:4182重启；首页、测评深链与JS/CSS实际200。OpenViking注册工作区及策略project字段同步修改，保留code/scope，真实MCP resolve新路径仍返回原项目标识。只改目录不需要重跑课程全量测试。
+
+
+## 2026-10-21：从Vercel请求日志定位主备失败
+
+Code配置保存并新建预览后，真实UI问答仍失败。Vercel日志列表将3条warning聚合成一行，需打开请求行并等待日志详情，再核对primary HTTP_403、fallback HTTP_401及External APIs中的实际Code路径；不能把仅列表末条AI_UPSTREAM_ERROR当作没有主备状态。官方401可能对应认证或能力权限，不能仅凭状态断言无额度、Key错误或编程用途限制。控制台生效Key元数据也不能证明Vercel Secret填写一致；由用户核对密钥并保存后再创建新部署，不反复调用相同失败凭据。
