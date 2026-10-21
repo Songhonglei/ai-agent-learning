@@ -1,7 +1,8 @@
 import { learningMapLessonIds } from '../../content/learning-map'
 import { authoredLessons, lessonById } from '../../content/lessons'
+import type { CourseTestRecords } from './courseAssessment'
 
-export const PROFILE_SCHEMA_VERSION = 1 as const
+export const PROFILE_SCHEMA_VERSION = 2 as const
 
 export type AssessmentKind = 'pretest' | 'posttest'
 
@@ -37,6 +38,7 @@ export interface LearningProfile {
   wrongAnswers: WrongAnswer[]
   favoriteContentIds: string[]
   assessments: Partial<Record<AssessmentKind, AssessmentResult>>
+  courseAssessments: CourseTestRecords
   updatedAt: string
 }
 
@@ -72,6 +74,7 @@ export function createEmptyProfile(): LearningProfile {
     wrongAnswers: [],
     favoriteContentIds: [],
     assessments: {},
+    courseAssessments: {},
     updatedAt: new Date().toISOString(),
   }
 }
@@ -83,6 +86,7 @@ export function hasLearningActivity(profile: LearningProfile): boolean {
     profile.wrongAnswers.length > 0
     || profile.favoriteContentIds.length > 0
     || Object.keys(profile.assessments).length > 0
+    || Object.keys(profile.courseAssessments).length > 0
   ) {
     return true
   }

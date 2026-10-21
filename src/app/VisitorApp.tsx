@@ -5,6 +5,8 @@ import { lessonById } from '../content/lessons'
 import { LearningMap } from '../features/learning-map/LearningMap'
 import { LearningProfilePage } from '../features/learning-profile/LearningProfilePage'
 import { LessonPlayer } from '../features/lesson-player/LessonPlayer'
+import { CourseAssessmentPage } from '../features/course-assessment/CourseAssessment'
+import { mergeCourseTestDelta } from '../shared/courseAssessment'
 import { StorageModeMenu } from '../features/account/StorageModeMenu'
 import {
   LEARNING_PROFILE_STORAGE_KEY,
@@ -243,6 +245,7 @@ function mergeStaleProfileUpdate(
       requested.assessments,
       canonical.assessments,
     ),
+    courseAssessments: mergeCourseTestDelta(staleBase.courseAssessments, requested.courseAssessments, canonical.courseAssessments),
   }
   if (profileDataEqual(merged, canonical)) return canonical
 
@@ -550,7 +553,7 @@ export function VisitorApp() {
   }
 
   function clearLocalProfile() {
-    if (!window.confirm('确定清空这台设备中的学习进度、收藏与错题吗？此操作无法撤销。')) return
+    if (!window.confirm('确定清空这台设备中的学习进度、测评、收藏与错题吗？此操作无法撤销。')) return
     updateProfile({
       ...createEmptyProfile(),
       theme: profileRef.current.theme,
@@ -645,6 +648,8 @@ export function VisitorApp() {
                 />
               )}
             />
+            <Route path="/assessment" element={<CourseAssessmentPage profile={profile} onProfileChange={updateProfile} />} />
+            <Route path="/assessment/:kind" element={<CourseAssessmentPage profile={profile} onProfileChange={updateProfile} />} />
             <Route path="*" element={<StatusPanel status="unknown-route" />} />
           </Routes>
         </div>

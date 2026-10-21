@@ -122,6 +122,34 @@ test('real HTTP model transport handles success, rate limiting, invalid JSON and
   }
 })
 
+test('HTTP falls back to the second provider with isolated keys and validated citations', async (t) => {
+  const attempts = []
+  const provider = createServer(async (request, response) => {
+    let body = ''
+    for await (const chunk of request) body += chunk
+    attempts.push(request.url)
+    if (request.url === '/primary/v1/chat/completions') {
+      assert.equal(request.headers.authorization, 'Bearer primary-test-key')
+      response.writeHead(503)
+      return response.end('provider-private-details')
+    }
+    assert.equal(request.url, '/fallback/v1/chat/completions')
+    assert.equal(request.headers.authorization, 'Bearer fallback-test-key')
+    assert.deepEqual(JSON.parse(body).thinking, { type: 'disabled' })
+    response.writeHead(200, { 'Content-Type': 'application/json' })
+    response.end(JSON.stringify({ choices: [{ message: { content: '先确认当前窗口。<sources>page-035</sources>' } }] }))
+  })
+  const { origin } = await listen(t, provider)
+  const { post } = await listen(t, createLearningServer({ getConfig: () => ({ ...config,
+    baseUrl: `${origin}/primary/v1`, apiKey: 'primary-test-key', timeoutMs: 1000,
+    fallback: { ...config, baseUrl: `${origin}/fallback/v1`, apiKey: 'fallback-test-key', model: 'kimi-k2.6', thinking: 'disabled', timeoutMs: 1000 },
+  }) }))
+  const response = await post()
+  assert.equal(response.status, 200)
+  assert.deepEqual(await response.json(), { answer: '先确认当前窗口。', citations: ['page-035'] })
+  assert.deepEqual(attempts, ['/primary/v1/chat/completions', '/fallback/v1/chat/completions'])
+})
+
 test('disconnecting a learner cancels upstream work and releases the request slot', async (t) => {
   let start
   const started = new Promise((resolve) => { start = resolve })

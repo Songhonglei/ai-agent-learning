@@ -3,13 +3,14 @@ import test from 'node:test'
 import profileHandler from '../api/profile.mjs'
 
 const profile = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   theme: 'light',
   currentLessonId: '0-1',
   courses: {},
   wrongAnswers: [],
   favoriteContentIds: [],
   assessments: {},
+  courseAssessments: {},
   updatedAt: '2026-08-19T00:00:00.000Z',
 }
 
@@ -123,4 +124,29 @@ test('profile API validates and upserts a learner-owned profile server-side', as
     globalThis.fetch = originalFetch
     clearSupabaseConfig()
   }
+})
+
+test('profile API refuses v1 writes and retains whole-course v2 drafts in round trips', async () => {
+  setSupabaseConfig()
+  const originalFetch = globalThis.fetch
+  const calls = []
+  const candidate = { ...profile, courseAssessments: { pretest: { kind: 'pretest', version: 'course-2026-10-v1', answers: { 'course-pretest-0-1-1': 'b' }, currentQuestion: 1, startedAt: '2026-10-21T00:00:00.000Z', updatedAt: '2026-10-21T00:00:00.000Z', learningStarted: false } } }
+  globalThis.fetch = async (url, init = {}) => {
+    calls.push({ url: String(url), init })
+    if (String(url).includes('/auth/v1/user')) return { ok: true, json: async () => ({ id: 'learner', email: 'learner@example.com' }) }
+    return { ok: true, json: async () => [{ profile: candidate }] }
+  }
+  try {
+    const old = responseRecorder()
+    await profileHandler(request('PUT', { ...profile, schemaVersion: 1 }), old)
+    assert.equal(old.result.statusCode, 409)
+    assert.equal(calls.some((call) => call.init.body?.includes('"profile":')), false)
+    const saved = responseRecorder()
+    await profileHandler(request('PUT', candidate), saved)
+    assert.equal(saved.result.statusCode, 200)
+    assert.deepEqual(saved.result.payload.courseAssessments, candidate.courseAssessments)
+    const loaded = responseRecorder()
+    await profileHandler(request('GET'), loaded)
+    assert.deepEqual(loaded.result.payload, candidate)
+  } finally { globalThis.fetch = originalFetch; clearSupabaseConfig() }
 })

@@ -116,7 +116,7 @@ export function ProfileTransfer({
           </div>
 
           <p className="profile-transfer-intro">
-            导出内容只包含学习进度；导入文件会先校验并展示合并取舍，确认前不会改动当前档案。
+            导出内容包含学习进度、测评草稿与结果、错题和收藏，不含课程正文；导入文件会先校验并展示合并取舍，确认前不会改动当前档案。
           </p>
         </>
       )}
@@ -177,6 +177,7 @@ export function ProfileTransfer({
               </>
             )}
           </p>
+          <p>全课程测评优先保留较早提交的首次结果；草稿可合并，不以更高分覆盖原基线。</p>
           <div className="profile-transfer-confirm-actions">
             <button type="button" onClick={() => setPreview(null)}>取消导入</button>
             <button className="primary-button" type="button" onClick={handleConfirm}>

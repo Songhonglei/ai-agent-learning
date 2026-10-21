@@ -1,4 +1,5 @@
 import { learningMapLessonIds } from '../../content/learning-map'
+import { projectCourseTestRecords } from '../courseAssessment'
 import type { LessonProgress } from '../types/lesson'
 import {
   PROFILE_SCHEMA_VERSION,
@@ -143,7 +144,7 @@ function projectAssessmentResult(
 }
 
 export function projectLearningProfile(value: unknown): LearningProfile | null {
-  if (!isRecord(value) || value.schemaVersion !== PROFILE_SCHEMA_VERSION) return null
+  if (!isRecord(value) || ![1, PROFILE_SCHEMA_VERSION].includes(value.schemaVersion as number)) return null
   if (
     (value.theme !== 'light' && value.theme !== 'dark') ||
     typeof value.currentLessonId !== 'string' ||
@@ -180,6 +181,8 @@ export function projectLearningProfile(value: unknown): LearningProfile | null {
     if (assessment === null) return null
     assessments[kind] = assessment
   }
+  const courseAssessments = value.schemaVersion === 1 ? {} : projectCourseTestRecords(value.courseAssessments)
+  if (courseAssessments === null) return null
 
   return {
     schemaVersion: PROFILE_SCHEMA_VERSION,
@@ -189,6 +192,7 @@ export function projectLearningProfile(value: unknown): LearningProfile | null {
     wrongAnswers,
     favoriteContentIds,
     assessments,
+    courseAssessments,
     updatedAt: value.updatedAt,
   }
 }
