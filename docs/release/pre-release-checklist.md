@@ -37,3 +37,7 @@
 ## 回滚
 
 若生产出现无法学习、档案恢复损坏、API 大面积失败，使用 Vercel 已有生产部署回滚到上述基准，复核域名、课程深链和问答；保留失败部署与日志。不得修改或清空学习者 localStorage，不执行 Supabase 数据迁移或写入来配合此次发布。
+
+## 最终候选回执（仅预览）
+
+实现提交 1bb852ba308b8a7212e6eb8953dcc4e3eda727e5；预览 dpl_6MSnStGu57xkZXrQH1EPPpJAy1De READY，地址 https://ai-agent-learning-4rlfpvy9n-evansong.vercel.app/。浏览器验证移动首页可读、首课可见、4-2深链与来源卡片正常，非法课程请求400。草稿 PR：https://github.com/Songhonglei/ai-agent-learning/pull/1。未合并、未切换正式域名；模型故障与真人试学仍待完成。后续文档提交不改此实现提交。
