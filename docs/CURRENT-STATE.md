@@ -2,6 +2,12 @@
 
 日期：2026-10-21。
 
+## 独立知识映射与模型配置
+
+2026-10-21用户要求把本项目与“课坊”custom-course-platform分别接入OpenViking，Cowork不接入。已登记project_code=ai-agent-learning-open-source，workspace_path=/Users/songhonglei/space/ai-agent-learning-open-source，独立scope=viking://resources/pilot/ai-agent-learning-open-source/current；复用全局openviking、本机服务和local-development身份，不另建MCP、不加入定时调度。精选维护资料10份，另附资料使用规则；导入/检索验收结果以项目外evidence为准。旧ai-agent-learning索引继续保存历史资料。
+
+用户已确认Kimi API Key保存完成，浏览器核对AI_FALLBACK_API_KEY在Production和Preview均存在且为Secret，未读取密钥值。后续真实模型/部署验收记录单独追加；不能把变量存在视为问答成功。维护索引不接入网站课程助教的审核来源链路。使用说明见OPENVIKING.md。
+
 ## 当前 main 基线
 
 2026-10-21按用户要求整理PR并合入main：[#1](https://github.com/Songhonglei/ai-agent-learning/pull/1)合并提交0986902，随后将[#2](https://github.com/Songhonglei/ai-agent-learning/pull/2)从依赖分支改为main并合并为f8aa8c2。保留merge提交与原始功能历史；本地已切换main并跟踪origin/main，两个本轮已合并开发分支已从本地和远端删除。
@@ -16,7 +22,7 @@
 - 访客可学习与问答，Supabase 登录和同步可选；发布到既有 Vercel 项目 ai-agent-learning。已分离 Cowork 构建入口、SSO App、PG 后端和部署脚本，已完成 AI 修复和本地验收，线上验收受既有模型故障阻塞。
 - 两项目独立仓库、独立 package-lock、独立 src/server 和测试。没有跨项目源文件导入或自动同步。
 - 固定12课，整体学习时长约3小时；本轮已实现覆盖12课的全课程前测、后测与对照，见下方新进展。
-- 本项目尚未单独登记 OpenViking；原 ai-agent-learning 索引只作为旧工作区历史，不能证明本项目运行状态。
+- 本项目已独立登记OpenViking；原ai-agent-learning索引只作为历史，当前实现与运行状态仍以本项目源码和本次验收为准。
 - 验证结果与当前提交后续记录在本文件及 docs/release/。
 
 ## 独立基线验证

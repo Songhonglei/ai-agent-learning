@@ -9,3 +9,9 @@ schema v2显式区分全课程测评与旧单课结果；兼容读取v1并迁移
 ## 2026-10-21：模型状态与后续意向
 
 用户确认阿里云模型暂不可用，需要晚些生效，另计划提供Kimi模型作fallback。此为用户告知的状态和后续意向，本轮未取得Kimi配置，未实现或宣称fallback已启用；测评不依赖模型。
+
+## 2026-10-21后续：Kimi与独立知识映射
+
+Kimi一次备用逻辑已通过测试并随PR #2合入main，5项非密钥配置此前保存在Vercel。用户现确认Kimi API Key已保存；浏览器仅确认Production/Preview两条Secret存在，不读取值。真实调用和正式站验收仍需执行，不从配置存在推导为调用成功。
+
+用户明确要求OpenViking分别映射ai-agent-learning-open-source与custom-course-platform；ai-agent-learning-cowork基本完成，本轮不接入。复用既有全局MCP、服务和共享local-development身份，各自使用独立code、scope和白名单；旧课程资料索引保留历史。此维护知识不接入网站问答链路，不自动新增定时任务。

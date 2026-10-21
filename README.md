@@ -6,6 +6,7 @@
 - 开源仓库：https://github.com/Songhonglei/ai-agent-learning
 - 项目主页：https://songhonglei.github.io/ai-agent-learning/
 - 本项目仅维护开源版，使用 Vercel；Cowork 已拆为独立本地项目，不再通过 mode 切换。
+- 本地项目知识入口：[当前状态](docs/CURRENT-STATE.md)、[OpenViking使用说明](OPENVIKING.md)。本项目与课坊分别索引，Cowork不接入。
 
 ## 本地运行
 

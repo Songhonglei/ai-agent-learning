@@ -106,3 +106,16 @@ test('fallback uses the same citation guard and returns safe failure without a t
     assert.equal(calls, 2)
   }
 })
+
+test('provider diagnostics identify primary and fallback status without secrets or content', async (t) => {
+  const warnings = []
+  t.mock.method(console, 'warn', (...args) => warnings.push(args))
+  let calls = 0
+  await assert.rejects(ask(async () => new Response('private provider body', { status: ++calls === 1 ? 401 : 402 })), (error) => error.code === 'AI_UPSTREAM_ERROR')
+  assert.deepEqual(warnings, [
+    ['course-answer-provider:', 'primary', 'HTTP_401'],
+    ['course-answer-provider:', 'fallback', 'HTTP_402'],
+  ])
+  const logged = JSON.stringify(warnings)
+  for (const privateValue of [primary.apiKey, fallback.apiKey, 'private provider body', '什么是上下文']) assert.ok(!logged.includes(privateValue))
+})
