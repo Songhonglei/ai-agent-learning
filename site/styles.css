@@ -402,3 +402,5 @@ footer > div a { color: var(--text); }
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
   .reveal { opacity: 1; transform: none; }
 }
+
+.platform-origin{max-width:1240px;margin:0 auto;padding:44px 24px 64px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:32px}.platform-origin h2{font-size:24px;margin:0 0 14px}.platform-origin p{max-width:750px;color:#afbfcb;font-size:14px;line-height:1.9}.platform-origin .action{flex-shrink:0}@media(max-width:780px){.platform-origin{flex-direction:column;align-items:flex-start;gap:20px}.platform-origin h2{font-size:22px}}

@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "site/**"
+      - "coursePlatform/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -28,10 +29,17 @@ jobs:
         uses: actions/checkout@v6
       - name: Configure Pages
         uses: actions/configure-pages@v5
+      - name: Assemble course and platform pages
+        run: |
+          mkdir -p _pages/coursePlatform/assets
+          cp -R site/. _pages/
+          cp coursePlatform/index.html _pages/coursePlatform/index.html
+          cp coursePlatform/assets/styles.css _pages/coursePlatform/assets/styles.css
+          cp coursePlatform/assets/workbench.webp coursePlatform/assets/learning.webp coursePlatform/assets/quota.webp coursePlatform/assets/retention.webp _pages/coursePlatform/assets/
       - name: Upload static site
         uses: actions/upload-pages-artifact@v4
         with:
-          path: ./site
+          path: ./_pages
       - name: Deploy Pages
         id: deployment
         uses: actions/deploy-pages@v4

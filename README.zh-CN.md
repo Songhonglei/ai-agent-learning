@@ -12,6 +12,12 @@
 
 [课程前测](https://my-agent-learning.vercel.app/assessment/pretest) · [结课后测](https://my-agent-learning.vercel.app/assessment/posttest) · [结果对照](https://my-agent-learning.vercel.app/assessment) · [开源仓库](https://github.com/Songhonglei/ai-agent-learning) · [项目介绍（GitHub Pages）](https://songhonglei.github.io/ai-agent-learning/)
 
+## 面向企业的课坊平台
+
+本课程来自**课坊平台（custom-course-platform）**。企业课程平台本身**尚未开源**，欢迎企业用户或团队联系[作者 Evan Song](https://github.com/Songhonglei)，沟通定制需求并申请使用授权。本仓库只公开平台介绍与演示截图。
+
+[平台产品介绍](https://songhonglei.github.io/ai-agent-learning/coursePlatform/) · [核心功能与授权说明](coursePlatform/README.md)
+
 ## 主要功能
 
 - **12 课互动学习**：学习地图、情境练习、预置 FAQ，保留原有课内练习和局部自测。

@@ -12,6 +12,12 @@ The project site presents highlights and product screenshots; the learning app p
 
 [Pre-assessment](https://my-agent-learning.vercel.app/assessment/pretest) · [Post-assessment](https://my-agent-learning.vercel.app/assessment/posttest) · [Results comparison](https://my-agent-learning.vercel.app/assessment) · [Source code](https://github.com/Songhonglei/ai-agent-learning) · [Project site (GitHub Pages)](https://songhonglei.github.io/ai-agent-learning/)
 
+## Kefang platform for enterprises
+
+This course comes from **Kefang (custom-course-platform)**. The enterprise course platform is **not open source**. Enterprises and teams can contact [Evan Song](https://github.com/Songhonglei) to discuss customization and request a license. This repository publishes only its product introduction and demonstration screenshots.
+
+[Platform product page](https://songhonglei.github.io/ai-agent-learning/coursePlatform/) · [Capabilities and licensing](coursePlatform/README.md)
+
 ## Features
 
 - **12 interactive lessons**: A learning map, scenario exercises, and built-in FAQs, with existing in-lesson exercises and lesson-specific self-checks preserved.
