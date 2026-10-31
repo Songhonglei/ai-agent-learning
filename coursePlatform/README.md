@@ -14,8 +14,8 @@
 - **课程 AI 助教**：基于有权访问的已发布课程资料答疑，提供引用依据；资料不足时明确说明。
 - **平台运营管理**：集中查看异常提醒、操作审计、配额、用量与保留策略；请求次数可设置硬上限，Token 和费用用于提醒。
 
-[![课程工作台：六门课程与统计卡一致](assets/workbench.png)](assets/workbench.png)
-[![学习阅读器：课程内容与课节导航](assets/learning.png)](assets/learning.png)
+[![课程工作台：六门课程与统计卡一致](assets/workbench-3200.webp)](assets/workbench.png)
+[![学习阅读器：课程内容与课节导航](assets/learning-3200.webp)](assets/learning.png)
 
 ## 企业定制
 
@@ -30,9 +30,9 @@
 
 现有配置能力与进一步开发的范围会在沟通中明确，不将待评估方案表述为已经交付的功能。
 
-<p><a href="assets/quota.png"><img src="assets/quota.png" alt="额度与用量：平台总量和各课程使用情况" width="49%"></a> <a href="assets/retention.png"><img src="assets/retention.png" alt="保留策略：保留规则与清理记录" width="49%"></a></p>
+<p><a href="assets/quota.png"><img src="assets/quota-3200.webp" alt="额度与用量：平台总量和各课程使用情况" width="49%"></a> <a href="assets/retention.png"><img src="assets/retention-3200.webp" alt="保留策略：保留规则与清理记录" width="49%"></a></p>
 
-截图以无损高清 PNG 提供，点击可查看原图。管理端来自经授权公开的实际平台界面；学习端使用当前产品的示例课程界面，不展示个人学习记录。截图只反映采集时的页面状态，不代表服务规模或性能承诺。
+页面按屏幕宽度加载无损 WebP，3200px版本与PNG原图像素一致；点击可查看高清 PNG 原图。管理端来自经授权公开的实际平台界面；学习端使用当前产品的示例课程界面，不展示个人学习记录。截图只反映采集时的页面状态，不代表服务规模或性能承诺。
 
 ## 企业使用与授权
 

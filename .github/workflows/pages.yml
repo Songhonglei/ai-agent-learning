@@ -34,8 +34,10 @@ jobs:
           mkdir -p _pages/coursePlatform/assets
           cp -R site/. _pages/
           cp coursePlatform/index.html _pages/coursePlatform/index.html
-          cp coursePlatform/assets/styles.css _pages/coursePlatform/assets/styles.css
-          cp coursePlatform/assets/workbench.png coursePlatform/assets/learning.png coursePlatform/assets/quota.png coursePlatform/assets/retention.png _pages/coursePlatform/assets/
+          cp coursePlatform/assets/styles.css coursePlatform/assets/site.js _pages/coursePlatform/assets/
+          for image in workbench learning quota retention; do
+            cp "coursePlatform/assets/$image.png" "coursePlatform/assets/$image-800.webp" "coursePlatform/assets/$image-3200.webp" _pages/coursePlatform/assets/
+          done
       - name: Upload static site
         uses: actions/upload-pages-artifact@v4
         with:
