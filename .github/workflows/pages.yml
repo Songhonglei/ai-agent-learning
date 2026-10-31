@@ -35,7 +35,7 @@ jobs:
           cp -R site/. _pages/
           cp coursePlatform/index.html _pages/coursePlatform/index.html
           cp coursePlatform/assets/styles.css _pages/coursePlatform/assets/styles.css
-          cp coursePlatform/assets/workbench.webp coursePlatform/assets/learning.webp coursePlatform/assets/quota.webp coursePlatform/assets/retention.webp _pages/coursePlatform/assets/
+          cp coursePlatform/assets/workbench.png coursePlatform/assets/learning.png coursePlatform/assets/quota.png coursePlatform/assets/retention.png _pages/coursePlatform/assets/
       - name: Upload static site
         uses: actions/upload-pages-artifact@v4
         with:

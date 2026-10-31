@@ -14,7 +14,7 @@
 
 ## 面向企业的课坊平台
 
-本课程来自**课坊平台（custom-course-platform）**。企业课程平台本身**尚未开源**，欢迎企业用户或团队联系[作者 Evan Song](https://github.com/Songhonglei)，沟通定制需求并申请使用授权。本仓库只公开平台介绍与演示截图。
+本课程来自**课坊平台（custom-course-platform）**。企业课程平台本身**尚未开源**，欢迎企业用户或团队联系[作者 Evan Song](mailto:281568337@qq.com)，沟通定制需求并申请使用授权。本仓库只公开平台介绍与演示截图。
 
 [平台产品介绍](https://songhonglei.github.io/ai-agent-learning/coursePlatform/) · [核心功能与授权说明](coursePlatform/README.md)
 

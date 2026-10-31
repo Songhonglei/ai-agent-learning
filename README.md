@@ -14,7 +14,7 @@ The project site presents highlights and product screenshots; the learning app p
 
 ## Kefang platform for enterprises
 
-This course comes from **Kefang (custom-course-platform)**. The enterprise course platform is **not open source**. Enterprises and teams can contact [Evan Song](https://github.com/Songhonglei) to discuss customization and request a license. This repository publishes only its product introduction and demonstration screenshots.
+This course comes from **Kefang (custom-course-platform)**. The enterprise course platform is **not open source**. Enterprises and teams can contact [Evan Song](mailto:281568337@qq.com) to discuss customization and request a license. This repository publishes only its product introduction and demonstration screenshots.
 
 [Platform product page](https://songhonglei.github.io/ai-agent-learning/coursePlatform/) · [Capabilities and licensing](coursePlatform/README.md)
 
