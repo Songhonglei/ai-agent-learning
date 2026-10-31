@@ -5,7 +5,7 @@
 ## 发布内容
 
 - `coursePlatform/README.md`：课程来自课坊（custom-course-platform）、核心功能、企业定制与未开源说明，作者主页及使用咨询入口。
-- `coursePlatform/index.html`：纸色／墨绿／陶土色，章节式产品介绍，四张演示截图，定制能力与授权联系区。沿用课坊学习平台视觉，DFII为14；字体Noto Serif SC／Noto Sans SC，锚点平滑滚动支持减少动效偏好。
+- `coursePlatform/index.html`：纸色／墨绿／陶土色，章节式产品介绍，四张演示截图，定制能力与授权联系区。沿用课坊学习平台视觉，DFII为14；字体优先本机Noto SC／宋体／苹方并提供通用回退，锚点平滑滚动支持减少动效偏好。
 - `coursePlatform/assets/`：独立样式和工作台、阅读器、额度、保留策略四张WebP。截图为真实组件与虚构数据，不含企业实际资料、账号或用量。
 - 英中README增加平台介绍入口；原Pages首页增加课程来源与平台入口。原课程站运行代码、依赖、服务端和模型配置保持。
 - Pages仍使用同一个站点，原`site/`作为根页面，产品页发布到`/ai-agent-learning/coursePlatform/`。workflow显式复制平台HTML、样式和四图，不将该目录README或其他平台资料打入站点。
@@ -27,3 +27,14 @@
 展示源码`3a58f820021de384e54e04268b765bbe23c757ed`已推送main；[Pages运行41187655900](https://github.com/Songhonglei/ai-agent-learning/actions/runs/41187655900)成功，原站与产品子页同一包发布。公开地址：https://songhonglei.github.io/ai-agent-learning/coursePlatform/ 。GitHub原文7个coursePlatform文件与本机blob一致；部署来源和状态独立读回。公开HTML已读回与本机一致，首次后续CSS读取遇到连接重置，未将中断称作全资源通过；浏览器随后由用户接管，线上视觉操作按工具规则暂停，本机五宽度及根页英中／入口验证保持有效。
 
 公开变更只含展示目录、英中README、原Pages入口、发布组装及维护资料，没有React学习App、API、依赖、模型值或平台源码。
+
+
+## 线上复核与加载补修
+
+用户恢复浏览器控制后继续同一任务。首轮CSS本身约665ms返回，但其外部字体导入链阻塞页面渲染，document停留interactive且截图超时；停止未完成请求后恢复布局。修正版移除Google Fonts导入，保留Noto SC优先及本机衬线／无衬线回退，并给样式链接添加发布标识。本机五宽度再次通过，后续以修正版自然加载复核，诊断停止加载不算通过。
+
+修正版展示源码`4a4f826775bb2f7903ab2da9aee888df3e9fbdb7`已推送main；[Pages运行41196199114](https://github.com/Songhonglei/ai-agent-learning/actions/runs/41196199114)success。独立读取github-pages部署`7457867455`，来源SHA一致、状态success。原浏览器任务空间23在后续恢复时已不存在；依Ego Skill暂停浏览器操作，等待用户确认新建任务空间，未绕过或将部署成功写成视觉通过。
+
+用户同意新建后，在新任务空间31复核：页面自然到complete，真实CSS规则83条，无外部字体导入；1440／1024／768／390／320五宽度均无横向溢出，六类定制能力与授权说明存在，无私有仓库／管理员链接。四图均加载为1440像素宽并有替代文字，授权锚点和作者／咨询／公开课程目标正确；1440首屏、390窄屏与联系区截图已人工查看。此次首轮CSS／首图请求约59秒才完成，浏览器与CLI均遇到资源请求超时，属于本轮访问边界，未称首屏性能通过或全资源下载一次成功。
+
+最终补验：浏览器读取产品HTML、CSS和四张WebP均200，逐字节与本机审核源一致（首轮HTML读取超时保留，后续重读成功）。原Pages首页的英中课程来源／未开源说明、1440／390／320入口布局及点击进入产品页通过，再次自然complete。未提交任何咨询、未登录或读取个人数据。本轮为桌面浏览器宽度模拟，未做移动真机验收。
