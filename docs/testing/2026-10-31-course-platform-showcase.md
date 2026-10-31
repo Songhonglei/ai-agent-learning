@@ -20,3 +20,10 @@
 ## 本机验收
 
 产品页1440／1024／768／390／320五宽度无横向溢出，六类定制能力与未开源说明可见，图片四张加载／替代文字／源文件字节一致，页面不含私有管理员或私库源码链接。实际coursePlatform目录前缀、授权锚点、原Pages首页入口跳转通过；原页新增介绍的英中切换与1440／390／320三宽度通过。Markdown／图片相对链接与diff检查通过。这是静态页面的桌面浏览器响应式检查，不是移动真机或平台业务验收。
+
+
+## 发布回执
+
+展示源码`3a58f820021de384e54e04268b765bbe23c757ed`已推送main；[Pages运行41187655900](https://github.com/Songhonglei/ai-agent-learning/actions/runs/41187655900)成功，原站与产品子页同一包发布。公开地址：https://songhonglei.github.io/ai-agent-learning/coursePlatform/ 。GitHub原文7个coursePlatform文件与本机blob一致；部署来源和状态独立读回。公开HTML已读回与本机一致，首次后续CSS读取遇到连接重置，未将中断称作全资源通过；浏览器随后由用户接管，线上视觉操作按工具规则暂停，本机五宽度及根页英中／入口验证保持有效。
+
+公开变更只含展示目录、英中README、原Pages入口、发布组装及维护资料，没有React学习App、API、依赖、模型值或平台源码。

@@ -4,7 +4,7 @@
 
 ## 课坊产品介绍（2026-10-31）
 
-用户指定新增`coursePlatform`介绍课坊平台（custom-course-platform）的课程来源、核心功能、企业定制和授权联系，配四张虚构数据的真实组件截图；平台本身未开源，业务源码／配置／企业资料不进入本仓库。英中README与原Pages首页增加入口；同一Pages保留原根页并发布产品子路径。设计与验收见[本轮记录](testing/2026-10-31-course-platform-showcase.md)。本轮仅公开展示，不修改课程App／问答后端／模型配置，不部署Vercel。
+用户指定新增`coursePlatform`介绍课坊平台（custom-course-platform）的课程来源、核心功能、企业定制和授权联系，配四张虚构数据的真实组件截图；平台本身未开源，业务源码／配置／企业资料不进入本仓库。英中README与原Pages首页增加入口；同一Pages保留原根页并发布产品子路径，源码3a58f82及Pages运行41187655900已成功，地址https://songhonglei.github.io/ai-agent-learning/coursePlatform/。设计与验收见[本轮记录](testing/2026-10-31-course-platform-showcase.md)。本轮仅公开展示，不修改课程App／问答后端／模型配置，不部署Vercel。
 
 
 ## 默认英文与中文README（2026-10-21）
