@@ -5,7 +5,7 @@
 @media(max-width:700px){.wrap{width:calc(100% - 36px)}.site-header{height:80px}.wordmark{font-size:23px}.wordmark svg{width:33px;height:33px}.site-header nav{gap:18px;font-size:12px}.site-header nav>a:first-child{display:none}.hero{display:block;padding-top:40px}.hero h1{font-size:clamp(29px,8.5vw,36px);margin:18px 0}.hero-lead{font-size:14px}.journey-index{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:38px}.journey-index li{display:block;padding:15px 0}.journey-index strong{display:block;font-size:13px;margin-top:12px}.journey-index p{font-size:10px;line-height:1.9}.journey-index li>span{font-size:11px}.hero-screen{margin-top:22px}.hero-actions{gap:22px}.journey{padding-block:65px}.feature-row,.learning-row,.retention-story{grid-template-columns:1fr;margin-top:40px}.feature-note{padding:5px 0 0 25px}.learning-row .feature-copy{grid-row:1}.feature-copy{max-width:none}.section-heading h2{font-size:27px}.feature-copy h3{font-size:27px}.release-register{grid-template-columns:repeat(2,1fr);margin:30px 0}.release-register article,.release-register article:first-child,.release-register article:last-child{padding:22px 15px}.release-register article:nth-child(2n){border-right:0}.release-register article:nth-child(-n+2){border-bottom:1px solid var(--line)}.release-register h3{font-size:17px}.operations{padding-block:55px}.closing{padding-block:65px}.site-footer{flex-wrap:wrap;gap:15px}.site-footer p{order:3;flex-basis:100%;line-height:1.8}.site-footer>a{margin-left:auto}.wide-only{display:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 
-.origin-note{margin:0 0 12px;font-size:12px;color:var(--clay);line-height:1.8}.customize{padding-block:85px}.customize-list{margin:35px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:0 60px}.customize-list>div{border-top:1px solid var(--line);padding:25px 0}.customize-list dt{font-size:17px;font-weight:500}.customize-list dd{margin:12px 0 0;font-size:14px;line-height:2;color:var(--muted)}.closing{border-top:1px solid var(--line)}@media(max-width:700px){.customize{padding-block:55px}.customize-list{grid-template-columns:1fr;gap:0}.customize-list>div{padding-block:22px}}
+.customize{padding-block:85px}.customize-list{margin:35px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:0 60px}.customize-list>div{border-top:1px solid var(--line);padding:25px 0}.customize-list dt{font-size:17px;font-weight:500}.customize-list dd{margin:12px 0 0;font-size:14px;line-height:2;color:var(--muted)}.closing{border-top:1px solid var(--line)}@media(max-width:700px){.customize{padding-block:55px}.customize-list{grid-template-columns:1fr;gap:0}.customize-list>div{padding-block:22px}}
 
 /* 保留整张截图，点击可查看两倍分辨率原图。 */
 .hero-copy{min-width:0}.feature-copy p,.customize-list dd{text-wrap:pretty}
@@ -34,3 +34,25 @@ h1,h2,h3{text-wrap:balance}
 @media(prefers-reduced-motion:reduce){.nav-mark,.nav-label{transition:none}}
 
 .section-nav a:focus-visible{outline:2px solid var(--clay);outline-offset:0}
+
+/* 三项亮点由左下向右上展开，保持01→02→03的阅读顺序。 */
+@media(min-width:900px){
+  .hero{grid-template-columns:minmax(0,1fr) clamp(380px,43vw,550px);gap:0 30px}
+  .journey-index{width:100%;--highlight-width:clamp(290px,27vw,350px)}
+  .journey-index li{width:var(--highlight-width)}
+  .journey-index li:nth-child(1){margin-left:calc(100% - var(--highlight-width))}
+  .journey-index li:nth-child(2){margin-left:calc((100% - var(--highlight-width))/2)}
+  .journey-index li:nth-child(3){margin-left:0}
+}
+.themes{padding-block:85px}.theme-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:34px 24px;margin-top:36px}
+.theme-card{min-width:0}.theme-card>a{display:block;border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--paper-deep)}
+.theme-card img{aspect-ratio:5/4;object-fit:contain}.theme-card figcaption{display:flex;align-items:center;gap:12px;margin-top:12px}
+.theme-card figcaption>span:first-child{color:var(--clay);font:500 12px var(--display)}.theme-card h3{font-size:15px;font-weight:500;color:var(--ink)}.theme-card figcaption>span:last-child{margin-left:auto;font-size:15px}
+/* 标题也是原生锚点的一部分，显示时允许点击，不拦截其事件。 */
+.section-nav a:hover,.section-nav a:focus-visible{width:66px}
+.section-nav a:hover .nav-label,.section-nav a:focus-visible .nav-label{pointer-events:auto}
+@media(min-width:1440px){.section-nav a{width:66px}.section-nav .nav-label{pointer-events:auto}}
+@media(max-width:899px){.theme-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:540px){.theme-grid{grid-template-columns:1fr;gap:28px}.themes{padding-block:55px}}
+
+.section-nav{align-items:flex-end}

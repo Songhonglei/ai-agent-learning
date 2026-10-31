@@ -1,6 +1,6 @@
 # 课坊 · AI 企业课程与学习平台
 
-本示例课程由**课坊平台（custom-course-platform）**制作。课坊支持将企业制度、业务文档和案例转化为课程，连接内容制作、人工审核、员工学习与日常运营。
+**课坊（custom-course-platform）**是一套 AI 企业课程与学习平台，支持将企业制度、业务文档和案例转化为课程，连接内容制作、人工审核、员工学习与日常运营。
 
 [产品介绍](https://songhonglei.github.io/ai-agent-learning/coursePlatform/) · [体验公开课程](https://my-agent-learning.vercel.app/) · [邮件联系：281568337@qq.com](mailto:281568337@qq.com)
 
@@ -32,7 +32,13 @@
 
 <p><a href="assets/quota.png"><img src="assets/quota-3200.webp" alt="额度与用量：平台总量和各课程使用情况" width="49%"></a> <a href="assets/retention.png"><img src="assets/retention-3200.webp" alt="保留策略：保留规则与清理记录" width="49%"></a></p>
 
-页面按屏幕宽度加载无损 WebP，3200px版本与PNG原图像素一致；点击可查看高清 PNG 原图。管理端来自经授权公开的实际平台界面；学习端使用当前产品的示例课程界面，不展示个人学习记录。截图只反映采集时的页面状态，不代表服务规模或性能承诺。
+页面按屏幕宽度加载无损 WebP，点击可查看高清原图。
+
+## 多主题学习空间
+
+提供东方书卷、工业网格、自然生长、星夜观测、几何乐园、数据终端、典雅学院、靛蓝轻盈、青绿极简九种主题，可按企业品牌配置学习首页。
+
+[查看九宫格主题展示](https://songhonglei.github.io/ai-agent-learning/coursePlatform/#themes)
 
 ## 企业使用与授权
 

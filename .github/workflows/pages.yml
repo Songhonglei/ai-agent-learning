@@ -31,12 +31,15 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Assemble course and platform pages
         run: |
-          mkdir -p _pages/coursePlatform/assets
+          mkdir -p _pages/coursePlatform/assets/themes
           cp -R site/. _pages/
           cp coursePlatform/index.html _pages/coursePlatform/index.html
           cp coursePlatform/assets/styles.css coursePlatform/assets/site.js _pages/coursePlatform/assets/
           for image in workbench learning quota retention; do
             cp "coursePlatform/assets/$image.png" "coursePlatform/assets/$image-800.webp" "coursePlatform/assets/$image-3200.webp" _pages/coursePlatform/assets/
+          done
+          for theme in style-01 style-03 style-04 style-07 style-08 style-11 style-12 style-13 style-14; do
+            cp "coursePlatform/assets/themes/$theme.webp" "coursePlatform/assets/themes/$theme-480.webp" _pages/coursePlatform/assets/themes/
           done
       - name: Upload static site
         uses: actions/upload-pages-artifact@v4
