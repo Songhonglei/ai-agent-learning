@@ -4,9 +4,9 @@
 
 ## 课坊产品介绍（2026-10-31）
 
-同日文案与高清重采：全页改为直接、自然的功能与场景表达；授权改邮箱281568337@qq.com，四图替换3200×2080无损PNG。管理员实际工作台6门与6行一致；学习端为本机当前示例课程，来源分开说明。原图点击打开，首图不再裁切。见[本轮记录](testing/2026-10-31-course-platform-copy-hd.md)。
+同日文案与高清重采：全页改为直接、自然的功能与场景表达；授权改邮箱281568337@qq.com，四图替换3200×2080无损PNG。管理员实际工作台6门与6行一致；学习端为本机当前示例课程，来源分开说明。原图点击打开，首图不再裁切。Pages源码`fe3aa51`／运行`41212566108`／部署`7460194319`success；七文件Git blob、六文件线上完整内容一致，本机完整图片／五宽度及线上版式／邮箱通过。线上图片网络加载慢与超时单列。见[本轮记录](testing/2026-10-31-course-platform-copy-hd.md)。
 
-用户指定新增`coursePlatform`介绍课坊平台（custom-course-platform）的课程来源、核心功能、企业定制和授权联系，配四张虚构数据的真实组件截图；平台本身未开源，业务源码／配置／企业资料不进入本仓库。英中README与原Pages首页增加入口；同一Pages保留原根页并发布产品子路径，源码3a58f82及Pages运行41187655900已成功，地址https://songhonglei.github.io/ai-agent-learning/coursePlatform/。设计与验收见[本轮记录](testing/2026-10-31-course-platform-showcase.md)。本轮仅公开展示，不修改课程App／问答后端／模型配置，不部署Vercel。
+用户指定新增`coursePlatform`介绍课坊平台（custom-course-platform）的课程来源、核心功能、企业定制和授权联系，配四张高清界面截图（管理端实拍、学习端示例）；平台本身未开源，业务源码／配置／企业资料不进入本仓库。英中README与原Pages首页增加入口；同一Pages保留原根页并发布产品子路径，首轮源码3a58f82及Pages运行41187655900已成功，后续高清改版见本轮记录，地址https://songhonglei.github.io/ai-agent-learning/coursePlatform/。设计与验收见[本轮记录](testing/2026-10-31-course-platform-showcase.md)。本轮仅公开展示，不修改课程App／问答后端／模型配置，不部署Vercel。
 
 
 2026-10-31线上复核补修：产品页外部字体导入阻塞首屏，已移除远程字体依赖，仅保留本机字体回退；源码`4a4f826`、Pages运行`41196199114`及部署`7457867455`独立读回success。目录7个公开文件blob再次一致，平台仓库仍private；实际浏览器自然complete，五宽度／四图／授权锚点及原首页英中入口通过，产品HTML／CSS／四图六文件200且字节一致；首轮约59秒与资源超时保留为访问性能边界。
