@@ -1,12 +1,17 @@
 # 开源课程站 当前状态
 
-## 2026-11-08 复查、PR与发布（进行中）
+## 2026-11-08 复查、PR与发布（已上线）
 
-用户已明确授权：复查后提交并推送维护分支、创建PR、跑通远端CI，然后合并并更新Vercel。此前“暂不部署”仅代表第一轮本地开发阶段。
+用户授权复查、提交推送、PR与远端CI，并明确CI通过后合并、更新Vercel；此前“暂不部署”仅代表第一轮本地阶段。
 
-已重新核对origin/main仍为`da22264`，本地维护分支无主分支漂移；复查覆盖会话隔离、条件更新/首次插入竞争、失败重试基线、接口超时、依赖与CI配置，未发现阻断问题。重新执行219项单元、64项服务端与构建通过，依赖审计0项。SQL、模型问答实现与现有Vercel配置未改动。
+- [PR #4](https://github.com/Songhonglei/ai-agent-learning/pull/4)已合并为`eefbe9e`；其[CI 42457548718](https://github.com/Songhonglei/ai-agent-learning/actions/runs/42457548718)通过219单元、64服务端、构建、25 E2E及审计0项。
+- 首次main CI `42457775294`的48次课程导航用例耗尽默认30秒，其余24项E2E通过。[PR #5](https://github.com/Songhonglei/ai-agent-learning/pull/5)只为该用例设置90秒并将CI并发限为2，保持全部断言、不加重试；已合并为`0e9a8a7`。修正PR的[CI 42458059749](https://github.com/Songhonglei/ai-agent-learning/actions/runs/42458059749)及主分支[CI 42458273111](https://github.com/Songhonglei/ai-agent-learning/actions/runs/42458273111)全部通过。
+- 生产源码`0e9a8a781f15f4b1b65d6488c2b4134dae635326`，部署`dpl_4jrnHHi3RcCGXzvrLNE7EwipUvrN` READY，已提升到https://my-agent-learning.vercel.app/。先使用Production配置且skip-domain暂存，验收同一构建后提升，无重建；正式alias读回同ID。
+- ego验证生产候选1-1 UI真实回答及figure-2-1/page-035引用；正式站测评/JS 200、4-2在390px无横向溢出、匿名档案401及非法课程400。保留自动分配域名false、部署保护、模型与Supabase凭据；无SQL迁移。
+- **既有外部服务边界：** Supabase公开服务地址访问出现TLS超时；旧正式站的无效凭据探针返回500，新部署返回安全JSON 503并记录固定诊断。未恢复服务、未写真实账号；不能宣称真实账号云同步/RLS通过。优先恢复/核对外部服务后独立验收。
+- 新部署最近20分钟error级运行日志查询0条；存在上述故意故障探针的warn和primary HTTP_403，真实问答由备用返回200。不能将error查询0条描述为没有任何5xx。
 
-Vercel当前正式部署仍是`dpl_jDquErNeX6pfhKtoZYKAvsYRDNxF`，源码`5fd6a03`；页面显示项目未连接Git，因此需单独发布。PR、远端CI及发布回执后续补入[复查与发布记录](testing/2026-11-08-pr-release.md)。真实Supabase/RLS验收范围须独立记录，不从本地合成账号测试推导。
+部署方式、失败与成功CI、观察范围及恢复点详见[复查与发布记录](testing/2026-11-08-pr-release.md)。本地main后续仅追加发布回执，业务运行代码以该已测试部署提交为准。以下为历史回执。
 
 ## 2026-11-08 第一轮可靠性维护（本地候选，暂不部署）
 
