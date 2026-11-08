@@ -124,6 +124,8 @@ test('opens tools, evaluation, and collaboration lessons with local practice', a
 })
 
 test('all twelve lessons stay navigable without horizontal overflow at key breakpoints', async ({ page }) => {
+  // 48 full navigations share this case; allow for the smaller hosted CI runner.
+  test.setTimeout(90_000)
   const lessons = [
     ['0-1', '你已经在用 Agent 了'], ['0-2', '三句话理解 Agent'], ['1-1', 'Agent的记忆有边界'],
     ['1-2', '给Agent下命令的艺术'], ['1-3', 'Agent的眼睛会被蒙蔽'], ['2-1', 'AI为什么不知道昨天的新闻'],
