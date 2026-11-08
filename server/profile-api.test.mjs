@@ -1,152 +1,134 @@
 import assert from 'node:assert/strict'
-import test from 'node:test'
-import profileHandler from '../api/profile.mjs'
+import { afterEach, beforeEach, test } from 'node:test'
+import { createProfileHandler } from '../api/profile.mjs'
+import { createProfileService } from '../tests/fixtures/profile-service.mjs'
 
-const profile = {
-  schemaVersion: 2,
-  theme: 'light',
-  currentLessonId: '0-1',
-  courses: {},
-  wrongAnswers: [],
-  favoriteContentIds: [],
-  assessments: {},
-  courseAssessments: {},
-  updatedAt: '2026-08-19T00:00:00.000Z',
-}
-
-function responseRecorder() {
-  const result = { statusCode: null, headers: {}, payload: null }
-  return {
-    result,
-    status(statusCode) {
-      result.statusCode = statusCode
-      return this
-    },
-    setHeader(name, value) {
-      result.headers[name] = value
-      return this
-    },
-    json(payload) {
-      result.payload = payload
-      return this
-    },
-  }
-}
-
-function request(method, body, authorization = 'Bearer learner-token') {
-  return { method, body, headers: { authorization } }
-}
-
-function setSupabaseConfig() {
+const profile = { schemaVersion: 2, theme: 'light', currentLessonId: '0-1', courses: {}, wrongAnswers: [], favoriteContentIds: [], assessments: {}, courseAssessments: {}, updatedAt: '2026-11-01T00:00:00.000Z' }
+const emptyRevision = '"profile-empty"'
+let service, handler
+beforeEach(() => {
   process.env.SUPABASE_URL = 'https://example.supabase.co'
   process.env.SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_test'
+  service = createProfileService()
+  handler = createProfileHandler({ request: service.request })
+})
+afterEach(() => { delete process.env.SUPABASE_URL; delete process.env.SUPABASE_PUBLISHABLE_KEY })
+async function call(method = 'GET', body, revision, token = 'learner-token', target = handler) {
+  const result = { status: null, headers: {}, payload: null }
+  const response = {
+    setHeader(k, v) { result.headers[k] = v; return this },
+    status(n) { result.status = n; return this },
+    json(v) { result.payload = v; return this },
+  }
+  await target({ method, body, headers: { ...(token ? { authorization: `Bearer ${token}` } : {}), ...(revision ? { 'if-match': revision } : {}) } }, response)
+  return result
 }
 
-function clearSupabaseConfig() {
+test('unconfigured service, unsupported methods and unauthenticated access are safe', async () => {
+  assert.equal((await call('DELETE')).status, 405)
+  assert.equal((await call('GET', undefined, undefined, null)).status, 401)
+  assert.equal(service.calls.length, 0)
+  assert.equal((await call('GET', undefined, undefined, 'invalid')).status, 401)
   delete process.env.SUPABASE_URL
-  delete process.env.SUPABASE_PUBLISHABLE_KEY
-}
-
-test('profile API makes unconfigured deployments explicitly local-only', async () => {
-  clearSupabaseConfig()
-  const response = responseRecorder()
-
-  await profileHandler(request('GET'), response)
-
-  assert.equal(response.result.statusCode, 503)
-  assert.deepEqual(response.result.payload, { error: '学习档案服务尚未完成配置。' })
+  assert.equal((await call()).status, 503)
 })
 
-test('profile API rejects profile access without an authenticated learner', async () => {
-  setSupabaseConfig()
-  const originalFetch = globalThis.fetch
-  globalThis.fetch = async () => ({ ok: false, status: 401 })
-  const response = responseRecorder()
+test('GET returns an internal ETag without creating an account or changing metadata', async () => {
+  const result = await call()
+  assert.equal(result.status, 200)
+  assert.equal(result.payload, null)
+  assert.equal(result.headers.ETag, emptyRevision)
+  assert.equal(service.records.size, 0)
+  assert.equal(service.calls.length, 2)
+  assert.ok(service.calls.every(({ init }) => !init.method))
+})
 
-  try {
-    await profileHandler(request('GET', undefined, undefined), response)
-    assert.equal(response.result.statusCode, 401)
-    assert.deepEqual(response.result.payload, { error: '请先通过邮箱登录后再同步学习档案。' })
-  } finally {
-    globalThis.fetch = originalFetch
-    clearSupabaseConfig()
+test('PUT requires a precondition and rejects legacy payloads and malformed JSON before any write', async () => {
+  assert.equal((await call('PUT', profile)).status, 428)
+  assert.equal((await call('PUT', profile, '*')).status, 400)
+  assert.equal((await call('PUT', '{broken', emptyRevision)).status, 400)
+  assert.equal((await call('PUT', {}, emptyRevision)).status, 400)
+  assert.equal((await call('PUT', { ...profile, schemaVersion: 1 }, emptyRevision)).status, 409)
+  assert.equal((await call('PUT', { ...profile, padding: '中'.repeat(40_000) }, emptyRevision)).status, 413)
+  assert.equal(service.calls.length, 0)
+})
+
+test('new and existing learner-owned profiles round-trip v2 assessments through conditional writes', async () => {
+  const candidate = { ...profile, courseAssessments: { pretest: { answers: { q1: 'b' } } } }
+  const first = await call('PUT', candidate, emptyRevision)
+  assert.equal(first.status, 200)
+  assert.notEqual(first.headers.ETag, emptyRevision)
+  assert.deepEqual((await call()).payload, candidate)
+  const second = await call('PUT', { ...candidate, theme: 'dark' }, first.headers.ETag)
+  assert.equal(second.status, 200)
+  assert.notEqual(second.headers.ETag, first.headers.ETag)
+  assert.equal(second.payload.theme, 'dark')
+  const patch = service.calls.find(({ init }) => init.method === 'PATCH')
+  assert.equal(patch.init.headers.Authorization, 'Bearer learner-token')
+  assert.match(patch.url.searchParams.get('updated_at'), /^eq\./)
+  assert.equal((await call('GET', undefined, undefined, 'other-token')).payload, null)
+})
+
+test('a stale ETag cannot overwrite a newer profile', async () => {
+  const saved = await call('PUT', profile, emptyRevision)
+  const winner = await call('PUT', { ...profile, theme: 'dark' }, saved.headers.ETag)
+  const stale = await call('PUT', profile, saved.headers.ETag)
+  assert.equal(stale.status, 409)
+  assert.equal(stale.payload.code, 'PROFILE_CONFLICT')
+  assert.deepEqual((await call()).payload, winner.payload)
+})
+
+test('simultaneous first saves have one winner and cannot overwrite it', async () => {
+  const results = await Promise.all([call('PUT', profile, emptyRevision), call('PUT', { ...profile, theme: 'dark' }, emptyRevision)])
+  assert.deepEqual(results.map((r) => r.status).sort(), [200, 409])
+  assert.deepEqual((await call()).payload, results.find((r) => r.status === 200).payload)
+})
+
+test('the database filter catches an update between the read and PATCH', async () => {
+  const first = await call('PUT', profile, emptyRevision)
+  service.control.beforeWrite = () => {
+    const row = service.records.get('learner')
+    service.records.set('learner', { ...row, profile: { ...profile, theme: 'dark' }, updated_at: '2099-01-01T00:00:00.000Z' })
   }
+  assert.equal((await call('PUT', profile, first.headers.ETag)).status, 409)
+  assert.equal(service.records.get('learner').profile.theme, 'dark')
 })
 
-test('profile API verifies the learner token before reading an empty cloud profile', async () => {
-  setSupabaseConfig()
-  const originalFetch = globalThis.fetch
+test('same-millisecond writes still advance the internal revision', async () => {
+  const fixed = createProfileHandler({ request: service.request, now: () => Date.parse('2026-11-01T00:00:00.000Z') })
+  const first = await call('PUT', profile, emptyRevision, 'learner-token', fixed)
+  const second = await call('PUT', profile, first.headers.ETag, 'learner-token', fixed)
+  assert.equal(second.status, 200)
+  assert.notEqual(second.headers.ETag, first.headers.ETag)
+})
+
+test('authentication, REST, JSON and timeouts all return a safe bounded error', async () => {
+  service.control.failAuth = true
+  assert.equal((await call()).status, 503)
+  service.control.failAuth = false
+  service.control.failRest = true
+  assert.equal((await call()).status, 503)
+  const malformed = createProfileHandler({ request: async () => ({ ok: true, json: async () => { throw new Error('private-provider-error') } }) })
+  const result = await call('GET', undefined, undefined, 'learner-token', malformed)
+  assert.equal(result.status, 503)
+  assert.doesNotMatch(JSON.stringify(result), /private-provider-error/)
+  const timeout = createProfileHandler({ request: async () => new Promise(() => {}), timeoutMs: 10 })
+  assert.equal((await call('GET', undefined, undefined, 'learner-token', timeout)).status, 503)
+})
+
+test('an auth response arriving after the deadline cannot continue into a write', async () => {
   const calls = []
-  globalThis.fetch = async (url, init = {}) => {
-    calls.push({ url: String(url), init })
-    if (String(url).includes('/auth/v1/user')) {
-      return { ok: true, json: async () => ({ id: '00000000-0000-4000-8000-000000000001', email: 'learner@example.com', user_metadata: { display_name: '学习者' } }) }
-    }
-    if (String(url).includes('select=profile')) return { ok: true, json: async () => [] }
-    return { ok: true, json: async () => [] }
-  }
-  const response = responseRecorder()
-
-  try {
-    await profileHandler(request('GET'), response)
-    assert.equal(response.result.statusCode, 200)
-    assert.equal(response.result.payload, null)
-    assert.equal(calls.length, 3)
-    assert.match(calls[0].url, /\/auth\/v1\/user$/)
-    assert.equal(calls[0].init.headers.Authorization, 'Bearer learner-token')
-  } finally {
-    globalThis.fetch = originalFetch
-    clearSupabaseConfig()
-  }
-})
-
-test('profile API validates and upserts a learner-owned profile server-side', async () => {
-  setSupabaseConfig()
-  const originalFetch = globalThis.fetch
-  const calls = []
-  globalThis.fetch = async (url, init = {}) => {
-    calls.push({ url: String(url), init })
-    if (String(url).includes('/auth/v1/user')) {
-      return { ok: true, json: async () => ({ id: '00000000-0000-4000-8000-000000000001', email: 'learner@example.com', user_metadata: { display_name: '学习者' } }) }
-    }
-    return { ok: true, json: async () => [{ profile }] }
-  }
-  const response = responseRecorder()
-
-  try {
-    await profileHandler(request('PUT', profile), response)
-    assert.equal(response.result.statusCode, 200)
-    assert.deepEqual(response.result.payload, profile)
-    assert.equal(calls.length, 3)
-    assert.equal(calls[2].init.headers.Authorization, 'Bearer learner-token')
-    assert.match(calls[2].init.body, /learner@example\.com/)
-  } finally {
-    globalThis.fetch = originalFetch
-    clearSupabaseConfig()
-  }
-})
-
-test('profile API refuses v1 writes and retains whole-course v2 drafts in round trips', async () => {
-  setSupabaseConfig()
-  const originalFetch = globalThis.fetch
-  const calls = []
-  const candidate = { ...profile, courseAssessments: { pretest: { kind: 'pretest', version: 'course-2026-10-v1', answers: { 'course-pretest-0-1-1': 'b' }, currentQuestion: 1, startedAt: '2026-10-21T00:00:00.000Z', updatedAt: '2026-10-21T00:00:00.000Z', learningStarted: false } } }
-  globalThis.fetch = async (url, init = {}) => {
-    calls.push({ url: String(url), init })
-    if (String(url).includes('/auth/v1/user')) return { ok: true, json: async () => ({ id: 'learner', email: 'learner@example.com' }) }
-    return { ok: true, json: async () => [{ profile: candidate }] }
-  }
-  try {
-    const old = responseRecorder()
-    await profileHandler(request('PUT', { ...profile, schemaVersion: 1 }), old)
-    assert.equal(old.result.statusCode, 409)
-    assert.equal(calls.some((call) => call.init.body?.includes('"profile":')), false)
-    const saved = responseRecorder()
-    await profileHandler(request('PUT', candidate), saved)
-    assert.equal(saved.result.statusCode, 200)
-    assert.deepEqual(saved.result.payload.courseAssessments, candidate.courseAssessments)
-    const loaded = responseRecorder()
-    await profileHandler(request('GET'), loaded)
-    assert.deepEqual(loaded.result.payload, candidate)
-  } finally { globalThis.fetch = originalFetch; clearSupabaseConfig() }
+  const slow = createProfileHandler({
+    timeoutMs: 5,
+    request: async (url) => {
+      calls.push(url)
+      await new Promise((resolve) => setTimeout(resolve, 20))
+      return Response.json({ id: 'learner', email: 'learner@example.com' })
+    },
+  })
+  const result = await call('PUT', profile, emptyRevision, 'learner-token', slow)
+  assert.equal(result.status, 503)
+  await new Promise((resolve) => setTimeout(resolve, 30))
+  assert.equal(calls.length, 1)
+  assert.equal(service.records.size, 0)
 })

@@ -46,11 +46,15 @@ Accounts and cloud profiles optionally use Supabase. For development, configure 
 ## Verification
 
 ```bash
-npx playwright install chromium
-npm run verify
+# Use an installed Chrome without downloading a browser
+PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" npm run verify
 ```
 
 `verify` runs unit tests, server tests, the build, and end-to-end tests in sequence. Tests use local model stubs and do not read real model credentials. To smoke-test a production build, run `APP_PREVIEW_URL=http://127.0.0.1:4175 npm run verify:preview`.
+
+Cloud saves automatically detect and merge progress from other windows; learners do not manage revision numbers. Failed saves retain current edits and offer retry. See [cloud synchronization](docs/CLOUD-SYNC.md) for internal preconditions, merge rules and the local synthetic-account harness.
+
+Application CI runs dependency auditing, unit/API tests, the build and E2E on pull requests and main pushes, using the runner-provided Chrome. Run `npm run verify:core` for checks without a browser; interactive acceptance for this maintenance round uses ego-browser.
 
 ## AI answer safeguards
 

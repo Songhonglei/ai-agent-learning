@@ -1,0 +1,290 @@
+[
+  {
+    "lesson": "0-1",
+    "width": 360,
+    "fits": true,
+    "title": "你已经在用 Agent 了"
+  },
+  {
+    "lesson": "0-2",
+    "width": 360,
+    "fits": true,
+    "title": "三句话理解 Agent"
+  },
+  {
+    "lesson": "1-1",
+    "width": 360,
+    "fits": true,
+    "title": "Agent的记忆有边界"
+  },
+  {
+    "lesson": "1-2",
+    "width": 360,
+    "fits": true,
+    "title": "给Agent下命令的艺术"
+  },
+  {
+    "lesson": "1-3",
+    "width": 360,
+    "fits": true,
+    "title": "Agent的眼睛会被蒙蔽"
+  },
+  {
+    "lesson": "2-1",
+    "width": 360,
+    "fits": true,
+    "title": "AI为什么不知道昨天的新闻"
+  },
+  {
+    "lesson": "2-2",
+    "width": 360,
+    "fits": true,
+    "title": "RAG：给AI装上“公司内网”"
+  },
+  {
+    "lesson": "2-3",
+    "width": 360,
+    "fits": true,
+    "title": "Agent怎么记住“你是谁”"
+  },
+  {
+    "lesson": "3-1",
+    "width": 360,
+    "fits": true,
+    "title": "Agent的工具箱"
+  },
+  {
+    "lesson": "3-2",
+    "width": 360,
+    "fits": true,
+    "title": "思考→行动→观察，再循环"
+  },
+  {
+    "lesson": "4-1",
+    "width": 360,
+    "fits": true,
+    "title": "怎么判断AI产品做得好不好"
+  },
+  {
+    "lesson": "4-2",
+    "width": 360,
+    "fits": true,
+    "title": "多个Agent怎么协作"
+  },
+  {
+    "lesson": "0-1",
+    "width": 768,
+    "fits": true,
+    "title": "你已经在用 Agent 了"
+  },
+  {
+    "lesson": "0-2",
+    "width": 768,
+    "fits": true,
+    "title": "三句话理解 Agent"
+  },
+  {
+    "lesson": "1-1",
+    "width": 768,
+    "fits": true,
+    "title": "Agent的记忆有边界"
+  },
+  {
+    "lesson": "1-2",
+    "width": 768,
+    "fits": true,
+    "title": "给Agent下命令的艺术"
+  },
+  {
+    "lesson": "1-3",
+    "width": 768,
+    "fits": true,
+    "title": "Agent的眼睛会被蒙蔽"
+  },
+  {
+    "lesson": "2-1",
+    "width": 768,
+    "fits": true,
+    "title": "AI为什么不知道昨天的新闻"
+  },
+  {
+    "lesson": "2-2",
+    "width": 768,
+    "fits": true,
+    "title": "RAG：给AI装上“公司内网”"
+  },
+  {
+    "lesson": "2-3",
+    "width": 768,
+    "fits": true,
+    "title": "Agent怎么记住“你是谁”"
+  },
+  {
+    "lesson": "3-1",
+    "width": 768,
+    "fits": true,
+    "title": "Agent的工具箱"
+  },
+  {
+    "lesson": "3-2",
+    "width": 768,
+    "fits": true,
+    "title": "思考→行动→观察，再循环"
+  },
+  {
+    "lesson": "4-1",
+    "width": 768,
+    "fits": true,
+    "title": "怎么判断AI产品做得好不好"
+  },
+  {
+    "lesson": "4-2",
+    "width": 768,
+    "fits": true,
+    "title": "多个Agent怎么协作"
+  },
+  {
+    "lesson": "0-1",
+    "width": 1024,
+    "fits": true,
+    "title": "你已经在用 Agent 了"
+  },
+  {
+    "lesson": "0-2",
+    "width": 1024,
+    "fits": true,
+    "title": "三句话理解 Agent"
+  },
+  {
+    "lesson": "1-1",
+    "width": 1024,
+    "fits": true,
+    "title": "Agent的记忆有边界"
+  },
+  {
+    "lesson": "1-2",
+    "width": 1024,
+    "fits": true,
+    "title": "给Agent下命令的艺术"
+  },
+  {
+    "lesson": "1-3",
+    "width": 1024,
+    "fits": true,
+    "title": "Agent的眼睛会被蒙蔽"
+  },
+  {
+    "lesson": "2-1",
+    "width": 1024,
+    "fits": true,
+    "title": "AI为什么不知道昨天的新闻"
+  },
+  {
+    "lesson": "2-2",
+    "width": 1024,
+    "fits": true,
+    "title": "RAG：给AI装上“公司内网”"
+  },
+  {
+    "lesson": "2-3",
+    "width": 1024,
+    "fits": true,
+    "title": "Agent怎么记住“你是谁”"
+  },
+  {
+    "lesson": "3-1",
+    "width": 1024,
+    "fits": true,
+    "title": "Agent的工具箱"
+  },
+  {
+    "lesson": "3-2",
+    "width": 1024,
+    "fits": true,
+    "title": "思考→行动→观察，再循环"
+  },
+  {
+    "lesson": "4-1",
+    "width": 1024,
+    "fits": true,
+    "title": "怎么判断AI产品做得好不好"
+  },
+  {
+    "lesson": "4-2",
+    "width": 1024,
+    "fits": true,
+    "title": "多个Agent怎么协作"
+  },
+  {
+    "lesson": "0-1",
+    "width": 1440,
+    "fits": true,
+    "title": "你已经在用 Agent 了"
+  },
+  {
+    "lesson": "0-2",
+    "width": 1440,
+    "fits": true,
+    "title": "三句话理解 Agent"
+  },
+  {
+    "lesson": "1-1",
+    "width": 1440,
+    "fits": true,
+    "title": "Agent的记忆有边界"
+  },
+  {
+    "lesson": "1-2",
+    "width": 1440,
+    "fits": true,
+    "title": "给Agent下命令的艺术"
+  },
+  {
+    "lesson": "1-3",
+    "width": 1440,
+    "fits": true,
+    "title": "Agent的眼睛会被蒙蔽"
+  },
+  {
+    "lesson": "2-1",
+    "width": 1440,
+    "fits": true,
+    "title": "AI为什么不知道昨天的新闻"
+  },
+  {
+    "lesson": "2-2",
+    "width": 1440,
+    "fits": true,
+    "title": "RAG：给AI装上“公司内网”"
+  },
+  {
+    "lesson": "2-3",
+    "width": 1440,
+    "fits": true,
+    "title": "Agent怎么记住“你是谁”"
+  },
+  {
+    "lesson": "3-1",
+    "width": 1440,
+    "fits": true,
+    "title": "Agent的工具箱"
+  },
+  {
+    "lesson": "3-2",
+    "width": 1440,
+    "fits": true,
+    "title": "思考→行动→观察，再循环"
+  },
+  {
+    "lesson": "4-1",
+    "width": 1440,
+    "fits": true,
+    "title": "怎么判断AI产品做得好不好"
+  },
+  {
+    "lesson": "4-2",
+    "width": 1440,
+    "fits": true,
+    "title": "多个Agent怎么协作"
+  }
+]

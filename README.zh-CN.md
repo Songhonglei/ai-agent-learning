@@ -46,11 +46,15 @@ npm run dev
 ## 验证
 
 ```bash
-npx playwright install chromium
-npm run verify
+# 使用已安装的 Chrome，无需下载浏览器
+PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" npm run verify
 ```
 
 verify 依次运行单元测试、服务端测试、构建和 E2E。测试使用本地模型桩，不读取真实模型凭据。生产构建冒烟命令为 APP_PREVIEW_URL=http://127.0.0.1:4175 npm run verify:preview。
+
+云端保存自动检测并合并其他窗口的进度，学员无需管理版本号；失败时保留当前编辑并提供重试。内部条件写入、合并规则与本地合成账号验收见[云同步说明](docs/CLOUD-SYNC.md)。
+
+GitHub Application CI 在 PR 和 main 推送时执行依赖审计、单元/服务端测试、构建与 E2E，使用运行器预装 Chrome。仅运行无浏览器检查可执行 `npm run verify:core`；本轮交互验收使用 ego-browser。
 
 ## AI 问答保护
 
