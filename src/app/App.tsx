@@ -6,7 +6,8 @@ import { LearningMap } from '../features/learning-map/LearningMap'
 import { LearningProfilePage } from '../features/learning-profile/LearningProfilePage'
 import { LessonPlayer } from '../features/lesson-player/LessonPlayer'
 import { CourseAssessmentPage } from '../features/course-assessment/CourseAssessment'
-import { loadCloudProfile, saveCloudProfile } from '../shared/profile-api'
+import { loadCloudProfile, saveCloudProfileWithMerge, type CloudProfileSnapshot } from '../shared/profile-api'
+import { mergeStaleProfileUpdate } from '../shared/profile-sync-merge'
 import {
   getLearnerIdentity,
   isLearnerAuthConfigured,
@@ -19,6 +20,7 @@ import {
   hasConfirmedLocalFallback,
   loadLearningProfile,
   reconcileProfileStorageEvent,
+  readLearningProfileStorage,
   saveLearningProfile,
 } from '../shared/storage/learningProfile'
 import {
@@ -96,6 +98,9 @@ function InternetAccountApp() {
   const [identity, setIdentity] = useState<LearnerIdentity | null>(null)
   const identityRef = useRef(identity)
   identityRef.current = identity
+  const cloudSession = useRef({ controller: new AbortController(), snapshot: null as CloudProfileSnapshot | null, failedBase: null as LearningProfile | null })
+  const cloudReadSequence = useRef(0)
+  const [cloudMerged, setCloudMerged] = useState(false)
   const cloudWriteQueue = useRef<Promise<void>>(Promise.resolve())
   const cloudWriteSequence = useRef(0)
   const [cloudSaving, setCloudSaving] = useState(false)
@@ -116,28 +121,37 @@ function InternetAccountApp() {
     setStorageMode(next)
   }
 
-  async function refreshCloudProfile(accessToken = identity?.accessToken) {
+  function resetCloudSession() {
+    cloudSession.current.controller.abort()
+    cloudSession.current = { controller: new AbortController(), snapshot: null, failedBase: null }
+    cloudReadSequence.current += 1
+    cloudWriteSequence.current += 1
+    cloudWriteQueue.current = Promise.resolve()
+    setPendingCloudProfile(null)
+    setCloudSaving(false)
+    setCloudMerged(false)
+  }
+
+  async function refreshCloudProfile(accessToken = identityRef.current?.accessToken) {
+    const session = cloudSession.current
+    const sequence = ++cloudReadSequence.current
+    const email = identityRef.current?.email
     setCloudState('loading')
     try {
-      const cloudProfile = await loadCloudProfile(accessToken)
+      const snapshot = await loadCloudProfile(accessToken, session.controller.signal)
+      if (cloudSession.current !== session || sequence !== cloudReadSequence.current
+        || identityRef.current?.email !== email || session.controller.signal.aborted) return
+      session.snapshot = snapshot
       const savedLocalProfile = loadLearningProfile()
-      if (
-        storageModeRef.current === 'local'
-        && savedLocalProfile.status === 'loaded'
-        && hasLearningActivity(savedLocalProfile.profile)
-      ) {
-        setPendingCloudProfile(cloudProfile)
-        applyProfile(cloudProfile)
-        activateStorageMode('cloud')
-        setCloudState('ready')
-        setHasWriteError(false)
-        return
+      if (savedLocalProfile.status === 'loaded' && hasLearningActivity(savedLocalProfile.profile)) {
+        setPendingCloudProfile(snapshot.profile)
       }
-      applyProfile(cloudProfile)
+      applyProfile(snapshot.profile)
       activateStorageMode('cloud')
       setCloudState('ready')
       setHasWriteError(false)
     } catch {
+      if (cloudSession.current !== session || sequence !== cloudReadSequence.current || session.controller.signal.aborted) return
       if (hasConfirmedLocalFallback() && restoreLocalProfile()) return
       setCloudState('error')
     }
@@ -162,18 +176,33 @@ function InternetAccountApp() {
       const nextAccessToken = nextIdentity?.accessToken ?? null
       if (nextAccessToken === activeAccessToken) return
       activeAccessToken = nextAccessToken
+      const previousEmail = identityRef.current?.email
+      identityRef.current = nextIdentity
       setIdentity(nextIdentity)
+      if (nextIdentity && previousEmail === nextIdentity.email && !cloudSession.current.controller.signal.aborted) return
+      resetCloudSession()
+      applyProfile(createEmptyProfile())
       setAuthState(nextIdentity ? 'authenticated' : 'anonymous')
-      if (nextIdentity && loadStorageModePreference() === 'local') restoreLocalProfile()
-      else if (nextIdentity) void refreshCloudProfile(nextIdentity.accessToken)
+      if (nextIdentity && loadStorageModePreference() === 'local') {
+        if (!restoreLocalProfile()) {
+          activateStorageMode('local')
+          setCloudState('ready')
+          setHasLocalWriteError(true)
+        }
+      }
+      else if (nextIdentity) { activateStorageMode('cloud'); void refreshCloudProfile(nextIdentity.accessToken) }
       else enterAnonymousLocalMode()
     }
 
+    let identityReadSequence = 0
     function refreshLearnerIdentity() {
+      const sequence = ++identityReadSequence
       void getLearnerIdentity()
-        .then(applyLearnerIdentity)
+        .then((next) => { if (sequence === identityReadSequence) applyLearnerIdentity(next) })
         .catch(() => {
-          if (!subscribed) return
+          if (!subscribed || sequence !== identityReadSequence) return
+          // A transient session-read failure must not log out an active learner.
+          if (identityRef.current) return
           setAuthState('anonymous')
           enterAnonymousLocalMode()
         })
@@ -181,6 +210,7 @@ function InternetAccountApp() {
 
     refreshLearnerIdentity()
     const unsubscribe = subscribeLearnerIdentity((nextIdentity) => {
+      identityReadSequence += 1
       applyLearnerIdentity(nextIdentity)
     })
 
@@ -192,6 +222,7 @@ function InternetAccountApp() {
     document.addEventListener('visibilitychange', refreshIdentityWhenVisible)
     return () => {
       subscribed = false
+      cloudSession.current.controller.abort()
       unsubscribe()
       window.removeEventListener('focus', refreshLearnerIdentity)
       document.removeEventListener('visibilitychange', refreshIdentityWhenVisible)
@@ -211,39 +242,54 @@ function InternetAccountApp() {
     return () => window.removeEventListener('storage', synchronizeLocalProfile)
   }, [])
 
+  function saveLocalSafely(next: LearningProfile) {
+    const stored = readLearningProfileStorage()
+    return (stored.status === 'loaded' || stored.status === 'empty') && saveLearningProfile(next)
+  }
+
   async function updateProfile(next: LearningProfile) {
+    if (storageModeRef.current === 'cloud' && cloudState === 'loading') return
+    const base = profileRef.current
     applyProfile(next)
-    if (storageMode === 'local') {
-      if (saveLearningProfile(next)) {
-        setHasLocalWriteError(false)
-        return
-      }
-      setHasLocalWriteError(true)
+    if (storageModeRef.current === 'local') {
+      setHasLocalWriteError(!saveLocalSafely(next))
       return
     }
 
-    const accessToken = identity?.accessToken
+    const session = cloudSession.current
+    const email = identityRef.current?.email
     const sequence = ++cloudWriteSequence.current
     setCloudSaving(true)
-    // Keep server writes ordered; an earlier response must not replace newer edits.
+    setCloudMerged(false)
+    const isCurrent = () => cloudSession.current === session && !session.controller.signal.aborted
+      && storageModeRef.current === 'cloud' && identityRef.current?.email === email
     const operation = cloudWriteQueue.current.catch(() => {}).then(async () => {
-      if (storageModeRef.current !== 'cloud' || identityRef.current?.accessToken !== accessToken) return
+      if (!isCurrent()) return
+      const mergeBase = session.failedBase ?? base
       try {
-        const saved = await saveCloudProfile(next, accessToken)
-        if (storageModeRef.current !== 'cloud' || identityRef.current?.accessToken !== accessToken) return
-        if (profileRef.current === next) applyProfile(saved)
+        const token = identityRef.current?.accessToken
+        const snapshot = session.snapshot ?? await loadCloudProfile(token, session.controller.signal)
+        if (!isCurrent()) return
+        const saved = await saveCloudProfileWithMerge(snapshot, mergeBase, next, token, session.controller.signal)
+        if (!isCurrent()) return
+        session.snapshot = saved
+        session.failedBase = null
+        // Apply remote changes without replacing edits made while this write was in flight.
+        applyProfile(mergeStaleProfileUpdate(saved.profile, next, profileRef.current))
+        if (saved.merged) setCloudMerged(true)
         if (sequence === cloudWriteSequence.current) {
           setCloudState('ready')
           setHasWriteError(false)
         }
       } catch {
-        if (sequence === cloudWriteSequence.current && storageModeRef.current === 'cloud'
-          && identityRef.current?.accessToken === accessToken) setHasWriteError(true)
+        if (!isCurrent()) return
+        session.failedBase ??= mergeBase
+        if (sequence === cloudWriteSequence.current) setHasWriteError(true)
       }
     })
     cloudWriteQueue.current = operation
     await operation
-    if (sequence === cloudWriteSequence.current) setCloudSaving(false)
+    if (isCurrent() && sequence === cloudWriteSequence.current) setCloudSaving(false)
   }
 
   useEffect(() => {
@@ -256,8 +302,10 @@ function InternetAccountApp() {
   function restoreLocalProfile() {
     const saved = loadLearningProfile()
     if (saved.status === 'loaded') applyProfile(saved.profile)
-    else if (saved.status !== 'empty') return false
+    else if (saved.status === 'empty') applyProfile(createEmptyProfile())
+    else return false
 
+    resetCloudSession()
     activateStorageMode('local')
     setCloudState('ready')
     setHasWriteError(false)
@@ -272,7 +320,7 @@ function InternetAccountApp() {
       return
     }
 
-    const candidate = hasWriteError
+    const candidate = hasWriteError || cloudSaving || cloudSession.current.failedBase !== null
       ? profileRef.current
       : saved.status === 'loaded'
         ? saved.profile
@@ -284,6 +332,7 @@ function InternetAccountApp() {
 
     applyProfile(candidate)
     saveStorageModePreference('local')
+    resetCloudSession()
     activateStorageMode('local')
     setCloudState('ready')
     setHasWriteError(false)
@@ -291,12 +340,14 @@ function InternetAccountApp() {
   }
 
   function useCloudProfile() {
+    if (storageModeRef.current === 'cloud') return
     saveStorageModePreference('cloud')
     if (!identity) return
+    resetCloudSession()
     activateStorageMode('cloud')
     setHasWriteError(false)
     setHasLocalWriteError(false)
-    if (identity) void refreshCloudProfile(identity.accessToken)
+    void refreshCloudProfile(identity.accessToken)
   }
 
   function clearLocalProfile() {
@@ -306,6 +357,7 @@ function InternetAccountApp() {
       theme: profileRef.current.theme,
     }
     applyProfile(emptyProfile)
+    resetCloudSession()
     activateStorageMode('local')
     if (saveLearningProfile(emptyProfile)) {
       setHasLocalWriteError(false)
@@ -325,6 +377,7 @@ function InternetAccountApp() {
     }
 
     applyProfile(next)
+    resetCloudSession()
     activateStorageMode('local')
     setCloudState('ready')
     setHasWriteError(false)
@@ -335,6 +388,7 @@ function InternetAccountApp() {
   async function signOut() {
     try {
       await signOutLearner()
+      identityRef.current = null
       setIdentity(null)
       setAuthState('anonymous')
       enterAnonymousLocalMode()
@@ -355,8 +409,11 @@ function InternetAccountApp() {
       })
       setHasLocalWriteError(false)
     } else {
+      // Never retain an old account's data when the local backup cannot be read.
+      applyProfile(createEmptyProfile())
       setHasLocalWriteError(true)
     }
+    resetCloudSession()
     activateStorageMode('local')
     setCloudState('ready')
     setHasWriteError(false)
@@ -364,8 +421,6 @@ function InternetAccountApp() {
 
   function keepCloudProfile() {
     if (!pendingCloudProfile) return
-    applyProfile(pendingCloudProfile)
-    activateStorageMode('cloud')
     setPendingCloudProfile(null)
   }
 
@@ -377,21 +432,14 @@ function InternetAccountApp() {
       return
     }
 
-    const merged = mergeLearningProfiles(pendingCloudProfile, saved.profile)
-    applyProfile(merged)
-    activateStorageMode('cloud')
+    const merged = mergeLearningProfiles(profileRef.current, saved.profile)
     setPendingCloudProfile(null)
-    try {
-      applyProfile(await saveCloudProfile(merged, identity.accessToken))
-      setHasWriteError(false)
-    } catch {
-      setHasWriteError(true)
-    }
+    await updateProfile(merged)
   }
 
   function retryCloudProfile() {
     if (storageMode === 'local') {
-      if (saveLearningProfile(profileRef.current)) setHasLocalWriteError(false)
+      if (saveLocalSafely(profileRef.current)) setHasLocalWriteError(false)
       else setHasLocalWriteError(true)
       return
     }
@@ -404,7 +452,7 @@ function InternetAccountApp() {
 
   function retryLocalStorage() {
     if (storageMode === 'local') {
-      if (saveLearningProfile(profileRef.current)) setHasLocalWriteError(false)
+      if (saveLocalSafely(profileRef.current)) setHasLocalWriteError(false)
       else setHasLocalWriteError(true)
       return
     }
@@ -412,7 +460,7 @@ function InternetAccountApp() {
   }
 
   return (
-    <BrowserRouter basename={deploymentBasePath() || undefined} future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
+    <BrowserRouter basename={deploymentBasePath() || undefined}>
       <div className="shell">
         <header className={headerCollapsed ? 'app-header is-collapsed' : 'app-header'}>
           <a className="brand" href={appPath('/')}>
@@ -485,8 +533,9 @@ function InternetAccountApp() {
         )}
 
         {cloudSaving && storageMode === 'cloud' && <p role="status">正在保存学习档案，请稍候再刷新或离开。</p>}
+        {cloudMerged && !cloudSaving && storageMode === 'cloud' && <p role="status">已合并其他窗口的学习进度并保存。</p>}
         <div className="app-frame">
-          <Routes>
+          {cloudState === 'loading' ? <p role="status">正在读取学习档案…</p> : <Routes>
             <Route path="/" element={<LearningMapPage profile={profile} />} />
             <Route
               path="/lesson/:lessonId"
@@ -507,10 +556,10 @@ function InternetAccountApp() {
                 />
               )}
             />
-            <Route path="/assessment" element={cloudState === 'loading' ? <p role="status">正在读取学习档案…</p> : <CourseAssessmentPage profile={profile} onProfileChange={updateProfile} />} />
-            <Route path="/assessment/:kind" element={cloudState === 'loading' ? <p role="status">正在读取学习档案…</p> : <CourseAssessmentPage profile={profile} onProfileChange={updateProfile} />} />
+            <Route path="/assessment" element={<CourseAssessmentPage profile={profile} onProfileChange={updateProfile} />} />
+            <Route path="/assessment/:kind" element={<CourseAssessmentPage profile={profile} onProfileChange={updateProfile} />} />
             <Route path="*" element={<StatusPanel status="unknown-route" />} />
-          </Routes>
+          </Routes>}
         </div>
         <ProjectFooter />
       </div>

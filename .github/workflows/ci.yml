@@ -1,0 +1,43 @@
+name: Application CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: application-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Audit locked dependencies
+        run: npm audit --audit-level=moderate
+      - name: Use runner-provided Chrome (no browser download)
+        run: |
+          chrome_path="$(command -v google-chrome)"
+          test -x "$chrome_path"
+          echo "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=$chrome_path" >> "$GITHUB_ENV"
+      - name: Unit, API, build and browser regression
+        run: npm run verify
+      - name: Preserve browser failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-failure
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7

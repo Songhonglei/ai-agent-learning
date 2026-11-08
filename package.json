@@ -13,7 +13,9 @@
     "test:e2e": "playwright test",
     "test:server": "node --test server/*.test.mjs",
     "verify:preview": "python3 scripts/verify-production-preview.py",
-    "verify": "npm run test:run && npm run test:server && npm run build && npm run test:e2e"
+    "verify": "npm run verify:core && npm run test:e2e",
+    "verify:core": "npm run test:run && npm run test:server && npm run build",
+    "dev:sync-fixture": "node scripts/cloud-sync-fixture.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3"
@@ -23,6 +25,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^24.19.2",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.5",
@@ -30,10 +33,13 @@
     "playwright": "^1.58.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-router-dom": "^6.30.3",
+    "react-router-dom": "^7.18.5",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",
-    "vite": "^8.2.0",
-    "vitest": "^4.1.10"
+    "vite": "^8.3.6",
+    "vitest": "^4.1.12"
+  },
+  "engines": {
+    "node": ">=24 <25"
   }
 }
