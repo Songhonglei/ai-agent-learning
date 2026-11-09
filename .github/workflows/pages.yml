@@ -6,6 +6,7 @@ on:
     paths:
       - "site/**"
       - "coursePlatform/**"
+      - "coursePlatform-next/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -41,6 +42,10 @@ jobs:
           for theme in style-01 style-03 style-04 style-07 style-08 style-11 style-12 style-13 style-14; do
             cp "coursePlatform/assets/themes/$theme.webp" "coursePlatform/assets/themes/$theme-480.webp" _pages/coursePlatform/assets/themes/
           done
+      - name: Add independent platform introduction
+        run: |
+          mkdir -p _pages/coursePlatform-next
+          cp -R coursePlatform-next/. _pages/coursePlatform-next/
       - name: Upload static site
         uses: actions/upload-pages-artifact@v4
         with:
